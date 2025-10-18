@@ -1,0 +1,69 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import Login from "./pages/Login";
+import StudentDashboard from "./pages/StudentDashboard";
+import TeacherDashboard from "./pages/TeacherDashboard";
+import TeacherResources from "./pages/TeacherResources";
+import TeacherBatchView from "./pages/TeacherBatchView";
+import TeacherAttendance from "./pages/TeacherAttendance";
+import TeacherTestResults from "./pages/TeacherTestResults";
+import TeacherNotices from "./pages/TeacherNotices";
+import TeacherSchedule from "./pages/TeacherSchedule";
+import TeacherProgress from "./pages/TeacherProgress";
+import TeacherAnalytics from "./pages/TeacherAnalytics";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminStudentManagement from "./pages/AdminStudentManagement";
+import AdminStaffManagement from "./pages/AdminStaffManagement";
+import AdminFeeManagement from "./pages/AdminFeeManagement";
+import AdminBatchList from "./pages/AdminBatchList";
+import AdminBatchDetails from "./pages/AdminBatchDetails";
+import AdminNoticeManagement from "./pages/AdminNoticeManagement";
+import SubjectPage from "./pages/SubjectPage";
+import PrimaryProgram from "./pages/PrimaryProgram";
+import BatchDetails from "./pages/BatchDetails";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/programs/primary" element={<PrimaryProgram />} />
+          <Route path="/programs/primary/batch/:standard" element={<BatchDetails />} />
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/subject/:subject" element={<SubjectPage />} />
+          <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+          <Route path="/teacher/resources" element={<TeacherResources />} />
+          <Route path="/teacher/batch/:batchId" element={<TeacherBatchView />} />
+          <Route path="/teacher/attendance" element={<TeacherAttendance />} />
+          <Route path="/teacher/test-results" element={<TeacherTestResults />} />
+          <Route path="/teacher/notices" element={<TeacherNotices />} />
+          <Route path="/teacher/schedule" element={<TeacherSchedule />} />
+          <Route path="/teacher/progress" element={<TeacherProgress />} />
+          <Route path="/teacher/analytics" element={<TeacherAnalytics />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/students" element={<AdminStudentManagement />} />
+          <Route path="/admin/staff" element={<AdminStaffManagement />} />
+          <Route path="/admin/batches" element={<AdminBatchList />} />
+          <Route path="/admin/batches/:batchId" element={<AdminBatchDetails />} />
+          <Route path="/admin/notices" element={<AdminNoticeManagement />} />
+          <Route path="/admin/fees" element={<AdminFeeManagement />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;
