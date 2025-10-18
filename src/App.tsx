@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import StudentDashboard from "./pages/StudentDashboard";
 import TeacherDashboard from "./pages/TeacherDashboard";
+import TeacherClassList from "./pages/TeacherClassList";
 import TeacherResources from "./pages/TeacherResources";
 import TeacherBatchView from "./pages/TeacherBatchView";
 import TeacherAttendance from "./pages/TeacherAttendance";
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/subject/:subject" element={<SubjectPage />} />
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+          <Route path="/teacher/classes" element={<TeacherClassList />} />
           <Route path="/teacher/resources" element={<TeacherResources />} />
           <Route path="/teacher/batch/:batchId" element={<TeacherBatchView />} />
           <Route path="/teacher/attendance" element={<TeacherAttendance />} />

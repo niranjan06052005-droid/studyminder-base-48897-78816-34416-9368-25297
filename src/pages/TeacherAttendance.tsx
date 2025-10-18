@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Home, LogOut, Calendar, UserCheck, UserX, Users, Save } from "lucide-react";
+import TeacherSidebar from "@/components/TeacherSidebar";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
@@ -48,24 +49,7 @@ export default function TeacherAttendance() {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col">
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-xl font-bold">Teacher Portal</h1>
-        </div>
-        
-        <nav className="flex-1 p-4">
-          <div className="space-y-2">
-            <Link to="/teacher/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Home className="h-5 w-5" />
-              <span>Dashboard</span>
-            </Link>
-            <Link to="/teacher/attendance" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
-              <UserCheck className="h-5 w-5" />
-              <span>Attendance</span>
-            </Link>
-          </div>
-        </nav>
-      </aside>
+      <TeacherSidebar />
 
       <div className="flex-1 flex flex-col">
         <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
