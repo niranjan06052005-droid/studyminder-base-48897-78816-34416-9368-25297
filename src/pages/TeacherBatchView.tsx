@@ -98,6 +98,7 @@ export default function TeacherBatchView() {
                       <SelectContent>
                         <SelectItem value="ch1">Chapter 1: Linear Equations</SelectItem>
                         <SelectItem value="ch2">Chapter 2: Quadratic Equations</SelectItem>
+                        <SelectItem value="new">+ Create New Chapter</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { FileText, Video, ClipboardList, Download, Play, CheckCircle, ArrowLeft } from "lucide-react";
+import { FileText, Video, ClipboardList, Download, Play, CheckCircle, ArrowLeft, Lock } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +11,7 @@ const chapters = [
   {
     id: "ch1",
     title: "Chapter 1: Linear Equations in Two Variables",
+    completed: true,
     notes: [
       { id: "n1", title: "Practice Set 1.1 Solutions", file: "ch1-ps1.pdf" },
       { id: "n2", title: "Practice Set 1.2 Solutions", file: "ch1-ps2.pdf" },
@@ -29,6 +30,7 @@ const chapters = [
   {
     id: "ch2",
     title: "Chapter 2: Quadratic Equations",
+    completed: false,
     notes: [
       { id: "n4", title: "Practice Set 2.1 Solutions", file: "ch2-ps1.pdf" },
       { id: "n5", title: "Practice Set 2.2 Solutions", file: "ch2-ps2.pdf" },
@@ -47,6 +49,7 @@ const chapters = [
   {
     id: "ch3",
     title: "Chapter 3: Arithmetic Progression",
+    completed: false,
     notes: [
       { id: "n7", title: "Practice Set 3.1 Solutions", file: "ch3-ps1.pdf" },
       { id: "n8", title: "AP Formulas Quick Reference", file: "ch3-formulas.pdf" },
@@ -64,6 +67,18 @@ const chapters = [
 export default function SubjectPage() {
   const { subject } = useParams();
   const [activeTab, setActiveTab] = useState("notes");
+  const [completedChapters, setCompletedChapters] = useState<string[]>(["ch1"]);
+
+  const isPreviousChaptersCompleted = (chapterIndex: number) => {
+    if (chapterIndex === 0) return true;
+    return chapters.slice(0, chapterIndex).every(ch => completedChapters.includes(ch.id));
+  };
+
+  const handleMarkDone = (chapterId: string) => {
+    if (!completedChapters.includes(chapterId)) {
+      setCompletedChapters([...completedChapters, chapterId]);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -105,114 +120,198 @@ export default function SubjectPage() {
           {/* Chapter Notes Tab */}
           <TabsContent value="notes" className="space-y-4">
             <Accordion type="single" collapsible className="w-full space-y-4">
-              {chapters.map((chapter) => (
-                <AccordionItem key={chapter.id} value={chapter.id} className="border rounded-lg bg-card">
-                  <AccordionTrigger className="px-6 hover:no-underline">
-                    <span className="text-lg font-medium">{chapter.title}</span>
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4">
-                    <div className="space-y-3 mt-2">
-                      {chapter.notes.map((note) => (
-                        <Card key={note.id} className="bg-accent/50">
-                          <CardContent className="flex items-center justify-between p-4">
-                            <div className="flex items-center gap-3">
-                              <FileText className="h-5 w-5 text-primary" />
-                              <span className="font-medium">{note.title}</span>
-                            </div>
-                            <Button size="sm" className="gap-2">
-                              <Download className="h-4 w-4" />
-                              Download
+              {chapters.map((chapter, index) => {
+                const isLocked = !isPreviousChaptersCompleted(index);
+                const isCompleted = completedChapters.includes(chapter.id);
+                
+                return (
+                  <AccordionItem key={chapter.id} value={chapter.id} className="border rounded-lg bg-card">
+                    <AccordionTrigger className="px-6 hover:no-underline" disabled={isLocked}>
+                      <div className="flex items-center gap-3">
+                        {isLocked && <Lock className="h-4 w-4 text-muted-foreground" />}
+                        <span className="text-lg font-medium">{chapter.title}</span>
+                        {isCompleted && <CheckCircle className="h-4 w-4 text-success" />}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 pb-4">
+                      {isLocked ? (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <Lock className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                          <p>Complete all tests from previous chapters to unlock this content</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="space-y-3 mt-2">
+                            {chapter.notes.map((note) => (
+                              <Card key={note.id} className="bg-accent/50">
+                                <CardContent className="flex items-center justify-between p-4">
+                                  <div className="flex items-center gap-3">
+                                    <FileText className="h-5 w-5 text-primary" />
+                                    <span className="font-medium">{note.title}</span>
+                                  </div>
+                                  <Button size="sm" className="gap-2">
+                                    <Download className="h-4 w-4" />
+                                    Download
+                                  </Button>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                          {!isCompleted && (
+                            <Button 
+                              onClick={() => handleMarkDone(chapter.id)}
+                              className="w-full mt-4"
+                              variant="outline"
+                            >
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              Mark Chapter as Done
                             </Button>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
+                          )}
+                        </>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
             </Accordion>
           </TabsContent>
 
           {/* Video Lectures Tab */}
           <TabsContent value="videos" className="space-y-4">
             <Accordion type="single" collapsible className="w-full space-y-4">
-              {chapters.map((chapter) => (
-                <AccordionItem key={chapter.id} value={chapter.id} className="border rounded-lg bg-card">
-                  <AccordionTrigger className="px-6 hover:no-underline">
-                    <span className="text-lg font-medium">{chapter.title}</span>
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4">
-                    <div className="space-y-3 mt-2">
-                      {chapter.videos.map((video) => (
-                        <Card key={video.id} className="bg-accent/50">
-                          <CardContent className="p-4">
-                            <div className="flex items-start gap-4">
-                              <div className="w-32 h-20 bg-muted rounded-md flex items-center justify-center flex-shrink-0">
-                                <Play className="h-8 w-8 text-primary" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-2">
-                                  <h4 className="font-medium line-clamp-2">{video.title}</h4>
-                                  {video.watched && (
-                                    <Badge variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-400 flex-shrink-0">
-                                      <CheckCircle className="h-3 w-3 mr-1" />
-                                      Watched
-                                    </Badge>
-                                  )}
-                                </div>
-                                <p className="text-sm text-muted-foreground mt-1">{video.duration}</p>
-                                <Button size="sm" className="mt-3">
-                                  {video.watched ? "Watch Again" : "Watch Now"}
-                                </Button>
-                              </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
+              {chapters.map((chapter, index) => {
+                const isLocked = !isPreviousChaptersCompleted(index);
+                const isCompleted = completedChapters.includes(chapter.id);
+                
+                return (
+                  <AccordionItem key={chapter.id} value={chapter.id} className="border rounded-lg bg-card">
+                    <AccordionTrigger className="px-6 hover:no-underline" disabled={isLocked}>
+                      <div className="flex items-center gap-3">
+                        {isLocked && <Lock className="h-4 w-4 text-muted-foreground" />}
+                        <span className="text-lg font-medium">{chapter.title}</span>
+                        {isCompleted && <CheckCircle className="h-4 w-4 text-success" />}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 pb-4">
+                      {isLocked ? (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <Lock className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                          <p>Complete all tests from previous chapters to unlock this content</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="space-y-3 mt-2">
+                            {chapter.videos.map((video) => (
+                              <Card key={video.id} className="bg-accent/50">
+                                <CardContent className="p-4">
+                                  <div className="flex items-start gap-4">
+                                    <div className="w-32 h-20 bg-muted rounded-md flex items-center justify-center flex-shrink-0">
+                                      <Play className="h-8 w-8 text-primary" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-start justify-between gap-2">
+                                        <h4 className="font-medium line-clamp-2">{video.title}</h4>
+                                        {video.watched && (
+                                          <Badge variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-400 flex-shrink-0">
+                                            <CheckCircle className="h-3 w-3 mr-1" />
+                                            Watched
+                                          </Badge>
+                                        )}
+                                      </div>
+                                      <p className="text-sm text-muted-foreground mt-1">{video.duration}</p>
+                                      <Button size="sm" className="mt-3">
+                                        {video.watched ? "Watch Again" : "Watch Now"}
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                          {!isCompleted && (
+                            <Button 
+                              onClick={() => handleMarkDone(chapter.id)}
+                              className="w-full mt-4"
+                              variant="outline"
+                            >
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              Mark Chapter as Done
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
             </Accordion>
           </TabsContent>
 
           {/* Practice Tests Tab */}
           <TabsContent value="tests" className="space-y-4">
             <Accordion type="single" collapsible className="w-full space-y-4">
-              {chapters.map((chapter) => (
-                <AccordionItem key={chapter.id} value={chapter.id} className="border rounded-lg bg-card">
-                  <AccordionTrigger className="px-6 hover:no-underline">
-                    <span className="text-lg font-medium">{chapter.title}</span>
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4">
-                    <div className="space-y-3 mt-2">
-                      {chapter.tests.map((test) => (
-                        <Card key={test.id} className="bg-accent/50">
-                          <CardContent className="flex items-center justify-between p-4">
-                            <div className="flex items-center gap-4">
-                              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                                <ClipboardList className="h-6 w-6 text-primary" />
-                              </div>
-                              <div>
-                                <h4 className="font-medium">{test.title}</h4>
-                                <div className="flex gap-4 mt-1">
-                                  <span className="text-sm text-muted-foreground">
-                                    {test.questions} Questions
-                                  </span>
-                                  <span className="text-sm text-muted-foreground">
-                                    {test.duration} Minutes
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <Button>Start Test</Button>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
+              {chapters.map((chapter, index) => {
+                const isLocked = !isPreviousChaptersCompleted(index);
+                const isCompleted = completedChapters.includes(chapter.id);
+                
+                return (
+                  <AccordionItem key={chapter.id} value={chapter.id} className="border rounded-lg bg-card">
+                    <AccordionTrigger className="px-6 hover:no-underline" disabled={isLocked}>
+                      <div className="flex items-center gap-3">
+                        {isLocked && <Lock className="h-4 w-4 text-muted-foreground" />}
+                        <span className="text-lg font-medium">{chapter.title}</span>
+                        {isCompleted && <CheckCircle className="h-4 w-4 text-success" />}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 pb-4">
+                      {isLocked ? (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <Lock className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                          <p>Complete all tests from previous chapters to unlock this content</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="space-y-3 mt-2">
+                            {chapter.tests.map((test) => (
+                              <Card key={test.id} className="bg-accent/50">
+                                <CardContent className="flex items-center justify-between p-4">
+                                  <div className="flex items-center gap-4">
+                                    <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                                      <ClipboardList className="h-6 w-6 text-primary" />
+                                    </div>
+                                    <div>
+                                      <h4 className="font-medium">{test.title}</h4>
+                                      <div className="flex gap-4 mt-1">
+                                        <span className="text-sm text-muted-foreground">
+                                          {test.questions} Questions
+                                        </span>
+                                        <span className="text-sm text-muted-foreground">
+                                          {test.duration} Minutes
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <Button>Start Test</Button>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                          {!isCompleted && (
+                            <Button 
+                              onClick={() => handleMarkDone(chapter.id)}
+                              className="w-full mt-4"
+                              variant="outline"
+                            >
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              Mark Chapter as Done
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
             </Accordion>
           </TabsContent>
         </Tabs>
