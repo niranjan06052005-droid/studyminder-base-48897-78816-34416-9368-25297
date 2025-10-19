@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Home, LogOut, Bell, Plus, Trash2, Edit, Eye } from "lucide-react";
+import { Home, LogOut, Bell, Plus, Trash2, Edit, Eye, ImagePlus } from "lucide-react";
 import TeacherSidebar from "@/components/TeacherSidebar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -46,17 +46,19 @@ export default function TeacherNotices() {
     title: "",
     content: "",
     batch: "",
-    priority: "medium"
+    priority: "medium",
+    image: null as File | null
   });
 
   const handleAddNotice = () => {
     const notice = {
       id: notices.length + 1,
       ...newNotice,
-      date: new Date().toISOString().split('T')[0]
+      date: new Date().toISOString().split('T')[0],
+      imageName: newNotice.image?.name
     };
     setNotices([notice, ...notices]);
-    setNewNotice({ title: "", content: "", batch: "", priority: "medium" });
+    setNewNotice({ title: "", content: "", batch: "", priority: "medium", image: null });
     setIsAddDialogOpen(false);
     toast.success("Notice published successfully!");
   };
@@ -164,6 +166,28 @@ export default function TeacherNotices() {
                         </SelectContent>
                       </Select>
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Attach Image (Optional)</Label>
+                    <div className="flex items-center gap-2">
+                      <Input 
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setNewNotice({...newNotice, image: file});
+                          }
+                        }}
+                        className="cursor-pointer"
+                      />
+                      <ImagePlus className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                    {newNotice.image && (
+                      <p className="text-sm text-muted-foreground">
+                        Selected: {newNotice.image.name}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
