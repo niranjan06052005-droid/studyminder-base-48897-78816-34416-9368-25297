@@ -136,7 +136,7 @@ export default function TeacherClassList() {
                     <p className="text-sm text-muted-foreground mb-3">
                       Next class: <span className="font-medium text-foreground">{classItem.nextClass}</span>
                     </p>
-                    <Link to={`/teacher/batch/${classItem.id}`}>
+                    <Link to={`/teacher/class/${classItem.id}`}>
                       <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 group-hover:gap-3 gap-2 transition-all">
                         Open Class
                         <ArrowRight className="h-4 w-4" />
