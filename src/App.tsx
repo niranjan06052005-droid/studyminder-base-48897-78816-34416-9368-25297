@@ -23,6 +23,7 @@ import AdminBatchList from "./pages/AdminBatchList";
 import AdminBatchDetails from "./pages/AdminBatchDetails";
 import AdminNoticeManagement from "./pages/AdminNoticeManagement";
 import SubjectPage from "./pages/SubjectPage";
+import StudentReport from "./pages/StudentReport";
 import PrimaryProgram from "./pages/PrimaryProgram";
 import BatchDetails from "./pages/BatchDetails";
 import NotFound from "./pages/NotFound";
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/programs/primary" element={<PrimaryProgram />} />
           <Route path="/programs/primary/batch/:standard" element={<BatchDetails />} />
           <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/report" element={<StudentReport />} />
           <Route path="/student/subject/:subject" element={<SubjectPage />} />
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
           <Route path="/teacher/classes" element={<TeacherClassList />} />
