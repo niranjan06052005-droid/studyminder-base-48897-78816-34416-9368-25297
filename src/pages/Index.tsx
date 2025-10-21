@@ -16,8 +16,11 @@ const Index = () => {
       <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden pt-32 pb-20">
         {/* Hero Background Image */}
         <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroBackgroundImage})` }}
+          className="absolute inset-0 w-full h-full bg-cover bg-no-repeat"
+          style={{ 
+            backgroundImage: `url(${heroBackgroundImage})`,
+            backgroundPosition: 'center center'
+          }}
         />
         
         {/* 3D Animation Overlay */}
