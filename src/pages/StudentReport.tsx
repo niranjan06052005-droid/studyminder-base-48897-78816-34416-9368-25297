@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Home, LogOut, BookOpen, TrendingUp, Award, Download } from "lucide-react";
+import { Home, LogOut, BookOpen, Award, Download, ClipboardList, FileText, Trophy, Smile, DollarSign, Bell } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -54,139 +54,150 @@ const studentScores = [
   }
 ];
 
-// Data for bar chart
-const chartData = studentScores.map(score => ({
+// Data for average performance chart
+const averageChartData = studentScores.map(score => ({
   subject: score.subject,
   average: score.averageScore
 }));
 
+// Data for each exam type
+const unitTest1Data = studentScores.map(score => ({
+  subject: score.subject,
+  score: score.unitTest1
+}));
+
+const semester1Data = studentScores.map(score => ({
+  subject: score.subject,
+  score: score.semester1
+}));
+
+const unitTest2Data = studentScores.map(score => ({
+  subject: score.subject,
+  score: score.unitTest2
+}));
+
+const finalSemesterData = studentScores.map(score => ({
+  subject: score.subject,
+  score: score.finalSemester
+}));
+
 const StudentReport = () => {
-  // Calculate overall statistics
-  const overallAverage = (studentScores.reduce((sum, score) => sum + score.averageScore, 0) / studentScores.length).toFixed(2);
-  const totalTests = studentScores.reduce((sum, score) => sum + score.totalTests, 0);
-  const highestAverage = Math.max(...studentScores.map(s => s.averageScore));
-  const topSubject = studentScores.find(s => s.averageScore === highestAverage)?.subject;
+  // Calculate statistics for each exam type
+  const unitTest1Total = studentScores.reduce((sum, score) => sum + score.unitTest1, 0);
+  const unitTest1Average = (unitTest1Total / studentScores.length).toFixed(2);
+  
+  const semester1Total = studentScores.reduce((sum, score) => sum + score.semester1, 0);
+  const semester1Average = (semester1Total / studentScores.length).toFixed(2);
+  
+  const unitTest2Total = studentScores.reduce((sum, score) => sum + score.unitTest2, 0);
+  const unitTest2Average = (unitTest2Total / studentScores.length).toFixed(2);
+  
+  const finalSemesterTotal = studentScores.reduce((sum, score) => sum + score.finalSemester, 0);
+  const finalSemesterAverage = (finalSemesterTotal / studentScores.length).toFixed(2);
 
   const getGrade = (marks: number) => {
-    if (marks >= 90) return { grade: 'A+', color: 'text-green-600' };
-    if (marks >= 80) return { grade: 'A', color: 'text-green-500' };
-    if (marks >= 70) return { grade: 'B+', color: 'text-blue-600' };
-    if (marks >= 60) return { grade: 'B', color: 'text-blue-500' };
-    if (marks >= 50) return { grade: 'C', color: 'text-yellow-600' };
-    return { grade: 'D', color: 'text-red-600' };
+    if (marks >= 90) return { grade: 'A+', color: 'text-green-600 dark:text-green-400' };
+    if (marks >= 80) return { grade: 'A', color: 'text-green-500 dark:text-green-300' };
+    if (marks >= 70) return { grade: 'B+', color: 'text-blue-600 dark:text-blue-400' };
+    if (marks >= 60) return { grade: 'B', color: 'text-blue-500 dark:text-blue-300' };
+    if (marks >= 50) return { grade: 'C', color: 'text-yellow-600 dark:text-yellow-400' };
+    return { grade: 'D', color: 'text-red-600 dark:text-red-400' };
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-screen w-64 bg-card border-r border-border overflow-y-auto">
-        <div className="p-6">
-          <h2 className="text-2xl font-bold text-foreground mb-2">Student Portal</h2>
-          <p className="text-sm text-muted-foreground">Rajiv Kumar</p>
+      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col">
+        <div className="p-6 border-b border-white/10">
+          <h1 className="text-xl font-bold">Student Portal</h1>
+          <p className="text-sm text-white/60 mt-1">Rajiv Kumar</p>
         </div>
-        <nav className="px-4 space-y-2">
-          <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors">
-            <Home className="h-5 w-5" />
-            <span>Dashboard</span>
-          </Link>
-          <div className="flex items-center gap-3 px-4 py-3 bg-primary text-primary-foreground rounded-lg">
-            <BookOpen className="h-5 w-5" />
-            <span>My Report</span>
+        
+        <nav className="flex-1 p-4">
+          <div className="space-y-2">
+            <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <Home className="h-5 w-5" />
+              <span>Home/Dashboard</span>
+            </Link>
+            
+            <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10">
+              <ClipboardList className="h-5 w-5" />
+              <span>My Report</span>
+            </div>
+            
+            <Link to="/student/attendance" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <FileText className="h-5 w-5" />
+              <span>Attendance</span>
+            </Link>
+            
+            <Link to="/student/leaderboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <Trophy className="h-5 w-5" />
+              <span>Leaderboard</span>
+            </Link>
+            
+            <Link to="/student/achievements" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <Award className="h-5 w-5" />
+              <span>Achievements</span>
+            </Link>
+            
+            <Link to="/student/fun-spot" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <Smile className="h-5 w-5" />
+              <span>Fun Spot</span>
+            </Link>
+            
+            <Link to="/student/fees" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <DollarSign className="h-5 w-5" />
+              <span>Fees</span>
+            </Link>
+            
+            <Link to="/student/notices" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <Bell className="h-5 w-5" />
+              <span>Notices</span>
+            </Link>
           </div>
-          <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors">
-            <TrendingUp className="h-5 w-5" />
-            <span>Attendance</span>
-          </Link>
-          <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors">
-            <Award className="h-5 w-5" />
-            <span>Achievements</span>
-          </Link>
         </nav>
-      </div>
+      </aside>
 
       {/* Main Content */}
-      <div className="ml-64">
+      <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-card border-b border-border px-8 py-4 flex justify-between items-center sticky top-0 z-10">
-          <h1 className="text-2xl font-bold text-foreground">My Academic Report</h1>
-          <div className="flex gap-3">
-            <Link to="/student/dashboard">
+        <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+          <div className="px-8 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-primary">My Academic Report</h1>
+            <div className="flex gap-3">
+              <Link to="/student/dashboard">
+                <Button variant="outline" size="sm">
+                  <Home className="mr-2 h-4 w-4" />
+                  Home
+                </Button>
+              </Link>
               <Button variant="outline" size="sm">
-                <Home className="mr-2 h-4 w-4" />
-                Home
+                <Download className="mr-2 h-4 w-4" />
+                Download Report
               </Button>
-            </Link>
-            <Button variant="outline" size="sm">
-              <Download className="mr-2 h-4 w-4" />
-              Download Report
-            </Button>
-            <Link to="/login">
-              <Button variant="destructive" size="sm">
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </Button>
-            </Link>
+              <Link to="/login">
+                <Button variant="outline" size="sm">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              </Link>
+            </div>
           </div>
         </header>
 
         {/* Content */}
-        <div className="p-8 space-y-6">
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Overall Average</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-primary">{overallAverage}%</div>
-                <p className="text-xs text-muted-foreground mt-1">Across all subjects</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Tests</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-foreground">{totalTests}</div>
-                <p className="text-xs text-muted-foreground mt-1">Tests completed</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Top Subject</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-xl font-bold text-foreground">{topSubject}</div>
-                <p className="text-xs text-muted-foreground mt-1">{highestAverage}% average</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Overall Grade</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className={`text-3xl font-bold ${getGrade(parseFloat(overallAverage)).color}`}>
-                  {getGrade(parseFloat(overallAverage)).grade}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Current performance</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Average Score Chart */}
+        <main className="flex-1 p-8 space-y-6">
+          {/* Average Performance Chart */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl font-bold">Subject-wise Average Performance</CardTitle>
-              <p className="text-sm text-muted-foreground">Visual representation of your average scores across all subjects</p>
+              <CardTitle className="text-xl font-bold">Average Performance Across All Tests</CardTitle>
+              <p className="text-sm text-muted-foreground">Overall average scores for each subject</p>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="subject" />
+              <ResponsiveContainer width="100%" height={350}>
+                <BarChart data={averageChartData}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis dataKey="subject" className="text-xs" />
                   <YAxis domain={[0, 100]} />
                   <Tooltip />
                   <Legend />
@@ -241,40 +252,85 @@ const StudentReport = () => {
             </CardContent>
           </Card>
 
-          {/* Performance Insights */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl font-bold">Performance Insights</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <Award className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-green-900 dark:text-green-100">Strong Performance</p>
-                    <p className="text-sm text-green-700 dark:text-green-300">
-                      You're excelling in {topSubject} with an average of {highestAverage}%. Keep up the excellent work!
-                    </p>
-                  </div>
-                </div>
-                
-                {studentScores
-                  .filter(s => s.averageScore < 85)
-                  .map(score => (
-                    <div key={score.subject} className="flex items-start gap-3 p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                      <TrendingUp className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mt-0.5" />
-                      <div>
-                        <p className="font-medium text-yellow-900 dark:text-yellow-100">Room for Improvement</p>
-                        <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                          Focus on {score.subject} to improve your average from {score.averageScore}% to 85% or higher.
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          {/* Visual Representations of Each Exam */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Unit Test 1 */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg font-bold">Unit Test 1 Scores</CardTitle>
+                <p className="text-sm text-muted-foreground">Total: {unitTest1Total} | Average: {unitTest1Average}%</p>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={unitTest1Data}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="subject" className="text-xs" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Bar dataKey="score" fill="hsl(var(--chart-1))" name="Score (%)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Semester 1 */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg font-bold">Semester 1 Scores</CardTitle>
+                <p className="text-sm text-muted-foreground">Total: {semester1Total} | Average: {semester1Average}%</p>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={semester1Data}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="subject" className="text-xs" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Bar dataKey="score" fill="hsl(var(--chart-2))" name="Score (%)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Unit Test 2 */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg font-bold">Unit Test 2 Scores</CardTitle>
+                <p className="text-sm text-muted-foreground">Total: {unitTest2Total} | Average: {unitTest2Average}%</p>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={unitTest2Data}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="subject" className="text-xs" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Bar dataKey="score" fill="hsl(var(--chart-3))" name="Score (%)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Final Semester */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg font-bold">Final Semester Scores</CardTitle>
+                <p className="text-sm text-muted-foreground">Total: {finalSemesterTotal} | Average: {finalSemesterAverage}%</p>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={finalSemesterData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="subject" className="text-xs" />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip />
+                    <Bar dataKey="score" fill="hsl(var(--chart-4))" name="Score (%)" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
       </div>
     </div>
   );
