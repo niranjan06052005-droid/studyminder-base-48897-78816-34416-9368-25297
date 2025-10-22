@@ -79,7 +79,7 @@ const StudentAttendance = () => {
   return (
     <div className="flex min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col">
+      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col sticky top-0 h-screen overflow-y-auto">
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold">Student Portal</h1>
         </div>
