@@ -88,49 +88,6 @@ const StudentDashboard = () => {
             <p className="text-muted-foreground">Here's what's happening with your studies</p>
           </div>
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card className="gradient-card">
-              <CardHeader className="pb-3">
-                <CardDescription>Overall Attendance</CardDescription>
-                <CardTitle className="text-3xl text-success">92%</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Progress value={92} className="h-2" />
-              </CardContent>
-            </Card>
-
-            <Card className="gradient-card">
-              <CardHeader className="pb-3">
-                <CardDescription>Upcoming Test</CardDescription>
-                <CardTitle className="text-lg text-primary">Maths - Chapter 5</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">Oct 15th, 2025</p>
-              </CardContent>
-            </Card>
-
-            <Card className="gradient-card">
-              <CardHeader className="pb-3">
-                <CardDescription>Pending Fees</CardDescription>
-                <CardTitle className="text-3xl text-destructive">₹1,500</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">Due: Oct 20th</p>
-              </CardContent>
-            </Card>
-
-            <Card className="gradient-card">
-              <CardHeader className="pb-3">
-                <CardDescription>Recent Notices</CardDescription>
-                <CardTitle className="text-lg text-primary">3 New</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">View all notices</p>
-              </CardContent>
-            </Card>
-          </div>
-
           {/* My Subjects Section */}
           <div>
             <h3 className="text-2xl font-bold text-primary mb-4">My Subjects</h3>
