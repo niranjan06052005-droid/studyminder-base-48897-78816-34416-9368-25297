@@ -4,109 +4,122 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Home, LogOut, Trophy, Medal, Award, TrendingUp, Crown, Star } from "lucide-react";
+import { Home, LogOut, Trophy, Medal, Award, TrendingUp, Crown, Star, Target } from "lucide-react";
 
-// Mock leaderboard data
-const mockLeaderboardData = {
-  mathematics: {
-    unitTest1: [
-      { rank: 1, name: "Priya Desai", rollNo: "10A06", score: 48, maxScore: 50, percentage: 96, grade: "A+" },
-      { rank: 2, name: "Aarav Sharma", rollNo: "10A01", score: 45, maxScore: 50, percentage: 90, grade: "A+" },
-      { rank: 3, name: "Arjun Mehta", rollNo: "10A05", score: 44, maxScore: 50, percentage: 88, grade: "A" },
-      { rank: 4, name: "Ananya Singh", rollNo: "10A04", score: 42, maxScore: 50, percentage: 84, grade: "A" },
-      { rank: 5, name: "Rohan Kumar", rollNo: "10A03", score: 40, maxScore: 50, percentage: 80, grade: "A" },
-      { rank: 6, name: "Isha Reddy", rollNo: "10A08", score: 38, maxScore: 50, percentage: 76, grade: "B" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 35, maxScore: 50, percentage: 70, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 32, maxScore: 50, percentage: 64, grade: "C" },
-    ],
-    semester1: [
-      { rank: 1, name: "Aarav Sharma", rollNo: "10A01", score: 92, maxScore: 100, percentage: 92, grade: "A+" },
-      { rank: 2, name: "Priya Desai", rollNo: "10A06", score: 90, maxScore: 100, percentage: 90, grade: "A+" },
-      { rank: 3, name: "Ananya Singh", rollNo: "10A04", score: 88, maxScore: 100, percentage: 88, grade: "A" },
-      { rank: 4, name: "Arjun Mehta", rollNo: "10A05", score: 85, maxScore: 100, percentage: 85, grade: "A" },
-      { rank: 5, name: "Rohan Kumar", rollNo: "10A03", score: 82, maxScore: 100, percentage: 82, grade: "A" },
-      { rank: 6, name: "Isha Reddy", rollNo: "10A08", score: 78, maxScore: 100, percentage: 78, grade: "B" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 72, maxScore: 100, percentage: 72, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 68, maxScore: 100, percentage: 68, grade: "C" },
-    ],
-    unitTest2: [
-      { rank: 1, name: "Arjun Mehta", rollNo: "10A05", score: 47, maxScore: 50, percentage: 94, grade: "A+" },
-      { rank: 2, name: "Aarav Sharma", rollNo: "10A01", score: 46, maxScore: 50, percentage: 92, grade: "A+" },
-      { rank: 3, name: "Priya Desai", rollNo: "10A06", score: 45, maxScore: 50, percentage: 90, grade: "A+" },
-      { rank: 4, name: "Ananya Singh", rollNo: "10A04", score: 43, maxScore: 50, percentage: 86, grade: "A" },
-      { rank: 5, name: "Isha Reddy", rollNo: "10A08", score: 41, maxScore: 50, percentage: 82, grade: "A" },
-      { rank: 6, name: "Rohan Kumar", rollNo: "10A03", score: 39, maxScore: 50, percentage: 78, grade: "B" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 36, maxScore: 50, percentage: 72, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 33, maxScore: 50, percentage: 66, grade: "C" },
-    ],
-    finalSemester: [
-      { rank: 1, name: "Aarav Sharma", rollNo: "10A01", score: 95, maxScore: 100, percentage: 95, grade: "A+" },
-      { rank: 2, name: "Priya Desai", rollNo: "10A06", score: 93, maxScore: 100, percentage: 93, grade: "A+" },
-      { rank: 3, name: "Arjun Mehta", rollNo: "10A05", score: 91, maxScore: 100, percentage: 91, grade: "A+" },
-      { rank: 4, name: "Ananya Singh", rollNo: "10A04", score: 87, maxScore: 100, percentage: 87, grade: "A" },
-      { rank: 5, name: "Isha Reddy", rollNo: "10A08", score: 84, maxScore: 100, percentage: 84, grade: "A" },
-      { rank: 6, name: "Rohan Kumar", rollNo: "10A03", score: 80, maxScore: 100, percentage: 80, grade: "A" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 75, maxScore: 100, percentage: 75, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 70, maxScore: 100, percentage: 70, grade: "B" },
-    ],
+// Mock leaderboard data - matching teacher's test entry structure
+const mockTestResults = {
+  "class10a-mathematics": {
+    "chapter1-unit": {
+      testName: "Chapter 1 - Unit Test",
+      maxMarks: 50,
+      students: [
+        { rollNo: "10A06", name: "Priya Desai", score: 48, percentage: 96, grade: "A+" },
+        { rollNo: "10A01", name: "Aarav Sharma", score: 45, percentage: 90, grade: "A+" },
+        { rollNo: "10A05", name: "Arjun Mehta", score: 44, percentage: 88, grade: "A" },
+        { rollNo: "10A04", name: "Ananya Singh", score: 42, percentage: 84, grade: "A" },
+        { rollNo: "10A03", name: "Rohan Kumar", score: 40, percentage: 80, grade: "A" },
+        { rollNo: "10A08", name: "Isha Reddy", score: 38, percentage: 76, grade: "B" },
+        { rollNo: "10A07", name: "Vihaan Joshi", score: 35, percentage: 70, grade: "B" },
+        { rollNo: "10A02", name: "Diya Patel", score: 32, percentage: 64, grade: "C" },
+      ]
+    },
+    "chapter2-unit": {
+      testName: "Chapter 2 - Unit Test",
+      maxMarks: 50,
+      students: [
+        { rollNo: "10A05", name: "Arjun Mehta", score: 47, percentage: 94, grade: "A+" },
+        { rollNo: "10A01", name: "Aarav Sharma", score: 46, percentage: 92, grade: "A+" },
+        { rollNo: "10A06", name: "Priya Desai", score: 45, percentage: 90, grade: "A+" },
+        { rollNo: "10A04", name: "Ananya Singh", score: 43, percentage: 86, grade: "A" },
+        { rollNo: "10A08", name: "Isha Reddy", score: 41, percentage: 82, grade: "A" },
+        { rollNo: "10A03", name: "Rohan Kumar", score: 39, percentage: 78, grade: "B" },
+        { rollNo: "10A07", name: "Vihaan Joshi", score: 36, percentage: 72, grade: "B" },
+        { rollNo: "10A02", name: "Diya Patel", score: 33, percentage: 66, grade: "C" },
+      ]
+    },
+    "midterm": {
+      testName: "Mid-Term Examination",
+      maxMarks: 100,
+      students: [
+        { rollNo: "10A01", name: "Aarav Sharma", score: 92, percentage: 92, grade: "A+" },
+        { rollNo: "10A06", name: "Priya Desai", score: 90, percentage: 90, grade: "A+" },
+        { rollNo: "10A04", name: "Ananya Singh", score: 88, percentage: 88, grade: "A" },
+        { rollNo: "10A05", name: "Arjun Mehta", score: 85, percentage: 85, grade: "A" },
+        { rollNo: "10A03", name: "Rohan Kumar", score: 82, percentage: 82, grade: "A" },
+        { rollNo: "10A08", name: "Isha Reddy", score: 78, percentage: 78, grade: "B" },
+        { rollNo: "10A07", name: "Vihaan Joshi", score: 72, percentage: 72, grade: "B" },
+        { rollNo: "10A02", name: "Diya Patel", score: 68, percentage: 68, grade: "C" },
+      ]
+    }
   },
-  science: {
-    unitTest1: [
-      { rank: 1, name: "Ananya Singh", rollNo: "10A04", score: 49, maxScore: 50, percentage: 98, grade: "A+" },
-      { rank: 2, name: "Aarav Sharma", rollNo: "10A01", score: 47, maxScore: 50, percentage: 94, grade: "A+" },
-      { rank: 3, name: "Isha Reddy", rollNo: "10A08", score: 46, maxScore: 50, percentage: 92, grade: "A+" },
-      { rank: 4, name: "Priya Desai", rollNo: "10A06", score: 44, maxScore: 50, percentage: 88, grade: "A" },
-      { rank: 5, name: "Arjun Mehta", rollNo: "10A05", score: 42, maxScore: 50, percentage: 84, grade: "A" },
-      { rank: 6, name: "Rohan Kumar", rollNo: "10A03", score: 39, maxScore: 50, percentage: 78, grade: "B" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 36, maxScore: 50, percentage: 72, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 34, maxScore: 50, percentage: 68, grade: "C" },
-    ],
-    semester1: [
-      { rank: 1, name: "Ananya Singh", rollNo: "10A04", score: 96, maxScore: 100, percentage: 96, grade: "A+" },
-      { rank: 2, name: "Isha Reddy", rollNo: "10A08", score: 93, maxScore: 100, percentage: 93, grade: "A+" },
-      { rank: 3, name: "Aarav Sharma", rollNo: "10A01", score: 91, maxScore: 100, percentage: 91, grade: "A+" },
-      { rank: 4, name: "Priya Desai", rollNo: "10A06", score: 88, maxScore: 100, percentage: 88, grade: "A" },
-      { rank: 5, name: "Arjun Mehta", rollNo: "10A05", score: 85, maxScore: 100, percentage: 85, grade: "A" },
-      { rank: 6, name: "Rohan Kumar", rollNo: "10A03", score: 80, maxScore: 100, percentage: 80, grade: "A" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 75, maxScore: 100, percentage: 75, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 71, maxScore: 100, percentage: 71, grade: "B" },
-    ],
-    unitTest2: [
-      { rank: 1, name: "Isha Reddy", rollNo: "10A08", score: 48, maxScore: 50, percentage: 96, grade: "A+" },
-      { rank: 2, name: "Ananya Singh", rollNo: "10A04", score: 47, maxScore: 50, percentage: 94, grade: "A+" },
-      { rank: 3, name: "Aarav Sharma", rollNo: "10A01", score: 45, maxScore: 50, percentage: 90, grade: "A+" },
-      { rank: 4, name: "Priya Desai", rollNo: "10A06", score: 43, maxScore: 50, percentage: 86, grade: "A" },
-      { rank: 5, name: "Arjun Mehta", rollNo: "10A05", score: 41, maxScore: 50, percentage: 82, grade: "A" },
-      { rank: 6, name: "Rohan Kumar", rollNo: "10A03", score: 38, maxScore: 50, percentage: 76, grade: "B" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 35, maxScore: 50, percentage: 70, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 32, maxScore: 50, percentage: 64, grade: "C" },
-    ],
-    finalSemester: [
-      { rank: 1, name: "Ananya Singh", rollNo: "10A04", score: 97, maxScore: 100, percentage: 97, grade: "A+" },
-      { rank: 2, name: "Isha Reddy", rollNo: "10A08", score: 95, maxScore: 100, percentage: 95, grade: "A+" },
-      { rank: 3, name: "Aarav Sharma", rollNo: "10A01", score: 92, maxScore: 100, percentage: 92, grade: "A+" },
-      { rank: 4, name: "Priya Desai", rollNo: "10A06", score: 89, maxScore: 100, percentage: 89, grade: "A" },
-      { rank: 5, name: "Arjun Mehta", rollNo: "10A05", score: 86, maxScore: 100, percentage: 86, grade: "A" },
-      { rank: 6, name: "Rohan Kumar", rollNo: "10A03", score: 82, maxScore: 100, percentage: 82, grade: "A" },
-      { rank: 7, name: "Vihaan Joshi", rollNo: "10A07", score: 77, maxScore: 100, percentage: 77, grade: "B" },
-      { rank: 8, name: "Diya Patel", rollNo: "10A02", score: 73, maxScore: 100, percentage: 73, grade: "B" },
-    ],
-  },
+  "class10a-science": {
+    "chapter1-unit": {
+      testName: "Chapter 1 - Unit Test",
+      maxMarks: 50,
+      students: [
+        { rollNo: "10A04", name: "Ananya Singh", score: 49, percentage: 98, grade: "A+" },
+        { rollNo: "10A01", name: "Aarav Sharma", score: 47, percentage: 94, grade: "A+" },
+        { rollNo: "10A08", name: "Isha Reddy", score: 46, percentage: 92, grade: "A+" },
+        { rollNo: "10A06", name: "Priya Desai", score: 44, percentage: 88, grade: "A" },
+        { rollNo: "10A05", name: "Arjun Mehta", score: 42, percentage: 84, grade: "A" },
+        { rollNo: "10A03", name: "Rohan Kumar", score: 39, percentage: 78, grade: "B" },
+        { rollNo: "10A07", name: "Vihaan Joshi", score: 36, percentage: 72, grade: "B" },
+        { rollNo: "10A02", name: "Diya Patel", score: 34, percentage: 68, grade: "C" },
+      ]
+    },
+    "chapter2-unit": {
+      testName: "Chapter 2 - Unit Test",
+      maxMarks: 50,
+      students: [
+        { rollNo: "10A08", name: "Isha Reddy", score: 48, percentage: 96, grade: "A+" },
+        { rollNo: "10A04", name: "Ananya Singh", score: 47, percentage: 94, grade: "A+" },
+        { rollNo: "10A01", name: "Aarav Sharma", score: 45, percentage: 90, grade: "A+" },
+        { rollNo: "10A06", name: "Priya Desai", score: 43, percentage: 86, grade: "A" },
+        { rollNo: "10A05", name: "Arjun Mehta", score: 41, percentage: 82, grade: "A" },
+        { rollNo: "10A03", name: "Rohan Kumar", score: 38, percentage: 76, grade: "B" },
+        { rollNo: "10A07", name: "Vihaan Joshi", score: 35, percentage: 70, grade: "B" },
+        { rollNo: "10A02", name: "Diya Patel", score: 32, percentage: 64, grade: "C" },
+      ]
+    },
+    "midterm": {
+      testName: "Mid-Term Examination",
+      maxMarks: 100,
+      students: [
+        { rollNo: "10A04", name: "Ananya Singh", score: 96, percentage: 96, grade: "A+" },
+        { rollNo: "10A08", name: "Isha Reddy", score: 93, percentage: 93, grade: "A+" },
+        { rollNo: "10A01", name: "Aarav Sharma", score: 91, percentage: 91, grade: "A+" },
+        { rollNo: "10A06", name: "Priya Desai", score: 88, percentage: 88, grade: "A" },
+        { rollNo: "10A05", name: "Arjun Mehta", score: 85, percentage: 85, grade: "A" },
+        { rollNo: "10A03", name: "Rohan Kumar", score: 80, percentage: 80, grade: "A" },
+        { rollNo: "10A07", name: "Vihaan Joshi", score: 75, percentage: 75, grade: "B" },
+        { rollNo: "10A02", name: "Diya Patel", score: 71, percentage: 71, grade: "B" },
+      ]
+    }
+  }
 };
 
 const StudentLeaderboard = () => {
-  const [selectedSubject, setSelectedSubject] = useState<"mathematics" | "science">("mathematics");
-  const [selectedTest, setSelectedTest] = useState<"unitTest1" | "semester1" | "unitTest2" | "finalSemester">("unitTest1");
+  const [selectedBatch, setSelectedBatch] = useState("class10a-mathematics");
+  const [selectedTest, setSelectedTest] = useState("chapter1-unit");
   
   const currentUser = "Aarav Sharma"; // Logged in user
-  const leaderboardData = mockLeaderboardData[selectedSubject][selectedTest];
-  const userRank = leaderboardData.find(student => student.name === currentUser);
+  
+  // Get current test data
+  const testData = mockTestResults[selectedBatch]?.[selectedTest];
+  const leaderboardData = testData?.students || [];
+  const userRank = leaderboardData.findIndex(student => student.name === currentUser) + 1;
+  const userDetails = leaderboardData.find(student => student.name === currentUser);
+  
+  // Calculate class statistics
+  const classAverage = leaderboardData.length > 0
+    ? (leaderboardData.reduce((sum, s) => sum + s.percentage, 0) / leaderboardData.length).toFixed(1)
+    : 0;
+  const highestScore = leaderboardData[0]?.score || 0;
 
   const getRankIcon = (rank: number) => {
-    if (rank === 1) return <Crown className="h-5 w-5 text-yellow-500" />;
-    if (rank === 2) return <Medal className="h-5 w-5 text-gray-400" />;
-    if (rank === 3) return <Medal className="h-5 w-5 text-orange-600" />;
+    if (rank === 1) return <Crown className="h-6 w-6 text-yellow-500" />;
+    if (rank === 2) return <Medal className="h-6 w-6 text-gray-400" />;
+    if (rank === 3) return <Medal className="h-6 w-6 text-orange-600" />;
     return <Star className="h-4 w-4 text-muted-foreground" />;
   };
 
@@ -116,6 +129,12 @@ const StudentLeaderboard = () => {
     if (rank === 3) return "bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-500/50";
     return "bg-muted text-muted-foreground border-border";
   };
+  
+  const getBatchLabel = (batchKey: string) => {
+    if (batchKey === "class10a-mathematics") return "Class 10 A - Mathematics";
+    if (batchKey === "class10a-science") return "Class 10 A - Science";
+    return batchKey;
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -123,6 +142,7 @@ const StudentLeaderboard = () => {
       <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col sticky top-0 h-screen overflow-y-auto">
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold">Student Portal</h1>
+          <p className="text-sm text-white/60 mt-1">{currentUser}</p>
         </div>
         
         <nav className="flex-1 p-4">
@@ -199,17 +219,62 @@ const StudentLeaderboard = () => {
             <p className="text-muted-foreground">See where you stand among your classmates</p>
           </div>
 
+          {/* Class Statistics */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Trophy className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Students</p>
+                    <p className="text-2xl font-bold">{leaderboardData.length}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
+                    <TrendingUp className="h-5 w-5 text-accent-foreground" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Class Average</p>
+                    <p className="text-2xl font-bold">{classAverage}%</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
+                    <Crown className="h-5 w-5 text-success" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Highest Score</p>
+                    <p className="text-2xl font-bold text-success">{highestScore}/{testData?.maxMarks}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Your Performance Card */}
-          {userRank && (
+          {userDetails && userRank > 0 && (
             <Card className="mb-6 gradient-card border-2 border-primary/50">
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Trophy className="h-6 w-6 text-primary" />
+                    <Target className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <CardTitle>Your Performance</CardTitle>
-                    <CardDescription>Current standing in selected test</CardDescription>
+                    <CardDescription>Current standing in {testData?.testName}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -217,19 +282,22 @@ const StudentLeaderboard = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="bg-background/50 p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground mb-1">Your Rank</p>
-                    <p className="text-3xl font-bold text-primary">#{userRank.rank}</p>
+                    <div className="flex items-center gap-2">
+                      {getRankIcon(userRank)}
+                      <p className="text-3xl font-bold text-primary">#{userRank}</p>
+                    </div>
                   </div>
                   <div className="bg-background/50 p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground mb-1">Your Score</p>
-                    <p className="text-3xl font-bold text-success">{userRank.score}/{userRank.maxScore}</p>
+                    <p className="text-3xl font-bold text-success">{userDetails.score}/{testData?.maxMarks}</p>
                   </div>
                   <div className="bg-background/50 p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground mb-1">Percentage</p>
-                    <p className="text-3xl font-bold">{userRank.percentage}%</p>
+                    <p className="text-3xl font-bold">{userDetails.percentage}%</p>
                   </div>
                   <div className="bg-background/50 p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground mb-1">Grade</p>
-                    <p className="text-3xl font-bold text-accent-foreground">{userRank.grade}</p>
+                    <p className="text-3xl font-bold text-accent-foreground">{userDetails.grade}</p>
                   </div>
                 </div>
               </CardContent>
@@ -239,34 +307,33 @@ const StudentLeaderboard = () => {
           {/* Filters */}
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Select Subject & Test</CardTitle>
-              <CardDescription>View rankings for different subjects and tests</CardDescription>
+              <CardTitle>Select Class & Test</CardTitle>
+              <CardDescription>View rankings for specific test and chapter</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Subject</label>
-                  <Select value={selectedSubject} onValueChange={(value: any) => setSelectedSubject(value)}>
+                  <label className="text-sm font-medium mb-2 block">Batch (Class - Subject)</label>
+                  <Select value={selectedBatch} onValueChange={setSelectedBatch}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="mathematics">Mathematics</SelectItem>
-                      <SelectItem value="science">Science</SelectItem>
+                      <SelectItem value="class10a-mathematics">Class 10 A - Mathematics</SelectItem>
+                      <SelectItem value="class10a-science">Class 10 A - Science</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Test Type</label>
-                  <Select value={selectedTest} onValueChange={(value: any) => setSelectedTest(value)}>
+                  <label className="text-sm font-medium mb-2 block">Test / Chapter</label>
+                  <Select value={selectedTest} onValueChange={setSelectedTest}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="unitTest1">Unit Test 1</SelectItem>
-                      <SelectItem value="semester1">Semester 1</SelectItem>
-                      <SelectItem value="unitTest2">Unit Test 2</SelectItem>
-                      <SelectItem value="finalSemester">Final Semester</SelectItem>
+                      <SelectItem value="chapter1-unit">Chapter 1 - Unit Test</SelectItem>
+                      <SelectItem value="chapter2-unit">Chapter 2 - Unit Test</SelectItem>
+                      <SelectItem value="midterm">Mid-Term Examination</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -274,27 +341,80 @@ const StudentLeaderboard = () => {
             </CardContent>
           </Card>
 
-          {/* Leaderboard Table */}
+          {/* Top 3 Podium */}
+          {leaderboardData.length >= 3 && (
+            <Card className="mb-6 gradient-card">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5 text-primary" />
+                  Top Performers
+                </CardTitle>
+                <CardDescription>{testData?.testName} - {getBatchLabel(selectedBatch)}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-center items-end gap-4">
+                  {/* 2nd Place */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-24 h-32 bg-gray-400/20 border-2 border-gray-400/50 rounded-lg flex flex-col items-center justify-center">
+                      <Medal className="h-12 w-12 text-gray-400 mb-2" />
+                      <span className="text-2xl font-bold text-gray-400">2</span>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <p className="font-bold">{leaderboardData[1].name}</p>
+                      <p className="text-sm text-muted-foreground">{leaderboardData[1].rollNo}</p>
+                      <p className="text-lg font-bold text-success mt-1">{leaderboardData[1].score}/{testData?.maxMarks}</p>
+                      <p className="text-sm text-muted-foreground">{leaderboardData[1].percentage}%</p>
+                    </div>
+                  </div>
+
+                  {/* 1st Place */}
+                  <div className="flex flex-col items-center -mt-6">
+                    <div className="w-28 h-40 bg-yellow-500/20 border-2 border-yellow-500/50 rounded-lg flex flex-col items-center justify-center">
+                      <Crown className="h-16 w-16 text-yellow-500 mb-2" />
+                      <span className="text-3xl font-bold text-yellow-500">1</span>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <p className="font-bold text-lg">{leaderboardData[0].name}</p>
+                      <p className="text-sm text-muted-foreground">{leaderboardData[0].rollNo}</p>
+                      <p className="text-xl font-bold text-success mt-1">{leaderboardData[0].score}/{testData?.maxMarks}</p>
+                      <p className="text-sm text-muted-foreground">{leaderboardData[0].percentage}%</p>
+                    </div>
+                  </div>
+
+                  {/* 3rd Place */}
+                  <div className="flex flex-col items-center">
+                    <div className="w-24 h-32 bg-orange-500/20 border-2 border-orange-500/50 rounded-lg flex flex-col items-center justify-center">
+                      <Medal className="h-12 w-12 text-orange-600 mb-2" />
+                      <span className="text-2xl font-bold text-orange-600">3</span>
+                    </div>
+                    <div className="mt-3 text-center">
+                      <p className="font-bold">{leaderboardData[2].name}</p>
+                      <p className="text-sm text-muted-foreground">{leaderboardData[2].rollNo}</p>
+                      <p className="text-lg font-bold text-success mt-1">{leaderboardData[2].score}/{testData?.maxMarks}</p>
+                      <p className="text-sm text-muted-foreground">{leaderboardData[2].percentage}%</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Complete Leaderboard Table */}
           <Card className="gradient-card">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2">
-                    <Trophy className="h-5 w-5 text-primary" />
-                    Class Rankings
+                    <Award className="h-5 w-5 text-primary" />
+                    Complete Rankings
                   </CardTitle>
                   <CardDescription>
-                    {selectedSubject === "mathematics" ? "Mathematics" : "Science"} - {
-                      selectedTest === "unitTest1" ? "Unit Test 1" :
-                      selectedTest === "semester1" ? "Semester 1" :
-                      selectedTest === "unitTest2" ? "Unit Test 2" :
-                      "Final Semester"
-                    }
+                    {testData?.testName} - {getBatchLabel(selectedBatch)}
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-success" />
-                  <span className="text-sm text-muted-foreground">8 Students</span>
+                  <span className="text-sm text-muted-foreground">{leaderboardData.length} Students</span>
                 </div>
               </div>
             </CardHeader>
@@ -302,7 +422,7 @@ const StudentLeaderboard = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-20">Rank</TableHead>
+                    <TableHead className="w-24">Rank</TableHead>
                     <TableHead>Roll No</TableHead>
                     <TableHead>Student Name</TableHead>
                     <TableHead>Score</TableHead>
@@ -311,89 +431,99 @@ const StudentLeaderboard = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {leaderboardData.map((student) => (
-                    <TableRow 
-                      key={student.rollNo} 
-                      className={student.name === currentUser ? "bg-primary/5 border-l-4 border-primary" : ""}
-                    >
-                      <TableCell>
-                        <div className={`flex items-center justify-center gap-2 px-3 py-1.5 rounded-full border ${getRankBadgeColor(student.rank)}`}>
-                          {getRankIcon(student.rank)}
-                          <span className="font-bold">#{student.rank}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-sm">{student.rollNo}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{student.name}</span>
-                          {student.name === currentUser && (
-                            <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">You</span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <span className="font-semibold">{student.score}</span>
-                        <span className="text-muted-foreground">/{student.maxScore}</span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full ${
-                                student.percentage >= 90 ? "bg-success" :
-                                student.percentage >= 75 ? "bg-accent-foreground" :
-                                "bg-destructive"
-                              }`}
-                              style={{ width: `${student.percentage}%` }}
-                            />
+                  {leaderboardData.map((student, index) => {
+                    const rank = index + 1;
+                    return (
+                      <TableRow 
+                        key={student.rollNo} 
+                        className={student.name === currentUser ? "bg-primary/5 border-l-4 border-primary" : ""}
+                      >
+                        <TableCell>
+                          <div className={`flex items-center justify-center gap-2 px-3 py-1.5 rounded-full border ${getRankBadgeColor(rank)}`}>
+                            {getRankIcon(rank)}
+                            <span className="font-bold">#{rank}</span>
                           </div>
-                          <span className="font-medium">{student.percentage}%</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <span className={`px-3 py-1 rounded-full font-bold text-sm ${
-                          student.grade === "A+" || student.grade === "A" 
-                            ? "bg-success/20 text-success border border-success/50" :
-                          student.grade === "B" 
-                            ? "bg-accent/20 text-accent-foreground border border-accent/50" :
-                            "bg-destructive/20 text-destructive border border-destructive/50"
-                        }`}>
-                          {student.grade}
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        </TableCell>
+                        <TableCell className="font-mono text-sm">{student.rollNo}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">{student.name}</span>
+                            {student.name === currentUser && (
+                              <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs rounded-full">You</span>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span className="font-semibold">{student.score}</span>
+                          <span className="text-muted-foreground">/{testData?.maxMarks}</span>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full ${
+                                  student.percentage >= 90 ? "bg-success" :
+                                  student.percentage >= 75 ? "bg-accent-foreground" :
+                                  "bg-destructive"
+                                }`}
+                                style={{ width: `${student.percentage}%` }}
+                              />
+                            </div>
+                            <span className="font-medium">{student.percentage}%</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span className={`px-3 py-1 rounded-full font-bold text-sm ${
+                            student.grade === "A+" || student.grade === "A" 
+                              ? "bg-success/20 text-success border border-success/50" :
+                            student.grade === "B" 
+                              ? "bg-accent/20 text-accent-foreground border border-accent/50" :
+                              "bg-destructive/20 text-destructive border border-destructive/50"
+                          }`}>
+                            {student.grade}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </CardContent>
           </Card>
 
-          {/* Performance Tips */}
+          {/* Study Insights */}
           <Card className="mt-6 gradient-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
-                Performance Tips
+                Study Insights
               </CardTitle>
+              <CardDescription>Tips to improve your rank</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-success/10 border border-success/30 rounded-lg">
-                  <h4 className="font-semibold text-success mb-2">Keep Up the Good Work!</h4>
+                  <h4 className="font-semibold text-success mb-2 flex items-center gap-2">
+                    <Trophy className="h-4 w-4" />
+                    Aim Higher
+                  </h4>
                   <p className="text-sm text-muted-foreground">
-                    Maintain consistent study habits and practice regularly to improve your rankings.
-                  </p>
-                </div>
-                <div className="p-4 bg-accent/10 border border-accent/30 rounded-lg">
-                  <h4 className="font-semibold text-accent-foreground mb-2">Learn from Top Rankers</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Study together with high performers and learn their effective study strategies.
+                    {userRank > 0 && userRank <= 3 
+                      ? "You're in the top 3! Keep practicing to maintain your position." 
+                      : userRank > 3
+                      ? `You're ${userRank - 1} ranks away from the podium. Focus on weak topics to climb higher.`
+                      : "Review your performance across all chapters to identify areas for improvement."}
                   </p>
                 </div>
                 <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg">
-                  <h4 className="font-semibold text-primary mb-2">Track Your Progress</h4>
+                  <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
+                    <Target className="h-4 w-4" />
+                    Class Standing
+                  </h4>
                   <p className="text-sm text-muted-foreground">
-                    Compare your performance across different tests to identify areas for improvement.
+                    Class average is {classAverage}%. {userDetails && userDetails.percentage >= Number(classAverage)
+                      ? "You're performing above average - excellent work!"
+                      : "Work on improving to reach the class average."}
                   </p>
                 </div>
               </div>
