@@ -219,50 +219,42 @@ const StudentLeaderboard = () => {
             <p className="text-muted-foreground">See where you stand among your classmates</p>
           </div>
 
-          {/* Class Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Trophy className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total Students</p>
-                    <p className="text-2xl font-bold">{leaderboardData.length}</p>
-                  </div>
+          {/* Filters */}
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Select Subject & Chapter</CardTitle>
+              <CardDescription>View rankings for specific test and chapter</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Batch (Class - Subject)</label>
+                  <Select value={selectedBatch} onValueChange={setSelectedBatch}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="class10a-mathematics">Class 10 A - Mathematics</SelectItem>
+                      <SelectItem value="class10a-science">Class 10 A - Science</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
-                    <TrendingUp className="h-5 w-5 text-accent-foreground" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Class Average</p>
-                    <p className="text-2xl font-bold">{classAverage}%</p>
-                  </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Test / Chapter</label>
+                  <Select value={selectedTest} onValueChange={setSelectedTest}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="chapter1-unit">Chapter 1 - Unit Test</SelectItem>
+                      <SelectItem value="chapter2-unit">Chapter 2 - Unit Test</SelectItem>
+                      <SelectItem value="midterm">Mid-Term Examination</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
-                    <Crown className="h-5 w-5 text-success" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Highest Score</p>
-                    <p className="text-2xl font-bold text-success">{highestScore}/{testData?.maxMarks}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Your Performance Card */}
           {userDetails && userRank > 0 && (
@@ -303,43 +295,6 @@ const StudentLeaderboard = () => {
               </CardContent>
             </Card>
           )}
-
-          {/* Filters */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Select Class & Test</CardTitle>
-              <CardDescription>View rankings for specific test and chapter</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Batch (Class - Subject)</label>
-                  <Select value={selectedBatch} onValueChange={setSelectedBatch}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="class10a-mathematics">Class 10 A - Mathematics</SelectItem>
-                      <SelectItem value="class10a-science">Class 10 A - Science</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Test / Chapter</label>
-                  <Select value={selectedTest} onValueChange={setSelectedTest}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="chapter1-unit">Chapter 1 - Unit Test</SelectItem>
-                      <SelectItem value="chapter2-unit">Chapter 2 - Unit Test</SelectItem>
-                      <SelectItem value="midterm">Mid-Term Examination</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Top 3 Podium */}
           {leaderboardData.length >= 3 && (
@@ -398,6 +353,7 @@ const StudentLeaderboard = () => {
               </CardContent>
             </Card>
           )}
+
 
           {/* Complete Leaderboard Table */}
           <Card className="gradient-card">
@@ -491,44 +447,6 @@ const StudentLeaderboard = () => {
             </CardContent>
           </Card>
 
-          {/* Study Insights */}
-          <Card className="mt-6 gradient-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                Study Insights
-              </CardTitle>
-              <CardDescription>Tips to improve your rank</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-success/10 border border-success/30 rounded-lg">
-                  <h4 className="font-semibold text-success mb-2 flex items-center gap-2">
-                    <Trophy className="h-4 w-4" />
-                    Aim Higher
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    {userRank > 0 && userRank <= 3 
-                      ? "You're in the top 3! Keep practicing to maintain your position." 
-                      : userRank > 3
-                      ? `You're ${userRank - 1} ranks away from the podium. Focus on weak topics to climb higher.`
-                      : "Review your performance across all chapters to identify areas for improvement."}
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg">
-                  <h4 className="font-semibold text-primary mb-2 flex items-center gap-2">
-                    <Target className="h-4 w-4" />
-                    Class Standing
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Class average is {classAverage}%. {userDetails && userDetails.percentage >= Number(classAverage)
-                      ? "You're performing above average - excellent work!"
-                      : "Work on improving to reach the class average."}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </main>
       </div>
     </div>
