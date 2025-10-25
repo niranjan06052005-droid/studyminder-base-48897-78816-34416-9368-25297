@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import StudentDashboard from "./pages/StudentDashboard";
+import StudentProfile from "./pages/StudentProfile";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import TeacherClassList from "./pages/TeacherClassList";
 import TeacherBatchView from "./pages/TeacherBatchView";
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/programs/primary" element={<PrimaryProgram />} />
           <Route path="/programs/primary/batch/:standard" element={<BatchDetails />} />
           <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/profile" element={<StudentProfile />} />
           <Route path="/student/report" element={<StudentReport />} />
           <Route path="/student/attendance" element={<StudentAttendance />} />
           <Route path="/student/leaderboard" element={<StudentLeaderboard />} />

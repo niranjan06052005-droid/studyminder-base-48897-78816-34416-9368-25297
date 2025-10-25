@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, FileText, DollarSign, Bell, LogOut, Home, Calculator, Beaker, Globe, ClipboardList, Trophy, Award, Smile, Languages } from "lucide-react";
+import { BookOpen, FileText, DollarSign, Bell, LogOut, Home, Calculator, Beaker, Globe, ClipboardList, Trophy, Award, Smile, Languages, User } from "lucide-react";
 
 const StudentDashboard = () => {
   return (
@@ -18,6 +18,11 @@ const StudentDashboard = () => {
             <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
               <Home className="h-5 w-5" />
               <span>Home/Dashboard</span>
+            </Link>
+            
+            <Link to="/student/profile" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <User className="h-5 w-5" />
+              <span>My Profile</span>
             </Link>
             
             <Link to="/student/report" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
