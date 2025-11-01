@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Home, LogOut, Trophy, Medal, Award, TrendingUp, Crown, Star, Target } from "lucide-react";
+import { Home, LogOut, Trophy, Medal, Award, TrendingUp, Crown, Star, Target, ClipboardList, FileText, DollarSign, Bell } from "lucide-react";
 
 // Mock leaderboard data - matching teacher's test entry structure
 const mockTestResults = {
@@ -137,9 +137,9 @@ const StudentLeaderboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col sticky top-0 h-screen overflow-y-auto">
+      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col fixed left-0 top-0 h-screen overflow-y-auto z-40">
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold">Student Portal</h1>
           <p className="text-sm text-white/60 mt-1">{currentUser}</p>
@@ -149,16 +149,16 @@ const StudentLeaderboard = () => {
           <div className="space-y-2">
             <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
               <Home className="h-5 w-5" />
-              <span>Home/Dashboard</span>
+              <span>Home</span>
             </Link>
             
             <Link to="/student/report" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Home className="h-5 w-5" />
+              <ClipboardList className="h-5 w-5" />
               <span>My Report</span>
             </Link>
             
             <Link to="/student/attendance" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Home className="h-5 w-5" />
+              <FileText className="h-5 w-5" />
               <span>Attendance</span>
             </Link>
             
@@ -167,23 +167,13 @@ const StudentLeaderboard = () => {
               <span>Leaderboard</span>
             </Link>
             
-            <Link to="/student/achievements" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Award className="h-5 w-5" />
-              <span>Achievements</span>
-            </Link>
-            
-            <Link to="/student/fun-spot" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Home className="h-5 w-5" />
-              <span>Fun Spot</span>
-            </Link>
-            
             <Link to="/student/fees" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Home className="h-5 w-5" />
+              <DollarSign className="h-5 w-5" />
               <span>Fees</span>
             </Link>
             
             <Link to="/student/notices" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Home className="h-5 w-5" />
+              <Bell className="h-5 w-5" />
               <span>Notices</span>
             </Link>
           </div>
@@ -191,7 +181,7 @@ const StudentLeaderboard = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col ml-64">
         {/* Header */}
         <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
           <div className="px-8 py-4 flex justify-between items-center">

@@ -88,9 +88,9 @@ const StudentFees = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col">
+      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col fixed left-0 top-0 h-screen overflow-y-auto z-40">
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold">Student Portal</h1>
         </div>
@@ -99,7 +99,7 @@ const StudentFees = () => {
           <div className="space-y-2">
             <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
               <Home className="h-5 w-5" />
-              <span>Home/Dashboard</span>
+              <span>Home</span>
             </Link>
             
             <Link to="/student/report" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
@@ -117,16 +117,6 @@ const StudentFees = () => {
               <span>Leaderboard</span>
             </Link>
             
-            <Link to="/student/achievements" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Award className="h-5 w-5" />
-              <span>Achievements</span>
-            </Link>
-            
-            <Link to="/student/fun-spot" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Smile className="h-5 w-5" />
-              <span>Fun Spot</span>
-            </Link>
-            
             <Link to="/student/fees" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
               <DollarSign className="h-5 w-5" />
               <span>Fees</span>
@@ -141,7 +131,7 @@ const StudentFees = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col ml-64">
         {/* Header */}
         <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
           <div className="px-8 py-4 flex justify-between items-center">
