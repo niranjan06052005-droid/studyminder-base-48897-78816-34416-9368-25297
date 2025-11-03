@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Home, LogOut, BookOpen, Award, Download, ClipboardList, FileText, Trophy, Smile, DollarSign, Bell } from "lucide-react";
+import { Home, LogOut, BookOpen, Award, Download, ClipboardList, FileText, Trophy, Smile, DollarSign, Bell, User } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -110,7 +110,6 @@ const StudentReport = () => {
       <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col fixed left-0 top-0 h-screen overflow-y-auto z-40">
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold">Student Portal</h1>
-          <p className="text-sm text-white/60 mt-1">Rajiv Kumar</p>
         </div>
         
         <nav className="flex-1 p-4">
@@ -118,6 +117,11 @@ const StudentReport = () => {
             <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
               <Home className="h-5 w-5" />
               <span>Home</span>
+            </Link>
+            
+            <Link to="/student/profile" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <User className="h-5 w-5" />
+              <span>My Profile</span>
             </Link>
             
             <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10">
@@ -236,6 +240,26 @@ const StudentReport = () => {
                         </TableRow>
                       );
                     })}
+                    {/* Total Row */}
+                    <TableRow className="bg-muted/50 font-bold">
+                      <TableCell className="font-bold">Total</TableCell>
+                      <TableCell className="text-center">{unitTest1Total}</TableCell>
+                      <TableCell className="text-center">{semester1Total}</TableCell>
+                      <TableCell className="text-center">{unitTest2Total}</TableCell>
+                      <TableCell className="text-center">{finalSemesterTotal}</TableCell>
+                      <TableCell className="text-center">-</TableCell>
+                      <TableCell className="text-center">-</TableCell>
+                    </TableRow>
+                    {/* Percentage Row */}
+                    <TableRow className="bg-muted font-bold">
+                      <TableCell className="font-bold">Percentage</TableCell>
+                      <TableCell className="text-center">{unitTest1Average}%</TableCell>
+                      <TableCell className="text-center">{semester1Average}%</TableCell>
+                      <TableCell className="text-center">{unitTest2Average}%</TableCell>
+                      <TableCell className="text-center">{finalSemesterAverage}%</TableCell>
+                      <TableCell className="text-center">-</TableCell>
+                      <TableCell className="text-center">-</TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </div>

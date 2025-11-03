@@ -68,15 +68,30 @@ export default function SubjectPage() {
   const { subject } = useParams();
   const [activeTab, setActiveTab] = useState("notes");
   const [completedChapters, setCompletedChapters] = useState<string[]>(["ch1"]);
+  const [attemptedTests, setAttemptedTests] = useState<string[]>(["t1", "t2"]); // Track attempted tests
 
   const isPreviousChaptersCompleted = (chapterIndex: number) => {
     if (chapterIndex === 0) return true;
     return chapters.slice(0, chapterIndex).every(ch => completedChapters.includes(ch.id));
   };
 
+  const areAllTestsAttempted = (chapterId: string) => {
+    const chapter = chapters.find(ch => ch.id === chapterId);
+    if (!chapter) return false;
+    return chapter.tests.every(test => attemptedTests.includes(test.id));
+  };
+
   const handleMarkDone = (chapterId: string) => {
     if (!completedChapters.includes(chapterId)) {
-      setCompletedChapters([...completedChapters, chapterId]);
+      if (areAllTestsAttempted(chapterId)) {
+        setCompletedChapters([...completedChapters, chapterId]);
+      }
+    }
+  };
+
+  const handleStartTest = (testId: string) => {
+    if (!attemptedTests.includes(testId)) {
+      setAttemptedTests([...attemptedTests, testId]);
     }
   };
 
@@ -158,14 +173,22 @@ export default function SubjectPage() {
                             ))}
                           </div>
                           {!isCompleted && (
-                            <Button 
-                              onClick={() => handleMarkDone(chapter.id)}
-                              className="w-full mt-4"
-                              variant="outline"
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Mark Chapter as Done
-                            </Button>
+                            <>
+                              {!areAllTestsAttempted(chapter.id) && (
+                                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mt-4 text-sm text-yellow-700 dark:text-yellow-400">
+                                  ⚠️ You must attempt all tests for this chapter before marking it as complete
+                                </div>
+                              )}
+                              <Button 
+                                onClick={() => handleMarkDone(chapter.id)}
+                                className="w-full mt-4"
+                                variant="outline"
+                                disabled={!areAllTestsAttempted(chapter.id)}
+                              >
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                Mark Chapter as Done
+                              </Button>
+                            </>
                           )}
                         </>
                       )}
@@ -229,14 +252,22 @@ export default function SubjectPage() {
                             ))}
                           </div>
                           {!isCompleted && (
-                            <Button 
-                              onClick={() => handleMarkDone(chapter.id)}
-                              className="w-full mt-4"
-                              variant="outline"
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Mark Chapter as Done
-                            </Button>
+                            <>
+                              {!areAllTestsAttempted(chapter.id) && (
+                                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mt-4 text-sm text-yellow-700 dark:text-yellow-400">
+                                  ⚠️ You must attempt all tests for this chapter before marking it as complete
+                                </div>
+                              )}
+                              <Button 
+                                onClick={() => handleMarkDone(chapter.id)}
+                                className="w-full mt-4"
+                                variant="outline"
+                                disabled={!areAllTestsAttempted(chapter.id)}
+                              >
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                Mark Chapter as Done
+                              </Button>
+                            </>
                           )}
                         </>
                       )}
@@ -272,39 +303,60 @@ export default function SubjectPage() {
                       ) : (
                         <>
                           <div className="space-y-3 mt-2">
-                            {chapter.tests.map((test) => (
-                              <Card key={test.id} className="bg-accent/50">
-                                <CardContent className="flex items-center justify-between p-4">
-                                  <div className="flex items-center gap-4">
-                                    <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                                      <ClipboardList className="h-6 w-6 text-primary" />
-                                    </div>
-                                    <div>
-                                      <h4 className="font-medium">{test.title}</h4>
-                                      <div className="flex gap-4 mt-1">
-                                        <span className="text-sm text-muted-foreground">
-                                          {test.questions} Questions
-                                        </span>
-                                        <span className="text-sm text-muted-foreground">
-                                          {test.duration} Minutes
-                                        </span>
+                            {chapter.tests.map((test) => {
+                              const isAttempted = attemptedTests.includes(test.id);
+                              return (
+                                <Card key={test.id} className="bg-accent/50">
+                                  <CardContent className="flex items-center justify-between p-4">
+                                    <div className="flex items-center gap-4">
+                                      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                                        <ClipboardList className="h-6 w-6 text-primary" />
+                                      </div>
+                                      <div>
+                                        <div className="flex items-center gap-2">
+                                          <h4 className="font-medium">{test.title}</h4>
+                                          {isAttempted && (
+                                            <Badge variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-400">
+                                              <CheckCircle className="h-3 w-3 mr-1" />
+                                              Attempted
+                                            </Badge>
+                                          )}
+                                        </div>
+                                        <div className="flex gap-4 mt-1">
+                                          <span className="text-sm text-muted-foreground">
+                                            {test.questions} Questions
+                                          </span>
+                                          <span className="text-sm text-muted-foreground">
+                                            {test.duration} Minutes
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                  <Button>Start Test</Button>
-                                </CardContent>
-                              </Card>
-                            ))}
+                                    <Button onClick={() => handleStartTest(test.id)}>
+                                      {isAttempted ? "Retake Test" : "Start Test"}
+                                    </Button>
+                                  </CardContent>
+                                </Card>
+                              );
+                            })}
                           </div>
                           {!isCompleted && (
-                            <Button 
-                              onClick={() => handleMarkDone(chapter.id)}
-                              className="w-full mt-4"
-                              variant="outline"
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Mark Chapter as Done
-                            </Button>
+                            <>
+                              {!areAllTestsAttempted(chapter.id) && (
+                                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mt-4 text-sm text-yellow-700 dark:text-yellow-400">
+                                  ⚠️ You must attempt all tests for this chapter before marking it as complete
+                                </div>
+                              )}
+                              <Button 
+                                onClick={() => handleMarkDone(chapter.id)}
+                                className="w-full mt-4"
+                                variant="outline"
+                                disabled={!areAllTestsAttempted(chapter.id)}
+                              >
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                Mark Chapter as Done
+                              </Button>
+                            </>
                           )}
                         </>
                       )}
