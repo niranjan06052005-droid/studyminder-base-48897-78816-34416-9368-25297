@@ -303,8 +303,6 @@ const StudentAttendance = () => {
                       <TableHead>Day</TableHead>
                       <TableHead>Subject</TableHead>
                       <TableHead>Topic Missed</TableHead>
-                      <TableHead>Period</TableHead>
-                      <TableHead>Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -321,14 +319,6 @@ const StudentAttendance = () => {
                         <TableCell className="max-w-xs">
                           <span className="text-sm">{day.topic}</span>
                         </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {day.period}
-                        </TableCell>
-                        <TableCell>
-                          <Button size="sm" variant="outline">
-                            View Notes
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -337,47 +327,6 @@ const StudentAttendance = () => {
             </Card>
           </div>
 
-          {/* Quick Actions */}
-          <div>
-            <h2 className="text-2xl font-bold text-primary mb-6">Quick Actions</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="gradient-card hover:shadow-lg transition-all cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-lg">Request Leave</CardTitle>
-                  <CardDescription>Submit a leave application</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                    Apply for Leave
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="gradient-card hover:shadow-lg transition-all cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-lg">Download Report</CardTitle>
-                  <CardDescription>Get detailed attendance report</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button className="w-full" variant="outline">
-                    Download PDF
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="gradient-card hover:shadow-lg transition-all cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-lg">View Calendar</CardTitle>
-                  <CardDescription>See full attendance calendar</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button className="w-full" variant="outline">
-                    Open Calendar
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
         </main>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +31,8 @@ const StudentFees = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
   const [selectedInstallment, setSelectedInstallment] = useState("full");
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
+  const [customAmount, setCustomAmount] = useState("");
+  const [customAmountError, setCustomAmountError] = useState("");
 
   // Mock data
   const pendingFees = {
@@ -67,19 +70,51 @@ const StudentFees = () => {
     { id: "full", label: "One-time Payment", amount: 30000, description: "Pay full amount at once (5% discount)" },
     { id: "3months", label: "3 Months Plan", amount: 10500, description: "₹10,500 x 3 months" },
     { id: "6months", label: "6 Months Plan", amount: 5250, description: "₹5,250 x 6 months" },
-    { id: "9months", label: "9 Months Plan", amount: 3500, description: "₹3,500 x 9 months" }
+    { id: "9months", label: "9 Months Plan", amount: 3500, description: "₹3,500 x 9 months" },
+    { id: "custom", label: "Custom Amount", amount: 0, description: "Enter your desired amount" }
   ];
 
+  const handleCustomAmountChange = (value: string) => {
+    setCustomAmount(value);
+    setCustomAmountError("");
+    
+    const amount = parseFloat(value);
+    if (isNaN(amount) || amount <= 0) {
+      setCustomAmountError("Please enter a valid amount");
+    } else if (amount > pendingFees.remainingAmount) {
+      setCustomAmountError(`Amount cannot exceed remaining balance of ₹${pendingFees.remainingAmount.toLocaleString()}`);
+    } else if (amount < 100) {
+      setCustomAmountError("Minimum amount is ₹100");
+    }
+  };
+
+  const getPaymentAmount = () => {
+    if (selectedInstallment === "custom") {
+      return parseFloat(customAmount) || 0;
+    }
+    return installmentOptions.find(opt => opt.id === selectedInstallment)?.amount || 0;
+  };
+
   const handlePayment = () => {
-    const selectedPlan = installmentOptions.find(opt => opt.id === selectedInstallment);
+    const amount = getPaymentAmount();
+    
+    if (selectedInstallment === "custom" && customAmountError) {
+      toast({
+        title: "Invalid Amount",
+        description: customAmountError,
+        variant: "destructive"
+      });
+      return;
+    }
     
     toast({
       title: "Payment Initiated",
-      description: `Processing payment of ₹${selectedPlan?.amount.toLocaleString()} via ${selectedPaymentMethod.toUpperCase()}...`,
+      description: `Processing payment of ₹${amount.toLocaleString()} via ${selectedPaymentMethod.toUpperCase()}...`,
     });
     
     setTimeout(() => {
       setIsPaymentDialogOpen(false);
+      setCustomAmount("");
       toast({
         title: "Payment Successful!",
         description: "Your payment has been processed successfully. Receipt has been sent to your email.",
@@ -216,13 +251,37 @@ const StudentFees = () => {
                           <RadioGroupItem value={option.id} id={option.id} />
                           <Label htmlFor={option.id} className="flex-1 cursor-pointer">
                             <div className="flex justify-between items-start">
-                              <div>
+                              <div className="flex-1">
                                 <p className="font-semibold">{option.label}</p>
                                 <p className="text-sm text-muted-foreground">{option.description}</p>
+                                {option.id === "custom" && selectedInstallment === "custom" && (
+                                  <div className="mt-3 space-y-2" onClick={(e) => e.stopPropagation()}>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-sm font-medium">₹</span>
+                                      <input
+                                        type="number"
+                                        placeholder="Enter amount"
+                                        value={customAmount}
+                                        onChange={(e) => handleCustomAmountChange(e.target.value)}
+                                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                        min="100"
+                                        max={pendingFees.remainingAmount}
+                                      />
+                                    </div>
+                                    {customAmountError && (
+                                      <p className="text-xs text-destructive">{customAmountError}</p>
+                                    )}
+                                    <p className="text-xs text-muted-foreground">
+                                      Max: ₹{pendingFees.remainingAmount.toLocaleString()} | Min: ₹100
+                                    </p>
+                                  </div>
+                                )}
                               </div>
-                              <Badge variant="secondary" className="ml-2">
-                                ₹{option.amount.toLocaleString()}
-                              </Badge>
+                              {option.id !== "custom" && (
+                                <Badge variant="secondary" className="ml-2">
+                                  ₹{option.amount.toLocaleString()}
+                                </Badge>
+                              )}
                             </div>
                           </Label>
                         </div>
@@ -264,7 +323,11 @@ const StudentFees = () => {
 
                   <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
                     <DialogTrigger asChild>
-                      <Button size="lg" className="w-full">
+                      <Button 
+                        size="lg" 
+                        className="w-full"
+                        disabled={selectedInstallment === "custom" && (!!customAmountError || !customAmount)}
+                      >
                         Proceed to Payment
                       </Button>
                     </DialogTrigger>
@@ -285,7 +348,7 @@ const StudentFees = () => {
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Amount:</span>
                           <span className="text-xl font-bold text-primary">
-                            ₹{installmentOptions.find(opt => opt.id === selectedInstallment)?.amount.toLocaleString()}
+                            ₹{getPaymentAmount().toLocaleString()}
                           </span>
                         </div>
                         <div className="flex justify-between">
