@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Calendar, BookOpen, Users, GraduationCap, BarChart3, MessageSquare, Folder, ClipboardCheck, CheckCircle2, UserCircle } from "lucide-react";
+import { Calendar, BookOpen, Users, GraduationCap, BarChart3, MessageSquare, Folder, ClipboardCheck, CheckCircle2, UserCircle } from "lucide-react";
 
 export default function TeacherSidebar() {
   const location = useLocation();
@@ -8,7 +8,6 @@ export default function TeacherSidebar() {
   const isActive = (path: string) => currentPath === path;
 
   const navItems = [
-    { path: "/teacher/dashboard", icon: Home, label: "Home/Dashboard" },
     { path: "/teacher/profile", icon: UserCircle, label: "My Profile" },
     { path: "/teacher/classes", icon: GraduationCap, label: "My Classes" },
     { path: "/teacher/attendance", icon: ClipboardCheck, label: "Attendance" },
