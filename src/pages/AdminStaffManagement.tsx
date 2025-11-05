@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -29,6 +29,7 @@ interface Staff {
 
 const AdminStaffManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   
   const staff: Staff[] = [
     { id: "STF001", name: "Dr. Rajesh Kumar", section: "Mathematics", contact: "98765-43210" },
@@ -124,7 +125,11 @@ const AdminStaffManagement = () => {
                       <TableCell>{member.section}</TableCell>
                       <TableCell>{member.contact}</TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => navigate(`/admin/staff/${member.id}`)}
+                        >
                           <Eye className="h-4 w-4" />
                         </Button>
                       </TableCell>

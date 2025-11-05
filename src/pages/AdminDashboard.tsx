@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Users, DollarSign, TrendingUp, UserCheck, LogOut, Home, AlertCircle, ClockAlert, UserPlus, CalendarX } from "lucide-react";
+import { Users, DollarSign, TrendingUp, UserCheck, LogOut, Home, AlertCircle, UserPlus } from "lucide-react";
 import AdminSidebar from "@/components/AdminSidebar";
 
 const AdminDashboard = () => {
@@ -45,7 +44,7 @@ const AdminDashboard = () => {
               <AlertCircle className="h-6 w-6" />
               Pending Actions - Requires Attention
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Fee Payments Overdue */}
               <Card className="border-destructive/50 bg-destructive/5">
                 <CardHeader className="pb-3">
@@ -65,30 +64,6 @@ const AdminDashboard = () => {
                   <Link to="/admin/fees">
                     <Button variant="destructive" size="sm" className="w-full">
                       Review Payments
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              {/* Attendance to Review */}
-              <Card className="border-orange-500/50 bg-orange-500/5">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <CalendarX className="h-5 w-5 text-orange-600" />
-                      <CardTitle className="text-lg text-orange-600 dark:text-orange-500">Attendance to Review</CardTitle>
-                    </div>
-                  </div>
-                  <CardDescription>Classes where attendance is not marked</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="mb-4">
-                    <p className="text-4xl font-bold text-orange-600 dark:text-orange-500">7</p>
-                    <p className="text-sm text-muted-foreground mt-1">Classes pending review</p>
-                  </div>
-                  <Link to="/admin/batches">
-                    <Button variant="outline" size="sm" className="w-full border-orange-500 text-orange-600 hover:bg-orange-500/10">
-                      View Classes
                     </Button>
                   </Link>
                 </CardContent>

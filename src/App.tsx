@@ -18,7 +18,9 @@ import TeacherProgress from "./pages/TeacherProgress";
 import TeacherAnalytics from "./pages/TeacherAnalytics";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminStudentManagement from "./pages/AdminStudentManagement";
+import AdminStudentView from "./pages/AdminStudentView";
 import AdminStaffManagement from "./pages/AdminStaffManagement";
+import AdminStaffView from "./pages/AdminStaffView";
 import AdminFeeManagement from "./pages/AdminFeeManagement";
 import AdminBatchList from "./pages/AdminBatchList";
 import AdminBatchDetails from "./pages/AdminBatchDetails";
@@ -67,7 +69,9 @@ const App = () => (
           <Route path="/teacher/analytics" element={<TeacherAnalytics />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/students" element={<AdminStudentManagement />} />
+          <Route path="/admin/students/:studentId" element={<AdminStudentView />} />
           <Route path="/admin/staff" element={<AdminStaffManagement />} />
+          <Route path="/admin/staff/:staffId" element={<AdminStaffView />} />
           <Route path="/admin/batches" element={<AdminBatchList />} />
           <Route path="/admin/batches/:batchId" element={<AdminBatchDetails />} />
           <Route path="/admin/notices" element={<AdminNoticeManagement />} />
