@@ -240,43 +240,78 @@ export default function TeacherAnalytics() {
 
       {/* Student Scores Modal */}
       <Dialog open={!!selectedTest} onOpenChange={() => setSelectedTest(null)}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{selectedTest?.testName}</DialogTitle>
             <DialogDescription>{selectedTest?.chapter}</DialogDescription>
           </DialogHeader>
-          <div className="mt-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Roll No</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Score</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {selectedTest?.students.map((student) => (
-                  <TableRow key={student.rollNo}>
-                    <TableCell className="font-mono">{student.rollNo}</TableCell>
-                    <TableCell className="font-medium">{student.name}</TableCell>
-                    <TableCell>
-                      {student.score !== null ? (
-                        <span className={`text-lg font-bold ${
-                          student.score >= 90 ? "text-success" : 
-                          student.score >= 75 ? "text-accent-foreground" : 
-                          student.score >= 60 ? "text-muted-foreground" : 
-                          "text-destructive"
-                        }`}>
-                          {student.score}%
-                        </span>
-                      ) : (
-                        <span className="text-destructive">Not Attempted</span>
-                      )}
-                    </TableCell>
+          <div className="mt-4 space-y-6">
+            {/* Students who attempted the test */}
+            <div>
+              <h3 className="text-lg font-semibold mb-3 text-primary">
+                Students with Scores ({selectedTest?.students.filter(s => s.score !== null).length || 0})
+              </h3>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Roll No</TableHead>
+                    <TableHead>Student Name</TableHead>
+                    <TableHead>Score</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {selectedTest?.students
+                    .filter(student => student.score !== null)
+                    .map((student) => (
+                      <TableRow key={student.rollNo}>
+                        <TableCell className="font-mono">{student.rollNo}</TableCell>
+                        <TableCell className="font-medium">{student.name}</TableCell>
+                        <TableCell>
+                          <span className={`text-lg font-bold ${
+                            student.score! >= 90 ? "text-success" : 
+                            student.score! >= 75 ? "text-accent-foreground" : 
+                            student.score! >= 60 ? "text-muted-foreground" : 
+                            "text-destructive"
+                          }`}>
+                            {student.score}%
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            {/* Absent students */}
+            {selectedTest?.students.filter(s => s.score === null).length > 0 && (
+              <div className="pt-4 border-t border-border">
+                <h3 className="text-lg font-semibold mb-3 text-destructive">
+                  Absent Students ({selectedTest?.students.filter(s => s.score === null).length})
+                </h3>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Roll No</TableHead>
+                      <TableHead>Student Name</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedTest?.students
+                      .filter(student => student.score === null)
+                      .map((student) => (
+                        <TableRow key={student.rollNo} className="bg-destructive/5">
+                          <TableCell className="font-mono">{student.rollNo}</TableCell>
+                          <TableCell className="font-medium">{student.name}</TableCell>
+                          <TableCell>
+                            <span className="text-destructive font-medium">Absent</span>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
