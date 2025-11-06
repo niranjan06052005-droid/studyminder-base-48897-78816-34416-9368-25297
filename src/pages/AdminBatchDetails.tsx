@@ -279,49 +279,6 @@ const AdminBatchDetails = () => {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-xl font-bold text-primary">Test Performance by Subject</CardTitle>
-                    <CardDescription>Average scores and test count across subjects</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[350px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart 
-                          data={testChartData}
-                          margin={{ top: 20, right: 30, left: 20, bottom: 80 }}
-                        >
-                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis 
-                            dataKey="subject" 
-                            angle={-45} 
-                            textAnchor="end" 
-                            height={100}
-                            tick={{ fill: 'hsl(var(--foreground))' }}
-                          />
-                          <YAxis tick={{ fill: 'hsl(var(--foreground))' }} />
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: 'hsl(var(--card))', 
-                              border: '1px solid hsl(var(--border))',
-                              borderRadius: '8px'
-                            }}
-                          />
-                          <Legend 
-                            wrapperStyle={{ paddingTop: '20px' }}
-                            iconType="square"
-                          />
-                          <Bar dataKey="tests" fill="hsl(210, 86%, 16%)" name="Tests" radius={[4, 4, 0, 0]} />
-                          <Bar dataKey="avgScore" fill="hsl(134, 61%, 41%)" name="Avg Score %" radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Top Performers & Consistent Performers */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Trophy className="h-5 w-5 text-accent" />
                       Top Scorers
@@ -344,37 +301,6 @@ const AdminBatchDetails = () => {
                           <div className="text-right">
                             <p className="text-xl font-bold text-success">{student.score}%</p>
                             <p className="text-xs text-muted-foreground">Avg Score</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="h-5 w-5 text-secondary" />
-                      Consistent Performers
-                    </CardTitle>
-                    <CardDescription>Students with most consistent performance</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {consistentPerformers.map((student, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center font-bold">
-                              {index + 1}
-                            </div>
-                            <div>
-                              <p className="font-medium">{student.name}</p>
-                              <p className="text-sm text-muted-foreground">{student.testsAttended} tests attended</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xl font-bold text-secondary">{student.consistency}%</p>
-                            <p className="text-xs text-muted-foreground">Consistency</p>
                           </div>
                         </div>
                       ))}

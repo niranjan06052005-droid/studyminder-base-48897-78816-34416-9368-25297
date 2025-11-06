@@ -386,15 +386,15 @@ const AdminFeeManagement = () => {
                       </Dialog>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-2">
+                  <CardContent className="space-y-3">
                     {expenditures.map((exp) => (
-                      <div key={exp.id} className="flex items-center justify-between py-2 group">
-                        <div className="flex-1">
-                          <span className="font-medium">{exp.category}</span>
-                          {exp.subcategory && <span className="text-xs text-muted-foreground ml-2">{exp.subcategory}</span>}
+                      <div key={exp.id} className="flex items-center justify-between py-3 border-b last:border-0 group">
+                        <div className="flex-1 min-w-0 mr-4">
+                          <div className="font-medium text-foreground truncate">{exp.category}</div>
+                          {exp.subcategory && <div className="text-xs text-muted-foreground mt-0.5">{exp.subcategory}</div>}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">₹{exp.amount.toLocaleString()}</span>
+                        <div className="flex items-center gap-3 flex-shrink-0">
+                          <span className="font-semibold text-foreground">₹{exp.amount.toLocaleString()}</span>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -406,10 +406,10 @@ const AdminFeeManagement = () => {
                         </div>
                       </div>
                     ))}
-                    <div className="pt-4 border-t border-border">
+                    <div className="pt-4 mt-2 border-t-2 border-border">
                       <div className="flex items-center justify-between">
-                        <span className="font-medium">Total Monthly Expenditure</span>
-                        <span className="font-semibold text-lg">₹{totalExpenditure.toLocaleString()}</span>
+                        <span className="font-semibold text-foreground">Total Monthly Expenditure</span>
+                        <span className="font-bold text-xl text-primary">₹{totalExpenditure.toLocaleString()}</span>
                       </div>
                     </div>
                   </CardContent>
