@@ -13,7 +13,6 @@ const AdminSidebar = () => {
     { name: "Fee", path: "/admin/fees", icon: DollarSign },
     { name: "Report", path: "/admin/reports", icon: BarChart3 },
     { name: "Notice", path: "/admin/notices", icon: Bell },
-    { name: "Recent", path: "/admin/recent", icon: Clock },
   ];
 
   return (

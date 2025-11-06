@@ -21,7 +21,7 @@ const Login = () => {
       navigate("/student/dashboard");
     } else if (email.includes("teacher")) {
       toast.success("Welcome back, Teacher!");
-      navigate("/teacher/dashboard");
+      navigate("/teacher/profile");
     } else if (email.includes("admin")) {
       toast.success("Welcome back, Admin!");
       navigate("/admin/dashboard");

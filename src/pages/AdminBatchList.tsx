@@ -58,39 +58,33 @@ const AdminBatchList = () => {
           {/* Batch Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {batches.map((batch) => (
-              <Card key={batch.id} className="gradient-card hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl">{batch.name}</CardTitle>
-                  <CardDescription>Active Batch</CardDescription>
+              <Card key={batch.id} className="gradient-card hover:shadow-lg transition-all">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">{batch.name}</CardTitle>
+                  <CardDescription className="text-xs">Active Batch</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <div className="flex items-center justify-center mb-1">
-                        <Users className="h-4 w-4 text-primary" />
-                      </div>
-                      <div className="text-2xl font-bold text-primary">{batch.students}</div>
-                      <div className="text-xs text-muted-foreground">Students</div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center p-2 bg-primary/5 rounded-lg">
+                      <Users className="h-4 w-4 text-primary mx-auto mb-1" />
+                      <div className="text-xl font-bold text-primary">{batch.students}</div>
+                      <div className="text-[10px] text-muted-foreground">Students</div>
                     </div>
-                    <div className="text-center">
-                      <div className="flex items-center justify-center mb-1">
-                        <UserCheck className="h-4 w-4 text-secondary" />
-                      </div>
-                      <div className="text-2xl font-bold text-secondary">{batch.teachers}</div>
-                      <div className="text-xs text-muted-foreground">Teachers</div>
+                    <div className="text-center p-2 bg-secondary/5 rounded-lg">
+                      <UserCheck className="h-4 w-4 text-secondary mx-auto mb-1" />
+                      <div className="text-xl font-bold text-secondary">{batch.teachers}</div>
+                      <div className="text-[10px] text-muted-foreground">Teachers</div>
                     </div>
-                    <div className="text-center">
-                      <div className="flex items-center justify-center mb-1">
-                        <TrendingUp className="h-4 w-4 text-success" />
-                      </div>
-                      <div className="text-2xl font-bold text-success">{batch.attendance}%</div>
-                      <div className="text-xs text-muted-foreground">Attendance</div>
+                    <div className="text-center p-2 bg-success/5 rounded-lg">
+                      <TrendingUp className="h-4 w-4 text-success mx-auto mb-1" />
+                      <div className="text-xl font-bold text-success">{batch.attendance}%</div>
+                      <div className="text-[10px] text-muted-foreground">Attend.</div>
                     </div>
                   </div>
                   
-                  <Link to={`/admin/batches/${batch.id}`}>
-                    <Button className="w-full" variant="outline">
-                      View Batch
+                  <Link to={`/admin/batches/${batch.id}`} className="block">
+                    <Button className="w-full" variant="outline" size="sm">
+                      View Details
                     </Button>
                   </Link>
                 </CardContent>

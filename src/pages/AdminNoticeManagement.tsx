@@ -18,7 +18,6 @@ const AdminNoticeManagement = () => {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [targetAudience, setTargetAudience] = useState({
     students: false,
-    parents: false,
     teachers: false,
   });
 
@@ -126,7 +125,7 @@ const AdminNoticeManagement = () => {
       return;
     }
 
-    if (!targetAudience.students && !targetAudience.parents && !targetAudience.teachers) {
+    if (!targetAudience.students && !targetAudience.teachers) {
       toast({
         title: "No audience selected",
         description: "Please select at least one target audience",
@@ -146,7 +145,7 @@ const AdminNoticeManagement = () => {
     setSelectedBatches([]);
     setSelectedImages([]);
     setImagePreviews([]);
-    setTargetAudience({ students: false, parents: false, teachers: false });
+    setTargetAudience({ students: false, teachers: false });
   };
 
   return (
@@ -283,21 +282,6 @@ const AdminNoticeManagement = () => {
                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                           Students
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="parents"
-                          checked={targetAudience.parents}
-                          onCheckedChange={(checked) =>
-                            setTargetAudience((prev) => ({ ...prev, parents: checked as boolean }))
-                          }
-                        />
-                        <label
-                          htmlFor="parents"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Parents
                         </label>
                       </div>
                       <div className="flex items-center space-x-2">

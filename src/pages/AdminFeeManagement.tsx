@@ -4,13 +4,26 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { AlertCircle, TrendingUp, Home, LogOut, MoreVertical } from "lucide-react";
+import { AlertCircle, TrendingUp, Home, LogOut, MoreVertical, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import AdminSidebar from "@/components/AdminSidebar";
+import { toast } from "@/hooks/use-toast";
 
 const AdminFeeManagement = () => {
   const [timePeriod, setTimePeriod] = useState("Monthly");
+  const [expenditures, setExpenditures] = useState([
+    { id: 1, category: "Staff Salaries", amount: 455000, subcategory: "(Monthly)" },
+    { id: 2, category: "Printing & Notes", amount: 15000, subcategory: "" },
+    { id: 3, category: "Extracurricular Activities", amount: 8000, subcategory: "" },
+    { id: 4, category: "Class Maintenance", amount: 20000, subcategory: "" },
+    { id: 5, category: "Rent", amount: 50000, subcategory: "" },
+  ]);
+  const [newExpenditure, setNewExpenditure] = useState({ category: "", amount: "", subcategory: "" });
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Mock data for charts
   const revenueData = [
@@ -37,14 +50,53 @@ const AdminFeeManagement = () => {
     { id: 6, name: "Amk Sharma", class: "10th - A", amount: "₹3,500", lastDate: "Nov 3038", overdue: false },
   ];
 
-  // Mock data for expenditure
-  const expenditures = [
-    { category: "Staff Salaries", amount: "₹4,55,000", subcategory: "(Monthly)" },
-    { category: "Printing & Notes", amount: "₹15,000", subcategory: "" },
-    { category: "Extracurrular Activities", amount: "₹8,000", subcategory: "" },
-    { category: "Class Maintenance", amount: "₹20,000", subcategory: "" },
-    { category: "Rent", amount: "₹50,000", subcategory: "" },
-  ];
+  const handleAddExpenditure = () => {
+    if (!newExpenditure.category || !newExpenditure.amount) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in category and amount",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const amount = parseFloat(newExpenditure.amount);
+    if (isNaN(amount) || amount <= 0) {
+      toast({
+        title: "Invalid amount",
+        description: "Please enter a valid amount",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setExpenditures([
+      ...expenditures,
+      {
+        id: Date.now(),
+        category: newExpenditure.category,
+        amount: amount,
+        subcategory: newExpenditure.subcategory,
+      },
+    ]);
+
+    setNewExpenditure({ category: "", amount: "", subcategory: "" });
+    setIsDialogOpen(false);
+    toast({
+      title: "Expenditure added",
+      description: "New expenditure has been added successfully",
+    });
+  };
+
+  const handleDeleteExpenditure = (id: number) => {
+    setExpenditures(expenditures.filter((exp) => exp.id !== id));
+    toast({
+      title: "Expenditure deleted",
+      description: "Expenditure has been removed",
+    });
+  };
+
+  const totalExpenditure = expenditures.reduce((sum, exp) => sum + exp.amount, 0);
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -245,13 +297,11 @@ const AdminFeeManagement = () => {
                     <ResponsiveContainer width="100%" height={300}>
                       <PieChart>
                         <Pie
-                          data={[
-                            { name: "Staff Salaries", value: 455000, color: "#3b82f6" },
-                            { name: "Rent", value: 50000, color: "#60a5fa" },
-                            { name: "Class Maintenance", value: 20000, color: "#93c5fd" },
-                            { name: "Printing & Notes", value: 15000, color: "#bfdbfe" },
-                            { name: "Extracurricular", value: 8000, color: "#dbeafe" },
-                          ]}
+                          data={expenditures.map((exp) => ({
+                            name: exp.category,
+                            value: exp.amount,
+                            color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+                          }))}
                           cx="50%"
                           cy="50%"
                           innerRadius={70}
@@ -259,33 +309,24 @@ const AdminFeeManagement = () => {
                           paddingAngle={3}
                           dataKey="value"
                         >
-                          {[
-                            { name: "Staff Salaries", value: 455000, color: "#3b82f6" },
-                            { name: "Rent", value: 50000, color: "#60a5fa" },
-                            { name: "Class Maintenance", value: 20000, color: "#93c5fd" },
-                            { name: "Printing & Notes", value: 15000, color: "#bfdbfe" },
-                            { name: "Extracurricular", value: 8000, color: "#dbeafe" },
-                          ].map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          {expenditures.map((_, index) => (
+                            <Cell key={`cell-${index}`} fill={`hsl(${(index * 360) / expenditures.length}, 70%, 50%)`} />
                           ))}
                         </Pie>
                         <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="mt-4 space-y-2">
-                      {[
-                        { name: "Staff Salaries", value: 455000, color: "#3b82f6" },
-                        { name: "Rent", value: 50000, color: "#60a5fa" },
-                        { name: "Class Maintenance", value: 20000, color: "#93c5fd" },
-                        { name: "Printing & Notes", value: 15000, color: "#bfdbfe" },
-                        { name: "Extracurricular", value: 8000, color: "#dbeafe" },
-                      ].map((item) => (
-                        <div key={item.name} className="flex items-center justify-between text-sm">
+                      {expenditures.map((item, index) => (
+                        <div key={item.id} className="flex items-center justify-between text-sm">
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                            <span>{item.name}</span>
+                            <div
+                              className="w-3 h-3 rounded-full"
+                              style={{ backgroundColor: `hsl(${(index * 360) / expenditures.length}, 70%, 50%)` }}
+                            />
+                            <span>{item.category}</span>
                           </div>
-                          <span className="font-medium">₹{item.value.toLocaleString()}</span>
+                          <span className="font-medium">₹{item.amount.toLocaleString()}</span>
                         </div>
                       ))}
                     </div>
@@ -294,36 +335,81 @@ const AdminFeeManagement = () => {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Operational Costs</CardTitle>
-                    <Button variant="ghost" size="icon" className="absolute right-4 top-4">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center justify-between">
+                      <CardTitle>Operational Costs</CardTitle>
+                      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                        <DialogTrigger asChild>
+                          <Button size="sm">
+                            <Plus className="h-4 w-4 mr-2" />
+                            Add Expenditure
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Add New Expenditure</DialogTitle>
+                            <DialogDescription>Enter the details of the new expenditure item</DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-4 pt-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="category">Category *</Label>
+                              <Input
+                                id="category"
+                                placeholder="e.g., Staff Salaries"
+                                value={newExpenditure.category}
+                                onChange={(e) => setNewExpenditure({ ...newExpenditure, category: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="amount">Amount (₹) *</Label>
+                              <Input
+                                id="amount"
+                                type="number"
+                                placeholder="e.g., 50000"
+                                value={newExpenditure.amount}
+                                onChange={(e) => setNewExpenditure({ ...newExpenditure, amount: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="subcategory">Subcategory (Optional)</Label>
+                              <Input
+                                id="subcategory"
+                                placeholder="e.g., Monthly"
+                                value={newExpenditure.subcategory}
+                                onChange={(e) => setNewExpenditure({ ...newExpenditure, subcategory: e.target.value })}
+                              />
+                            </div>
+                            <Button onClick={handleAddExpenditure} className="w-full">
+                              Add Expenditure
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between py-2">
-                      <span className="font-medium">Staff Salaries</span>
-                      <span className="font-semibold">₹4,55,000</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2">
-                      <span className="font-medium">Printing & Notes</span>
-                      <span className="font-semibold">₹15,000</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2">
-                      <span className="font-medium">Extracurricular Activities</span>
-                      <span className="font-semibold">₹8,000</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2">
-                      <span className="font-medium">Class Maintenance</span>
-                      <span className="font-semibold">₹20,000</span>
-                    </div>
-                    <div className="flex items-center justify-between py-2">
-                      <span className="font-medium">Rent</span>
-                      <span className="font-semibold">₹50,000</span>
-                    </div>
+                  <CardContent className="space-y-2">
+                    {expenditures.map((exp) => (
+                      <div key={exp.id} className="flex items-center justify-between py-2 group">
+                        <div className="flex-1">
+                          <span className="font-medium">{exp.category}</span>
+                          {exp.subcategory && <span className="text-xs text-muted-foreground ml-2">{exp.subcategory}</span>}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold">₹{exp.amount.toLocaleString()}</span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleDeleteExpenditure(exp.id)}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
                     <div className="pt-4 border-t border-border">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">Total Monthly Expenditure</span>
-                        <span className="font-semibold">₹5,48,000</span>
+                        <span className="font-semibold text-lg">₹{totalExpenditure.toLocaleString()}</span>
                       </div>
                     </div>
                   </CardContent>

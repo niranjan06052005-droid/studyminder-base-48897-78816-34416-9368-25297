@@ -119,59 +119,64 @@ const AdminBatchDetails = () => {
           <p className="text-muted-foreground mb-6">Here's what's classes with resources efficiently</p>
 
           {/* Quick Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-fade-in">
             <Card className="gradient-card">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 rounded-lg">
-                    <Users className="h-6 w-6 text-primary" />
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <Users className="h-5 w-5 text-primary" />
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Total Students</p>
-                    <p className="text-3xl font-bold text-primary">{batchInfo.totalStudents}</p>
+                  <div className="flex-1">
+                    <p className="text-xs text-muted-foreground">Total Students</p>
+                    <p className="text-2xl font-bold text-primary">{batchInfo.totalStudents}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="gradient-card">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-accent/10 rounded-lg">
-                    <UserCheck className="h-6 w-6 text-accent" />
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-accent/10 rounded-lg">
+                    <UserCheck className="h-5 w-5 text-accent" />
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Assigned Teachers</p>
-                    <p className="text-3xl font-bold text-accent">{batchInfo.assignedTeachers}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="gradient-card">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-secondary/10 rounded-lg">
-                    <TrendingUp className="h-6 w-6 text-secondary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Average Attendance</p>
-                    <p className="text-3xl font-bold text-secondary">{batchInfo.avgAttendance}%</p>
-                    <p className="text-xs text-muted-foreground">{batchInfo.feeCollectionDate}</p>
+                  <div className="flex-1">
+                    <p className="text-xs text-muted-foreground">Assigned Teachers</p>
+                    <p className="text-2xl font-bold text-accent">{batchInfo.assignedTeachers}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card className="gradient-card">
-              <CardContent className="pt-6">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-3">Fee Collection Status</p>
-                  <div className="flex items-end gap-2 mb-2">
-                    <p className="text-3xl font-bold text-success">{batchInfo.feeCollection}%</p>
-                    <Progress value={batchInfo.feeCollection} className="flex-1 mb-2" />
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-secondary/10 rounded-lg">
+                    <TrendingUp className="h-5 w-5 text-secondary" />
                   </div>
-                  <p className="text-xs text-muted-foreground">View all fee, 20th</p>
+                  <div className="flex-1">
+                    <p className="text-xs text-muted-foreground">Average Attendance</p>
+                    <p className="text-2xl font-bold text-secondary">{batchInfo.avgAttendance}%</p>
+                    <p className="text-[10px] text-muted-foreground">{batchInfo.feeCollectionDate}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="gradient-card">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-success/10 rounded-lg">
+                    <DollarSign className="h-5 w-5 text-success" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs text-muted-foreground mb-1">Fee Collection Status</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-2xl font-bold text-success">{batchInfo.feeCollection}%</p>
+                      <Progress value={batchInfo.feeCollection} className="flex-1 h-2" />
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-1">View all fees, 20th</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
