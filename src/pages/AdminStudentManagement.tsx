@@ -114,7 +114,6 @@ const AdminStudentManagement = () => {
                     <TableHead className="font-semibold">Std</TableHead>
                     <TableHead className="font-semibold">Contact No</TableHead>
                     <TableHead className="font-semibold">View</TableHead>
-                    <TableHead className="font-semibold text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -132,22 +131,6 @@ const AdminStudentManagement = () => {
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   ))}

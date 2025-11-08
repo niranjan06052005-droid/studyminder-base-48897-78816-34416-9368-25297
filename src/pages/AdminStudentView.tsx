@@ -1,36 +1,92 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Home, LogOut, ArrowLeft, Mail, Phone, MapPin, Calendar, BookOpen, Award, TrendingUp } from "lucide-react";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { Home, LogOut, ArrowLeft, Camera } from "lucide-react";
 import AdminSidebar from "@/components/AdminSidebar";
+import { toast } from "sonner";
 
 const AdminStudentView = () => {
   const { studentId } = useParams();
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState("/placeholder.svg");
+  
+  const [formData, setFormData] = useState({
+    // Personal Info
+    firstName: "Raj",
+    middleName: "Kumar",
+    lastName: "Patil",
+    gender: "Male",
+    dob: "2008-03-15",
+    age: "16",
+    aadharNo: "1234-5678-9012",
+    
+    // Academic Info
+    studentId: studentId || "STU2024001",
+    class: "10th",
+    rollNo: "15",
+    admissionDate: "2023-04-15",
+    academicYear: "2024-2025",
+    schoolName: "ABC High School",
+    
+    // Guardian Info
+    fatherName: "Kumar Patil",
+    motherName: "Sunita Patil",
+    guardianContact1: "+91 98765 43210",
+    guardianContact2: "+91 98765 43211",
+    fatherOccupation: "Business",
+    motherOccupation: "Teacher",
+    
+    // Fee Section
+    academicFee: "₹85,000",
+    plan: "monthly",
+    dueAmount: "₹0",
+    paidAmount: "₹85,000",
+    
+    // Contact Info
+    email: "raj.kumar@school.com",
+    mobileNo: "+91 98765 43210",
+    whatsappNo: "+91 98765 43210",
+    
+    // Address
+    country: "India",
+    state: "Maharashtra",
+    city: "Mumbai",
+    postalCode: "400001",
+    addressLine1: "123 Main Street",
+    addressLine2: "Near Central Park"
+  });
 
-  // Mock student data - would come from API/database
-  const student = {
-    id: studentId || "STU001",
-    name: "Raj Kumar",
-    email: "raj.kumar@email.com",
-    phone: "98765-43210",
-    standard: "10th - A",
-    rollNumber: "10A23",
-    dateOfBirth: "15 March 2009",
-    joiningDate: "1 April 2023",
-    address: "123 Main Street, Mumbai, Maharashtra",
-    fatherName: "Ramesh Kumar",
-    motherName: "Sunita Kumar",
-    guardianContact: "98765-43210",
-    bloodGroup: "O+",
-    subjects: ["Mathematics", "Science", "English", "Hindi", "Social Studies"],
-    attendance: "92%",
-    overallGrade: "A+",
-    lastTestScore: "87%",
-    feesStatus: "Paid",
-    dueAmount: "₹0"
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+        toast.success("Profile image updated successfully!");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+    toast.success("Profile updated successfully!");
   };
 
   return (
@@ -59,7 +115,7 @@ const AdminStudentView = () => {
           </div>
         </header>
 
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-8 overflow-auto">
           {/* Back Button */}
           <Link to="/admin/students">
             <Button variant="ghost" className="mb-6">
@@ -68,208 +124,412 @@ const AdminStudentView = () => {
             </Button>
           </Link>
 
-          {/* Student Profile Header */}
-          <Card className="mb-6">
-            <CardContent className="pt-6">
-              <div className="flex flex-col md:flex-row gap-6 items-start">
-                <Avatar className="h-24 w-24">
-                  <AvatarImage src="" />
-                  <AvatarFallback className="text-2xl bg-primary/10 text-primary">
-                    {student.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
-                
-                <div className="flex-1">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                    <div>
-                      <h2 className="text-3xl font-bold text-primary mb-2">{student.name}</h2>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant="outline">{student.standard}</Badge>
-                        <Badge variant="outline">Roll No: {student.rollNumber}</Badge>
-                        <Badge className="bg-success">Active</Badge>
-                      </div>
-                    </div>
-                    <div className="mt-4 md:mt-0 flex gap-2">
-                      <Button variant="outline">Edit Details</Button>
-                      <Button variant="destructive">Delete Student</Button>
-                    </div>
-                  </div>
+          <Card className="max-w-6xl mx-auto">
+            <CardHeader className="text-center pb-6">
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative">
+                  <Avatar className="h-32 w-32">
+                    <AvatarImage src={profileImage} alt="Profile" />
+                    <AvatarFallback className="text-2xl">{formData.firstName[0]}{formData.lastName[0]}</AvatarFallback>
+                  </Avatar>
+                  {isEditing && (
+                    <label
+                      htmlFor="profile-upload"
+                      className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer hover:bg-primary/90 transition-colors"
+                    >
+                      <Camera className="h-4 w-4" />
+                      <input
+                        id="profile-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </label>
+                  )}
+                </div>
+                <div>
+                  <CardTitle className="text-3xl">{formData.firstName} {formData.middleName} {formData.lastName}</CardTitle>
+                  <p className="text-muted-foreground mt-1">{formData.studentId}</p>
+                </div>
+              </div>
+            </CardHeader>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Email</p>
-                        <p className="font-medium">{student.email}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Contact</p>
-                        <p className="font-medium">{student.phone}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Calendar className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm text-muted-foreground">Joined</p>
-                        <p className="font-medium">{student.joiningDate}</p>
-                      </div>
-                    </div>
+            <CardContent className="space-y-8">
+              <div className="flex justify-end">
+                {!isEditing ? (
+                  <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                ) : (
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+                    <Button onClick={handleSave}>Save Changes</Button>
+                  </div>
+                )}
+              </div>
+
+              {/* Personal Information */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange("firstName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="middleName">Middle Name</Label>
+                    <Input
+                      id="middleName"
+                      value={formData.middleName}
+                      onChange={(e) => handleInputChange("middleName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange("lastName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="gender">Gender</Label>
+                    <Select 
+                      value={formData.gender}
+                      onValueChange={(value) => handleInputChange("gender", value)}
+                      disabled={!isEditing}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dob">Date of Birth</Label>
+                    <Input
+                      id="dob"
+                      type="date"
+                      value={formData.dob}
+                      onChange={(e) => handleInputChange("dob", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                      id="age"
+                      value={formData.age}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="aadharNo">Aadhar Card No</Label>
+                    <Input
+                      id="aadharNo"
+                      value={formData.aadharNo}
+                      onChange={(e) => handleInputChange("aadharNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Academic Information */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Academic Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="studentId">Student ID</Label>
+                    <Input
+                      id="studentId"
+                      value={formData.studentId}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="class">Class</Label>
+                    <Input
+                      id="class"
+                      value={formData.class}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="rollNo">Roll Number</Label>
+                    <Input
+                      id="rollNo"
+                      value={formData.rollNo}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="admissionDate">Admission Date</Label>
+                    <Input
+                      id="admissionDate"
+                      type="date"
+                      value={formData.admissionDate}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="academicYear">Current Academic Year</Label>
+                    <Input
+                      id="academicYear"
+                      value={formData.academicYear}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="schoolName">School Name</Label>
+                    <Input
+                      id="schoolName"
+                      value={formData.schoolName}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Guardian Information */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Guardian Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="fatherName">Father's Name</Label>
+                    <Input
+                      id="fatherName"
+                      value={formData.fatherName}
+                      onChange={(e) => handleInputChange("fatherName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="motherName">Mother's Name</Label>
+                    <Input
+                      id="motherName"
+                      value={formData.motherName}
+                      onChange={(e) => handleInputChange("motherName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="guardianContact1">Guardian Contact No 1</Label>
+                    <Input
+                      id="guardianContact1"
+                      value={formData.guardianContact1}
+                      onChange={(e) => handleInputChange("guardianContact1", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="guardianContact2">Guardian Contact No 2</Label>
+                    <Input
+                      id="guardianContact2"
+                      value={formData.guardianContact2}
+                      onChange={(e) => handleInputChange("guardianContact2", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="fatherOccupation">Father's Occupation</Label>
+                    <Input
+                      id="fatherOccupation"
+                      value={formData.fatherOccupation}
+                      onChange={(e) => handleInputChange("fatherOccupation", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="motherOccupation">Mother's Occupation</Label>
+                    <Input
+                      id="motherOccupation"
+                      value={formData.motherOccupation}
+                      onChange={(e) => handleInputChange("motherOccupation", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Fee Section */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Fee Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="academicFee">Academic Fee</Label>
+                    <Input
+                      id="academicFee"
+                      value={formData.academicFee}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="plan">Chosen Plan</Label>
+                    <Select 
+                      value={formData.plan}
+                      disabled
+                    >
+                      <SelectTrigger className="bg-muted">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                        <SelectItem value="3-month">3 Month</SelectItem>
+                        <SelectItem value="6-month">6 Month</SelectItem>
+                        <SelectItem value="one-time">One-Time</SelectItem>
+                        <SelectItem value="custom">Custom</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dueAmount">Due Fees</Label>
+                    <Input
+                      id="dueAmount"
+                      value={formData.dueAmount}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="paidAmount">Fees Paid</Label>
+                    <Input
+                      id="paidAmount"
+                      value={formData.paidAmount}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Contact Information */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Contact Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="mobileNo">Mobile No</Label>
+                    <Input
+                      id="mobileNo"
+                      type="tel"
+                      value={formData.mobileNo}
+                      onChange={(e) => handleInputChange("mobileNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="whatsappNo">WhatsApp No</Label>
+                    <Input
+                      id="whatsappNo"
+                      type="tel"
+                      value={formData.whatsappNo}
+                      onChange={(e) => handleInputChange("whatsappNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Address */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Address</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="country">Country</Label>
+                    <Input
+                      id="country"
+                      value={formData.country}
+                      onChange={(e) => handleInputChange("country", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State</Label>
+                    <Input
+                      id="state"
+                      value={formData.state}
+                      onChange={(e) => handleInputChange("state", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Input
+                      id="city"
+                      value={formData.city}
+                      onChange={(e) => handleInputChange("city", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="postalCode">Postal Code</Label>
+                    <Input
+                      id="postalCode"
+                      value={formData.postalCode}
+                      onChange={(e) => handleInputChange("postalCode", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="addressLine1">Address Line 1</Label>
+                    <Input
+                      id="addressLine1"
+                      value={formData.addressLine1}
+                      onChange={(e) => handleInputChange("addressLine1", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="addressLine2">Address Line 2</Label>
+                    <Input
+                      id="addressLine2"
+                      value={formData.addressLine2}
+                      onChange={(e) => handleInputChange("addressLine2", e.target.value)}
+                      disabled={!isEditing}
+                    />
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
-                    <TrendingUp className="h-5 w-5 text-success" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Attendance</p>
-                    <p className="text-2xl font-bold">{student.attendance}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Award className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Overall Grade</p>
-                    <p className="text-2xl font-bold">{student.overallGrade}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
-                    <BookOpen className="h-5 w-5 text-accent-foreground" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Last Test</p>
-                    <p className="text-2xl font-bold">{student.lastTestScore}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
-                    <span className="text-xl">₹</span>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Fee Status</p>
-                    <p className="text-lg font-bold text-success">{student.feesStatus}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Detailed Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Personal Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Personal Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Date of Birth</p>
-                  <p className="font-medium">{student.dateOfBirth}</p>
-                </div>
-                <Separator />
-                <div>
-                  <p className="text-sm text-muted-foreground">Blood Group</p>
-                  <p className="font-medium">{student.bloodGroup}</p>
-                </div>
-                <Separator />
-                <div>
-                  <p className="text-sm text-muted-foreground">Address</p>
-                  <p className="font-medium">{student.address}</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Guardian Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Guardian Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Father's Name</p>
-                  <p className="font-medium">{student.fatherName}</p>
-                </div>
-                <Separator />
-                <div>
-                  <p className="text-sm text-muted-foreground">Mother's Name</p>
-                  <p className="font-medium">{student.motherName}</p>
-                </div>
-                <Separator />
-                <div>
-                  <p className="text-sm text-muted-foreground">Guardian Contact</p>
-                  <p className="font-medium">{student.guardianContact}</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Academic Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Academic Information</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="mb-3">
-                  <p className="text-sm text-muted-foreground mb-2">Enrolled Subjects</p>
-                  <div className="flex flex-wrap gap-2">
-                    {student.subjects.map((subject) => (
-                      <Badge key={subject} variant="secondary">
-                        {subject}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Fee Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Fee Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Fee Status</p>
-                  <Badge className="mt-1 bg-success">{student.feesStatus}</Badge>
-                </div>
-                <Separator />
-                <div>
-                  <p className="text-sm text-muted-foreground">Due Amount</p>
-                  <p className="font-medium text-lg">{student.dueAmount}</p>
-                </div>
-                <Button variant="outline" className="w-full mt-4">
-                  View Fee History
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
         </main>
       </div>
     </div>

@@ -5,24 +5,64 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { BookOpen, FileText, DollarSign, Bell, LogOut, Home, Trophy, Award, Smile, User, Camera, ClipboardList } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { FileText, DollarSign, Bell, LogOut, Home, Trophy, User, Camera, ClipboardList } from "lucide-react";
 import { toast } from "sonner";
 
 const StudentProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState("/placeholder.svg");
   const [formData, setFormData] = useState({
+    // Personal Info
     firstName: "Raj",
     middleName: "Kumar",
     lastName: "Patil",
+    gender: "Male",
+    dob: "2008-03-15",
+    age: "16",
+    aadharNo: "1234-5678-9012",
+    
+    // Academic Info
     studentId: "STU2024001",
-    classBatch: "Class 10 - Batch A",
+    class: "10th",
     rollNo: "15",
-    email: "raj.kumar@school.com",
-    phone: "+91 98765 43210",
     admissionDate: "2023-04-15",
     academicYear: "2024-2025",
-    academicFee: "₹85,000"
+    schoolName: "ABC High School",
+    
+    // Guardian Info
+    fatherName: "Kumar Patil",
+    motherName: "Sunita Patil",
+    guardianContact1: "+91 98765 43210",
+    guardianContact2: "+91 98765 43211",
+    fatherOccupation: "Business",
+    motherOccupation: "Teacher",
+    
+    // Fee Section
+    academicFee: "₹85,000",
+    plan: "monthly",
+    dueAmount: "₹0",
+    paidAmount: "₹85,000",
+    
+    // Contact Info
+    email: "raj.kumar@school.com",
+    mobileNo: "+91 98765 43210",
+    whatsappNo: "+91 98765 43210",
+    
+    // Address
+    country: "India",
+    state: "Maharashtra",
+    city: "Mumbai",
+    postalCode: "400001",
+    addressLine1: "123 Main Street",
+    addressLine2: "Near Central Park"
   });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +87,7 @@ const StudentProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col fixed left-0 top-0 h-screen overflow-y-auto z-40">
         <div className="p-6 border-b border-white/10">
@@ -117,9 +157,9 @@ const StudentProfile = () => {
           </div>
         </header>
 
-        <main className="flex-1 p-8">
-          <Card className="max-w-4xl mx-auto">
-            <CardHeader className="text-center">
+        <main className="flex-1 p-8 overflow-auto">
+          <Card className="max-w-6xl mx-auto">
+            <CardHeader className="text-center pb-6">
               <div className="flex flex-col items-center gap-4">
                 <div className="relative">
                   <Avatar className="h-32 w-32">
@@ -140,12 +180,14 @@ const StudentProfile = () => {
                     />
                   </label>
                 </div>
-                <CardTitle className="text-2xl">{formData.firstName} {formData.middleName} {formData.lastName}</CardTitle>
-                <p className="text-muted-foreground">{formData.studentId}</p>
+                <div>
+                  <CardTitle className="text-3xl">{formData.firstName} {formData.middleName} {formData.lastName}</CardTitle>
+                  <p className="text-muted-foreground mt-1">{formData.studentId}</p>
+                </div>
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-8">
               <div className="flex justify-end">
                 {!isEditing ? (
                   <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
@@ -205,10 +247,10 @@ const StudentProfile = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="classBatch">Class / Batch</Label>
+                    <Label htmlFor="class">Class</Label>
                     <Input
-                      id="classBatch"
-                      value={formData.classBatch}
+                      id="class"
+                      value={formData.class}
                       disabled
                       className="bg-muted"
                     />
@@ -268,12 +310,12 @@ const StudentProfile = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="mobileNo">Mobile No</Label>
                     <Input
-                      id="phone"
+                      id="mobileNo"
                       type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      value={formData.mobileNo}
+                      onChange={(e) => handleInputChange("mobileNo", e.target.value)}
                       disabled={!isEditing}
                     />
                   </div>

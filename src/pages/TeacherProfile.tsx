@@ -1,35 +1,66 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
 import TeacherSidebar from "@/components/TeacherSidebar";
-import { Home, LogOut, Edit2, Save, Camera } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Home, LogOut, Camera } from "lucide-react";
+import { toast } from "sonner";
 
 export default function TeacherProfile() {
-  const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState<string>("/placeholder.svg");
   
   const [formData, setFormData] = useState({
-    name: "Dr. Sarah Johnson",
-    staffId: "TCH-2023-001",
-    email: "sarah.johnson@school.edu",
-    phone: "+1 234-567-8900",
-    dateJoined: "2023-01-15",
-    qualification: "Ph.D. in Mathematics Education",
-    specialization: "Advanced Mathematics & Statistics",
+    // Personal Info
+    fullName: "Dr. Sarah Johnson",
+    gender: "Female",
+    dob: "1985-03-15",
+    age: "39",
+    aadharNo: "1234-5678-9012",
+    
+    // Professional Info
+    qualification: "Ph.D. in Mathematics",
+    department: "Mathematics",
+    designation: "Senior Teacher",
     experience: "12 years",
-    department: "Mathematics Department",
-    designation: "Senior Mathematics Teacher",
-    address: "123 Education Street, Academic City",
-    emergencyContact: "+1 234-567-8901",
-    bloodGroup: "A+"
+    
+    // Bank Details
+    bankName: "State Bank of India",
+    branchName: "Mumbai Central",
+    accountNo: "1234567890",
+    ifscCode: "SBIN0001234",
+    upiId: "teacher@paytm",
+    bankMobileNo: "+91 98765 43210",
+    
+    // Salary Information
+    package: "₹75,000/month",
+    disbursedAmount: "₹72,000",
+    dueAmount: "₹3,000",
+    
+    // Contact
+    email: "sarah.johnson@school.edu",
+    whatsappNo: "+91 98765 43210",
+    optionalNo: "+91 98765 43211",
+    
+    // Address
+    country: "India",
+    state: "Maharashtra",
+    city: "Mumbai",
+    postalCode: "400001",
+    addressLine1: "123 Education Street",
+    addressLine2: "Near Academic Park"
   });
 
   const classes = [
@@ -45,24 +76,19 @@ export default function TeacherProfile() {
       const reader = new FileReader();
       reader.onload = (e) => {
         setProfileImage(e.target?.result as string);
+        toast.success("Profile image updated successfully!");
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
     setIsEditing(false);
-    toast({
-      title: "Profile Updated",
-      description: "Your profile information has been saved successfully.",
-    });
+    toast.success("Profile updated successfully!");
   };
 
   return (
@@ -71,15 +97,15 @@ export default function TeacherProfile() {
       
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="sticky top-0 z-10 bg-background border-b">
+        <header className="sticky top-0 z-10 bg-card border-b">
           <div className="flex items-center justify-between p-4">
             <div>
-              <h1 className="text-2xl font-bold">Teacher Profile</h1>
+              <h1 className="text-2xl font-bold text-primary">Teacher Profile</h1>
               <p className="text-sm text-muted-foreground">Manage your personal information</p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" asChild>
-                <Link to="/teacher/dashboard">
+                <Link to="/">
                   <Home className="mr-2 h-4 w-4" />
                   Home
                 </Link>
@@ -96,235 +122,380 @@ export default function TeacherProfile() {
 
         {/* Main Content */}
         <main className="flex-1 p-6 overflow-auto">
-          <div className="max-w-5xl mx-auto space-y-6">
-            {/* Profile Card */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Profile Information</CardTitle>
-                    <CardDescription>View and manage your personal details</CardDescription>
-                  </div>
-                  <Button
-                    variant={isEditing ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                  >
-                    {isEditing ? (
-                      <>
-                        <Save className="mr-2 h-4 w-4" />
-                        Save Changes
-                      </>
-                    ) : (
-                      <>
-                        <Edit2 className="mr-2 h-4 w-4" />
-                        Edit Profile
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Profile Image */}
-                <div className="flex items-center gap-6">
-                  <Avatar className="h-24 w-24">
-                    <AvatarImage src={profileImage} alt={formData.name} />
+          <Card className="max-w-6xl mx-auto">
+            <CardHeader className="text-center pb-6">
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative">
+                  <Avatar className="h-32 w-32">
+                    <AvatarImage src={profileImage} alt={formData.fullName} />
                     <AvatarFallback className="text-2xl">
-                      {formData.name.split(' ').map(n => n[0]).join('')}
+                      {formData.fullName.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   {isEditing && (
-                    <div>
-                      <Label htmlFor="profile-image" className="cursor-pointer">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">
-                          <Camera className="h-4 w-4" />
-                          Change Photo
-                        </div>
-                        <Input
-                          id="profile-image"
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={handleImageUpload}
-                        />
-                      </Label>
-                    </div>
+                    <label
+                      htmlFor="profile-image"
+                      className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer hover:bg-primary/90 transition-colors"
+                    >
+                      <Camera className="h-4 w-4" />
+                      <Input
+                        id="profile-image"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </label>
                   )}
                 </div>
-
-                <Separator />
-
-                {/* Personal Information */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="staffId">Staff ID</Label>
-                      <Input
-                        id="staffId"
-                        name="staffId"
-                        value={formData.staffId}
-                        disabled
-                        className="bg-muted"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="dateJoined">Date Joined</Label>
-                      <Input
-                        id="dateJoined"
-                        name="dateJoined"
-                        type="date"
-                        value={formData.dateJoined}
-                        disabled
-                        className="bg-muted"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="bloodGroup">Blood Group</Label>
-                      <Input
-                        id="bloodGroup"
-                        name="bloodGroup"
-                        value={formData.bloodGroup}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="address">Address</Label>
-                      <Input
-                        id="address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="emergencyContact">Emergency Contact</Label>
-                      <Input
-                        id="emergencyContact"
-                        name="emergencyContact"
-                        value={formData.emergencyContact}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
+                  <CardTitle className="text-3xl">{formData.fullName}</CardTitle>
+                  <p className="text-muted-foreground mt-1">{formData.designation}</p>
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-8">
+              <div className="flex justify-end">
+                {!isEditing ? (
+                  <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                ) : (
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+                    <Button onClick={handleSave}>Save Changes</Button>
+                  </div>
+                )}
+              </div>
+
+              {/* Personal Information */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Personal Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">Full Name</Label>
+                    <Input
+                      id="fullName"
+                      value={formData.fullName}
+                      onChange={(e) => handleInputChange("fullName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="gender">Gender</Label>
+                    <Select 
+                      value={formData.gender}
+                      onValueChange={(value) => handleInputChange("gender", value)}
+                      disabled={!isEditing}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dob">Date of Birth</Label>
+                    <Input
+                      id="dob"
+                      type="date"
+                      value={formData.dob}
+                      onChange={(e) => handleInputChange("dob", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                      id="age"
+                      value={formData.age}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="aadharNo">Aadhar Card No</Label>
+                    <Input
+                      id="aadharNo"
+                      value={formData.aadharNo}
+                      onChange={(e) => handleInputChange("aadharNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
                   </div>
                 </div>
+              </div>
 
-                <Separator />
+              <Separator />
 
-                {/* Professional Information */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Professional Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="qualification">Qualification</Label>
-                      <Input
-                        id="qualification"
-                        name="qualification"
-                        value={formData.qualification}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="specialization">Specialization</Label>
-                      <Input
-                        id="specialization"
-                        name="specialization"
-                        value={formData.specialization}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="experience">Teaching Experience</Label>
-                      <Input
-                        id="experience"
-                        name="experience"
-                        value={formData.experience}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="department">Department</Label>
-                      <Input
-                        id="department"
-                        name="department"
-                        value={formData.department}
-                        disabled
-                        className="bg-muted"
-                      />
-                    </div>
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="designation">Designation</Label>
-                      <Input
-                        id="designation"
-                        name="designation"
-                        value={formData.designation}
-                        disabled
-                        className="bg-muted"
-                      />
-                    </div>
+              {/* Professional Information */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Professional Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="qualification">Qualification</Label>
+                    <Input
+                      id="qualification"
+                      value={formData.qualification}
+                      onChange={(e) => handleInputChange("qualification", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="department">Department</Label>
+                    <Input
+                      id="department"
+                      value={formData.department}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="designation">Designation</Label>
+                    <Input
+                      id="designation"
+                      value={formData.designation}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="experience">Experience</Label>
+                    <Input
+                      id="experience"
+                      value={formData.experience}
+                      onChange={(e) => handleInputChange("experience", e.target.value)}
+                      disabled={!isEditing}
+                    />
                   </div>
                 </div>
+              </div>
 
-                <Separator />
+              <Separator />
 
-                {/* Classes Teaching */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Classes Teaching</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {classes.map((cls, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 border rounded-lg bg-card hover:bg-accent/50 transition-colors"
-                      >
-                        <div>
-                          <p className="font-medium">{cls.standard} - Section {cls.section}</p>
-                          <p className="text-sm text-muted-foreground">{cls.subject}</p>
-                        </div>
-                        <Badge variant="secondary">{cls.subject}</Badge>
+              {/* Bank Details */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Bank Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="bankName">Bank Name</Label>
+                    <Input
+                      id="bankName"
+                      value={formData.bankName}
+                      onChange={(e) => handleInputChange("bankName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="branchName">Branch Name</Label>
+                    <Input
+                      id="branchName"
+                      value={formData.branchName}
+                      onChange={(e) => handleInputChange("branchName", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="accountNo">Account No</Label>
+                    <Input
+                      id="accountNo"
+                      value={formData.accountNo}
+                      onChange={(e) => handleInputChange("accountNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="ifscCode">IFSC Code</Label>
+                    <Input
+                      id="ifscCode"
+                      value={formData.ifscCode}
+                      onChange={(e) => handleInputChange("ifscCode", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="upiId">UPI ID (PhonePe or GPay)</Label>
+                    <Input
+                      id="upiId"
+                      value={formData.upiId}
+                      onChange={(e) => handleInputChange("upiId", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bankMobileNo">Mobile No</Label>
+                    <Input
+                      id="bankMobileNo"
+                      value={formData.bankMobileNo}
+                      onChange={(e) => handleInputChange("bankMobileNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Classes Assigned */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Classes Assigned</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {classes.map((cls, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 border rounded-lg bg-card hover:bg-accent/50 transition-colors"
+                    >
+                      <div>
+                        <p className="font-medium">{cls.standard} - Section {cls.section}</p>
+                        <p className="text-sm text-muted-foreground">{cls.subject}</p>
                       </div>
-                    ))}
+                      <Badge variant="secondary">{cls.subject}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Salary Information */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Salary Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="package">Package</Label>
+                    <Input
+                      id="package"
+                      value={formData.package}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="disbursedAmount">Disbursed Amount</Label>
+                    <Input
+                      id="disbursedAmount"
+                      value={formData.disbursedAmount}
+                      disabled
+                      className="bg-muted"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="dueAmount">Due Amount</Label>
+                    <Input
+                      id="dueAmount"
+                      value={formData.dueAmount}
+                      disabled
+                      className="bg-muted"
+                    />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+
+              <Separator />
+
+              {/* Contact */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Contact</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="whatsappNo">WhatsApp No</Label>
+                    <Input
+                      id="whatsappNo"
+                      type="tel"
+                      value={formData.whatsappNo}
+                      onChange={(e) => handleInputChange("whatsappNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="optionalNo">Optional No</Label>
+                    <Input
+                      id="optionalNo"
+                      type="tel"
+                      value={formData.optionalNo}
+                      onChange={(e) => handleInputChange("optionalNo", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Address */}
+              <div>
+                <h3 className="text-xl font-semibold text-primary mb-4 pb-2 border-b">Address</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="country">Country</Label>
+                    <Input
+                      id="country"
+                      value={formData.country}
+                      onChange={(e) => handleInputChange("country", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state">State</Label>
+                    <Input
+                      id="state"
+                      value={formData.state}
+                      onChange={(e) => handleInputChange("state", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Input
+                      id="city"
+                      value={formData.city}
+                      onChange={(e) => handleInputChange("city", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="postalCode">Postal Code</Label>
+                    <Input
+                      id="postalCode"
+                      value={formData.postalCode}
+                      onChange={(e) => handleInputChange("postalCode", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="addressLine1">Address Line 1</Label>
+                    <Input
+                      id="addressLine1"
+                      value={formData.addressLine1}
+                      onChange={(e) => handleInputChange("addressLine1", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="addressLine2">Address Line 2</Label>
+                    <Input
+                      id="addressLine2"
+                      value={formData.addressLine2}
+                      onChange={(e) => handleInputChange("addressLine2", e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </main>
       </div>
     </div>
