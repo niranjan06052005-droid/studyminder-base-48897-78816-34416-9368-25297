@@ -49,10 +49,12 @@ const AdminBatchList = () => {
               <h2 className="text-3xl font-bold text-primary mb-2">All Batches</h2>
               <p className="text-muted-foreground">Manage and monitor all coaching batches</p>
             </div>
-            <Button className="bg-primary hover:bg-primary/90">
-              <Plus className="h-4 w-4 mr-2" />
-              Create New Batch
-            </Button>
+            <Link to="/admin/batches/create">
+              <Button className="bg-primary hover:bg-primary/90">
+                <Plus className="h-4 w-4 mr-2" />
+                Create New Batch
+              </Button>
+            </Link>
           </div>
 
           {/* Batch Cards Grid */}
