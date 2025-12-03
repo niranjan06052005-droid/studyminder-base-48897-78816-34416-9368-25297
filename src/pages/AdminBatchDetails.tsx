@@ -9,10 +9,50 @@ import { LogOut, Home, ArrowLeft, Users, UserCheck, TrendingUp, DollarSign, Book
 import AdminSidebar from "@/components/AdminSidebar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 const AdminBatchDetails = () => {
   const { batchId } = useParams();
   const [activeTab, setActiveTab] = useState("status");
+  const [addStudentOpen, setAddStudentOpen] = useState(false);
+  const [studentIdInput, setStudentIdInput] = useState("");
+  const [validatedStudent, setValidatedStudent] = useState<{ id: string; name: string } | null>(null);
+
+  // Mock student database for validation
+  const studentDatabase: Record<string, string> = {
+    "S001": "Amit Kumar",
+    "S002": "Priya Sharma",
+    "S003": "Rahul Verma",
+    "S004": "Sneha Patel",
+    "S005": "Arjun Singh",
+    "S006": "Divya Reddy",
+    "S007": "Karan Malhotra",
+    "S008": "Neha Singh"
+  };
+
+  const handleStudentIdChange = (value: string) => {
+    setStudentIdInput(value.toUpperCase());
+    const studentName = studentDatabase[value.toUpperCase()];
+    if (studentName) {
+      setValidatedStudent({ id: value.toUpperCase(), name: studentName });
+    } else {
+      setValidatedStudent(null);
+    }
+  };
+
+  const handleAddStudent = () => {
+    if (!validatedStudent) {
+      toast.error("Please enter a valid student ID");
+      return;
+    }
+    toast.success(`${validatedStudent.name} has been added to the batch!`);
+    setAddStudentOpen(false);
+    setStudentIdInput("");
+    setValidatedStudent(null);
+  };
 
   // Mock data
   const batchInfo = {
@@ -314,7 +354,66 @@ const AdminBatchDetails = () => {
             <TabsContent value="students" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-primary">Student List</h3>
-                <Button>+ Add Student to Batch</Button>
+                <Dialog open={addStudentOpen} onOpenChange={setAddStudentOpen}>
+                  <DialogTrigger asChild>
+                    <Button>+ Add Student to Batch</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add Student to Batch</DialogTitle>
+                      <DialogDescription>
+                        Enter the student ID to add them to this batch.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 pt-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="studentId">Student ID</Label>
+                        <Input
+                          id="studentId"
+                          placeholder="Enter student ID (e.g., S001)"
+                          value={studentIdInput}
+                          onChange={(e) => handleStudentIdChange(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="studentName">Student Name</Label>
+                        <Input
+                          id="studentName"
+                          placeholder="Will appear after valid ID"
+                          value={validatedStudent?.name || ""}
+                          disabled
+                          className={validatedStudent ? "text-success" : ""}
+                        />
+                        {studentIdInput && !validatedStudent && (
+                          <p className="text-xs text-destructive">Invalid student ID</p>
+                        )}
+                        {validatedStudent && (
+                          <p className="text-xs text-success">Student found!</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2 pt-4">
+                        <Button 
+                          onClick={handleAddStudent} 
+                          disabled={!validatedStudent}
+                          className="flex-1"
+                        >
+                          Add Student
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          onClick={() => {
+                            setAddStudentOpen(false);
+                            setStudentIdInput("");
+                            setValidatedStudent(null);
+                          }}
+                          className="flex-1"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
               
               <Card>
@@ -364,22 +463,37 @@ const AdminBatchDetails = () => {
             <TabsContent value="teachers" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-primary">Subject-Teacher Mapping</h3>
-                <Button>+ Assign Subject/Teacher</Button>
+                <Link to={`/admin/batches/${batchId}/assign-teacher`}>
+                  <Button>+ Assign Subject/Teacher</Button>
+                </Link>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {subjectProgress.map((subject, index) => (
                   <Card key={index} className="gradient-card">
                     <CardHeader>
-                      <CardTitle>{subject.subject}</CardTitle>
-                      <CardDescription>Teacher: {subject.teacher}</CardDescription>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle>{subject.subject}</CardTitle>
+                          <CardDescription>Teacher: {subject.teacher}</CardDescription>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-2xl font-bold text-primary">{subject.testsCount}</span>
+                          <p className="text-xs text-muted-foreground">Tests</p>
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span>Progress:</span>
-                        <span className="font-medium">{subject.progress}%</span>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-muted-foreground">Chapters:</span>
+                          <span className="font-medium ml-2">{subject.completedChapters}/{subject.totalChapters}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">Avg Score:</span>
+                          <span className="font-medium ml-2">{subject.avgScore}%</span>
+                        </div>
                       </div>
-                      <Progress value={subject.progress} />
                       <div className="flex gap-2 pt-2">
                         <Button variant="outline" size="sm" className="flex-1">Change Teacher</Button>
                         <Button variant="ghost" size="sm">Remove</Button>

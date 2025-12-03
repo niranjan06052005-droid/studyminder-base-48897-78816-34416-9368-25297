@@ -24,6 +24,8 @@ import AdminStaffView from "./pages/AdminStaffView";
 import AdminFeeManagement from "./pages/AdminFeeManagement";
 import AdminBatchList from "./pages/AdminBatchList";
 import AdminBatchDetails from "./pages/AdminBatchDetails";
+import AdminCreateBatch from "./pages/AdminCreateBatch";
+import AdminAssignTeacher from "./pages/AdminAssignTeacher";
 import AdminNoticeManagement from "./pages/AdminNoticeManagement";
 import SubjectPage from "./pages/SubjectPage";
 import StudentReport from "./pages/StudentReport";
@@ -73,7 +75,9 @@ const App = () => (
           <Route path="/admin/staff" element={<AdminStaffManagement />} />
           <Route path="/admin/staff/:staffId" element={<AdminStaffView />} />
           <Route path="/admin/batches" element={<AdminBatchList />} />
+          <Route path="/admin/batches/create" element={<AdminCreateBatch />} />
           <Route path="/admin/batches/:batchId" element={<AdminBatchDetails />} />
+          <Route path="/admin/batches/:batchId/assign-teacher" element={<AdminAssignTeacher />} />
           <Route path="/admin/notices" element={<AdminNoticeManagement />} />
           <Route path="/admin/fees" element={<AdminFeeManagement />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
