@@ -484,16 +484,6 @@ const AdminBatchDetails = () => {
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <span className="text-muted-foreground">Chapters:</span>
-                          <span className="font-medium ml-2">{subject.completedChapters}/{subject.totalChapters}</span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Avg Score:</span>
-                          <span className="font-medium ml-2">{subject.avgScore}%</span>
-                        </div>
-                      </div>
                       <div className="flex gap-2 pt-2">
                         <Button variant="outline" size="sm" className="flex-1">Change Teacher</Button>
                         <Button variant="ghost" size="sm">Remove</Button>
