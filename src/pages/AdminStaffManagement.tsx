@@ -111,7 +111,7 @@ const AdminStaffManagement = () => {
                   <TableRow>
                     <TableHead className="font-semibold">Staff ID</TableHead>
                     <TableHead className="font-semibold">Name</TableHead>
-                    <TableHead className="font-semibold">Department</TableHead>
+                    <TableHead className="font-semibold">Subject</TableHead>
                     <TableHead className="font-semibold">Contact No</TableHead>
                     <TableHead className="font-semibold">View</TableHead>
                   </TableRow>
