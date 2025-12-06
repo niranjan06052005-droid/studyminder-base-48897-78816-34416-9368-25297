@@ -99,7 +99,10 @@ const AdminStudentManagement = () => {
                 Filter by Standard
               </Button>
               
-              <Button className="whitespace-nowrap bg-[#3b82f6] hover:bg-[#2563eb] text-white">
+              <Button 
+                className="whitespace-nowrap bg-[#3b82f6] hover:bg-[#2563eb] text-white"
+                onClick={() => navigate("/admin/students/add")}
+              >
                 + Add New Student
               </Button>
             </div>
