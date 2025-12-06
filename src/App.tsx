@@ -18,6 +18,7 @@ import TeacherProgress from "./pages/TeacherProgress";
 import TeacherAnalytics from "./pages/TeacherAnalytics";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminStudentManagement from "./pages/AdminStudentManagement";
+import AdminAddStudent from "./pages/AdminAddStudent";
 import AdminStudentView from "./pages/AdminStudentView";
 import AdminStaffManagement from "./pages/AdminStaffManagement";
 import AdminStaffView from "./pages/AdminStaffView";
@@ -71,6 +72,7 @@ const App = () => (
           <Route path="/teacher/analytics" element={<TeacherAnalytics />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/students" element={<AdminStudentManagement />} />
+          <Route path="/admin/students/add" element={<AdminAddStudent />} />
           <Route path="/admin/students/:studentId" element={<AdminStudentView />} />
           <Route path="/admin/staff" element={<AdminStaffManagement />} />
           <Route path="/admin/staff/:staffId" element={<AdminStaffView />} />
