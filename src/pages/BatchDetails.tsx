@@ -450,8 +450,6 @@ const BatchDetails = () => {
           </div>
         </div>
       </section>
-      {/* Learning Journey CTA */}
-      <LearningJourneyCTA />
 
       <Footer />
     </div>
