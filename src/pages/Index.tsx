@@ -5,6 +5,7 @@ import { Users, BookOpen, Award, TrendingUp, CheckCircle2, ArrowRight } from "lu
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroAnimation3D from "@/components/HeroAnimation3D";
+import LearningJourneyCTA from "@/components/LearningJourneyCTA";
 import heroBackgroundImage from "@/assets/hero-background.png";
 
 const Index = () => {
@@ -173,20 +174,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 gradient-hero text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl mb-6">Ready to Start Your Learning Journey?</h2>
-          <p className="text-xl mb-8 text-white/90">
-            Join hundreds of successful students who have achieved their academic goals with us
-          </p>
-          <Link to="/login">
-            <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-glow">
-              Get Started Today
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-      </section>
+      <LearningJourneyCTA />
 
       <Footer />
     </div>
