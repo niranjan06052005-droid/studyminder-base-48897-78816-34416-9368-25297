@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LearningJourneyCTA from "@/components/LearningJourneyCTA";
 import heroClassroom from "@/assets/hero-classroom.jpg";
 
 const BatchDetails = () => {
@@ -449,6 +450,8 @@ const BatchDetails = () => {
           </div>
         </div>
       </section>
+      {/* Learning Journey CTA */}
+      <LearningJourneyCTA />
 
       <Footer />
     </div>

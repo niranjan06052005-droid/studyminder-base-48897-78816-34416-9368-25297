@@ -6,6 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { BookOpen, Download, Mail, Phone, Star, Play, Award, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LearningJourneyCTA from "@/components/LearningJourneyCTA";
 
 const PrimaryProgram = () => {
   const classes = [
@@ -362,37 +363,7 @@ const PrimaryProgram = () => {
       </section>
 
       {/* Next Steps (CTA) Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-primary via-primary/90 to-secondary text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl mb-6">Ready to Join Our Family?</h2>
-          <p className="text-xl mb-8 text-white/90">
-            Give your child the best start in their educational journey
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button size="lg" variant="outline" className="bg-white/10 text-white border-white hover:bg-white/20">
-              <Download className="mr-2 h-5 w-5" />
-              Download Brochure
-            </Button>
-            <Link to="/login">
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                Apply Now
-              </Button>
-            </Link>
-          </div>
-
-          <div className="space-y-2 text-white/90">
-            <p className="flex items-center justify-center gap-2">
-              <Phone className="h-5 w-5" />
-              +91 98765 43210
-            </p>
-            <p className="flex items-center justify-center gap-2">
-              <Mail className="h-5 w-5" />
-              admissions@educoach.com
-            </p>
-          </div>
-        </div>
-      </section>
+      <LearningJourneyCTA />
 
       <Footer />
     </div>
