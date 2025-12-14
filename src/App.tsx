@@ -28,6 +28,7 @@ import AdminBatchDetails from "./pages/AdminBatchDetails";
 import AdminCreateBatch from "./pages/AdminCreateBatch";
 import AdminAssignTeacher from "./pages/AdminAssignTeacher";
 import AdminNoticeManagement from "./pages/AdminNoticeManagement";
+import AdminEnquiries from "./pages/AdminEnquiries";
 import SubjectPage from "./pages/SubjectPage";
 import StudentReport from "./pages/StudentReport";
 import StudentAttendance from "./pages/StudentAttendance";
@@ -84,6 +85,7 @@ const App = () => (
           <Route path="/admin/batches/:batchId/assign-teacher" element={<AdminAssignTeacher />} />
           <Route path="/admin/notices" element={<AdminNoticeManagement />} />
           <Route path="/admin/fees" element={<AdminFeeManagement />} />
+          <Route path="/admin/enquiries" element={<AdminEnquiries />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
