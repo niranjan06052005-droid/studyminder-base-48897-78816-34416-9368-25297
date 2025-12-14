@@ -29,6 +29,7 @@ import AdminCreateBatch from "./pages/AdminCreateBatch";
 import AdminAssignTeacher from "./pages/AdminAssignTeacher";
 import AdminNoticeManagement from "./pages/AdminNoticeManagement";
 import AdminEnquiries from "./pages/AdminEnquiries";
+import AdminEditTimetable from "./pages/AdminEditTimetable";
 import SubjectPage from "./pages/SubjectPage";
 import StudentReport from "./pages/StudentReport";
 import StudentAttendance from "./pages/StudentAttendance";
@@ -83,6 +84,7 @@ const App = () => (
           <Route path="/admin/batches/create" element={<AdminCreateBatch />} />
           <Route path="/admin/batches/:batchId" element={<AdminBatchDetails />} />
           <Route path="/admin/batches/:batchId/assign-teacher" element={<AdminAssignTeacher />} />
+          <Route path="/admin/batches/:batchId/edit-timetable" element={<AdminEditTimetable />} />
           <Route path="/admin/notices" element={<AdminNoticeManagement />} />
           <Route path="/admin/fees" element={<AdminFeeManagement />} />
           <Route path="/admin/enquiries" element={<AdminEnquiries />} />
