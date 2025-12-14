@@ -7,10 +7,7 @@ import {
   Users, 
   Calendar, 
   CheckCircle, 
-  GraduationCap,
-  Phone,
-  MapPin,
-  School
+  GraduationCap
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -413,43 +410,8 @@ const BatchDetails = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-16 px-4 bg-gradient-to-br from-primary via-primary/90 to-secondary text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl mb-6 font-bold">Ready to Begin Your Child's Journey?</h2>
-          <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-            Join our nurturing learning community and give your child the foundation they deserve.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link to="/login">
-              <Button 
-                size="lg" 
-                className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold text-lg px-8 py-6 h-auto"
-              >
-                <School className="mr-2 h-6 w-6" />
-                Proceed to Admission Form
-              </Button>
-            </Link>
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="bg-white/10 text-white border-2 border-white hover:bg-white/20 font-semibold text-lg px-8 py-6 h-auto"
-            >
-              <MapPin className="mr-2 h-6 w-6" />
-              Schedule a Class Visit
-            </Button>
-          </div>
-
-          <div className="mt-8 p-6 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 inline-block">
-            <p className="text-lg mb-3">Have more questions?</p>
-            <p className="flex items-center justify-center gap-2 text-xl font-semibold">
-              <Phone className="h-6 w-6" />
-              Connect with us at +91 98765 43210
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Learning Journey CTA */}
+      <LearningJourneyCTA />
 
       <Footer />
     </div>
