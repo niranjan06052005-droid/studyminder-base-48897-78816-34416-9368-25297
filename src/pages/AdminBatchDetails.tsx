@@ -498,7 +498,9 @@ const AdminBatchDetails = () => {
             <TabsContent value="timetable" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-primary">Weekly Schedule</h3>
-                <Button>Edit Timetable</Button>
+                <Link to={`/admin/batches/${batchId}/edit-timetable`}>
+                  <Button>Edit Timetable</Button>
+                </Link>
               </div>
 
               <div className="space-y-6">
