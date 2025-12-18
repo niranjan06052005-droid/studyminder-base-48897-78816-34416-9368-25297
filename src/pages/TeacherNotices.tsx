@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Home, LogOut, Bell, Plus, Trash2, Edit, Eye, ImagePlus } from "lucide-react";
+import { Home, LogOut, Bell, Plus, Trash2, Eye, ImagePlus } from "lucide-react";
 import TeacherSidebar from "@/components/TeacherSidebar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -40,6 +40,7 @@ const mockNotices = [
 ];
 
 export default function TeacherNotices() {
+  const navigate = useNavigate();
   const [notices, setNotices] = useState(mockNotices);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newNotice, setNewNotice] = useState({
@@ -261,11 +262,12 @@ export default function TeacherNotices() {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => navigate(`/teacher/notices/${notice.id}`, { state: { notice } })}
+                      >
                         <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Edit className="h-4 w-4" />
                       </Button>
                       <Button variant="outline" size="sm" onClick={() => handleDelete(notice.id)}>
                         <Trash2 className="h-4 w-4" />

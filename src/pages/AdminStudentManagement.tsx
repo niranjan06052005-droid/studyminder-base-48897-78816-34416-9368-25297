@@ -12,12 +12,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Home, LogOut, Search, MoreVertical, Eye } from "lucide-react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Home, LogOut, Search, Eye } from "lucide-react";
 import AdminSidebar from "@/components/AdminSidebar";
 
 interface Student {
@@ -29,6 +30,7 @@ interface Student {
 
 const AdminStudentManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStandard, setSelectedStandard] = useState("all");
   const navigate = useNavigate();
   
   const students: Student[] = [
@@ -42,12 +44,15 @@ const AdminStudentManagement = () => {
     { id: "STU008", name: "Pooja Reddy", std: "9th - C", contact: "21098-76543" },
   ];
 
-  const filteredStudents = students.filter(
-    (student) =>
-      student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  const standards = ["all", "8th", "9th", "10th", "11th", "12th"];
+
+  const filteredStudents = students.filter((student) => {
+    const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       student.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.std.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      student.std.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStandard = selectedStandard === "all" || student.std.toLowerCase().includes(selectedStandard.toLowerCase());
+    return matchesSearch && matchesStandard;
+  });
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -95,9 +100,18 @@ const AdminStudentManagement = () => {
                 />
               </div>
               
-              <Button variant="outline" className="whitespace-nowrap">
-                Filter by Standard
-              </Button>
+              <Select value={selectedStandard} onValueChange={setSelectedStandard}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Filter by Standard" />
+                </SelectTrigger>
+                <SelectContent className="bg-background">
+                  {standards.map((std) => (
+                    <SelectItem key={std} value={std}>
+                      {std === "all" ? "All Standards" : `${std} Standard`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               
               <Button 
                 className="whitespace-nowrap bg-[#3b82f6] hover:bg-[#2563eb] text-white"

@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { LogOut, Home, Bell, Upload, X, Send, Calendar, Users } from "lucide-react";
+import { LogOut, Home, Bell, Upload, X, Send, Calendar, Users, Eye } from "lucide-react";
 import AdminSidebar from "@/components/AdminSidebar";
 import { toast } from "@/hooks/use-toast";
 
 const AdminNoticeManagement = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [selectedBatches, setSelectedBatches] = useState<string[]>([]);
@@ -404,7 +405,12 @@ const AdminNoticeManagement = () => {
                             )}
                           </div>
                         </div>
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => navigate(`/admin/notices/${notice.id}`, { state: { notice } })}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
                           View Details
                         </Button>
                       </div>

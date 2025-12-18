@@ -278,9 +278,7 @@ const AdminEnquiries = () => {
                     <TableHead>ID</TableHead>
                     <TableHead>Parent Name</TableHead>
                     <TableHead>Child Name</TableHead>
-                    <TableHead>Section / Standard</TableHead>
                     <TableHead>Contact</TableHead>
-                    <TableHead>Submitted</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -302,19 +300,10 @@ const AdminEnquiries = () => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <BookOpen className="h-4 w-4 text-muted-foreground" />
-                          {enquiry.section} - {enquiry.standard}
-                        </div>
-                      </TableCell>
-                      <TableCell>
                         <a href={`tel:${enquiry.contactNo}`} className="flex items-center gap-2 text-primary hover:underline">
                           <Phone className="h-4 w-4" />
                           {enquiry.contactNo}
                         </a>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {formatDate(enquiry.submittedAt)}
                       </TableCell>
                       <TableCell>
                         <Badge className={getStatusBadge(enquiry.status)}>

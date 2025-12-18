@@ -28,8 +28,10 @@ import AdminBatchDetails from "./pages/AdminBatchDetails";
 import AdminCreateBatch from "./pages/AdminCreateBatch";
 import AdminAssignTeacher from "./pages/AdminAssignTeacher";
 import AdminNoticeManagement from "./pages/AdminNoticeManagement";
+import AdminNoticeView from "./pages/AdminNoticeView";
 import AdminEnquiries from "./pages/AdminEnquiries";
 import AdminEditTimetable from "./pages/AdminEditTimetable";
+import TeacherNoticeView from "./pages/TeacherNoticeView";
 import SubjectPage from "./pages/SubjectPage";
 import StudentReport from "./pages/StudentReport";
 import StudentAttendance from "./pages/StudentAttendance";
@@ -71,6 +73,7 @@ const App = () => (
           <Route path="/teacher/attendance" element={<TeacherAttendance />} />
           <Route path="/teacher/test-results" element={<TeacherTestResults />} />
           <Route path="/teacher/notices" element={<TeacherNotices />} />
+          <Route path="/teacher/notices/:noticeId" element={<TeacherNoticeView />} />
           <Route path="/teacher/schedule" element={<TeacherSchedule />} />
           <Route path="/teacher/progress" element={<TeacherProgress />} />
           <Route path="/teacher/analytics" element={<TeacherAnalytics />} />
@@ -86,6 +89,7 @@ const App = () => (
           <Route path="/admin/batches/:batchId/assign-teacher" element={<AdminAssignTeacher />} />
           <Route path="/admin/batches/:batchId/edit-timetable" element={<AdminEditTimetable />} />
           <Route path="/admin/notices" element={<AdminNoticeManagement />} />
+          <Route path="/admin/notices/:noticeId" element={<AdminNoticeView />} />
           <Route path="/admin/fees" element={<AdminFeeManagement />} />
           <Route path="/admin/enquiries" element={<AdminEnquiries />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

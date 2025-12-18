@@ -12,12 +12,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Home, LogOut, Search, MoreVertical, Eye } from "lucide-react";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Home, LogOut, Search, Eye } from "lucide-react";
 import AdminSidebar from "@/components/AdminSidebar";
 
 interface Staff {
@@ -25,29 +26,32 @@ interface Staff {
   name: string;
   section: string;
   contact: string;
+  role: "teacher" | "non-teacher";
 }
 
 const AdminStaffManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRole, setSelectedRole] = useState("all");
   const navigate = useNavigate();
   
   const staff: Staff[] = [
-    { id: "STF001", name: "Dr. Rajesh Kumar", section: "Mathematics", contact: "98765-43210" },
-    { id: "STF002", name: "Mrs. Priya Sharma", section: "Science", contact: "87654-32109" },
-    { id: "STF003", name: "Mr. Amit Patel", section: "English", contact: "76543-21098" },
-    { id: "STF004", name: "Ms. Neha Gupta", section: "History", contact: "65432-10987" },
-    { id: "STF005", name: "Prof. Rohit Singh", section: "Physics", contact: "54321-09876" },
-    { id: "STF006", name: "Mrs. Anjali Reddy", section: "Chemistry", contact: "43210-98765" },
-    { id: "STF007", name: "Mr. Vikram Desai", section: "Computer Science", contact: "32109-87654" },
-    { id: "STF008", name: "Dr. Pooja Verma", section: "Biology", contact: "21098-76543" },
+    { id: "STF001", name: "Dr. Rajesh Kumar", section: "Mathematics", contact: "98765-43210", role: "teacher" },
+    { id: "STF002", name: "Mrs. Priya Sharma", section: "Science", contact: "87654-32109", role: "teacher" },
+    { id: "STF003", name: "Mr. Amit Patel", section: "English", contact: "76543-21098", role: "teacher" },
+    { id: "STF004", name: "Ms. Neha Gupta", section: "Administration", contact: "65432-10987", role: "non-teacher" },
+    { id: "STF005", name: "Prof. Rohit Singh", section: "Physics", contact: "54321-09876", role: "teacher" },
+    { id: "STF006", name: "Mrs. Anjali Reddy", section: "Chemistry", contact: "43210-98765", role: "teacher" },
+    { id: "STF007", name: "Mr. Vikram Desai", section: "Accounts", contact: "32109-87654", role: "non-teacher" },
+    { id: "STF008", name: "Dr. Pooja Verma", section: "Biology", contact: "21098-76543", role: "teacher" },
   ];
 
-  const filteredStaff = staff.filter(
-    (member) =>
-      member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  const filteredStaff = staff.filter((member) => {
+    const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       member.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.section.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      member.section.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = selectedRole === "all" || member.role === selectedRole;
+    return matchesSearch && matchesRole;
+  });
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -95,9 +99,16 @@ const AdminStaffManagement = () => {
                 />
               </div>
               
-              <Button variant="outline" className="whitespace-nowrap">
-                Filter by Role
-              </Button>
+              <Select value={selectedRole} onValueChange={setSelectedRole}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Filter by Role" />
+                </SelectTrigger>
+                <SelectContent className="bg-background">
+                  <SelectItem value="all">All Roles</SelectItem>
+                  <SelectItem value="teacher">Teacher</SelectItem>
+                  <SelectItem value="non-teacher">Non-Teacher</SelectItem>
+                </SelectContent>
+              </Select>
               
               <Button className="whitespace-nowrap bg-[#3b82f6] hover:bg-[#2563eb] text-white">
                 + Add New Staff
