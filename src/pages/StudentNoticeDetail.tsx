@@ -62,6 +62,11 @@ const StudentNoticeDetail = () => {
               <span>Home</span>
             </Link>
             
+            <Link to="/student/profile" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <BookOpen className="h-5 w-5" />
+              <span>My Profile</span>
+            </Link>
+            
             <Link to="/student/report" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
               <ClipboardList className="h-5 w-5" />
               <span>My Report</span>
