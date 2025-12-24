@@ -33,6 +33,8 @@ import AdminEnquiries from "./pages/AdminEnquiries";
 import AdminEditTimetable from "./pages/AdminEditTimetable";
 import TeacherNoticeView from "./pages/TeacherNoticeView";
 import SubjectPage from "./pages/SubjectPage";
+import ChapterNotes from "./pages/ChapterNotes";
+import ChapterVideo from "./pages/ChapterVideo";
 import StudentReport from "./pages/StudentReport";
 import StudentAttendance from "./pages/StudentAttendance";
 import StudentLeaderboard from "./pages/StudentLeaderboard";
@@ -67,6 +69,8 @@ const App = () => (
           <Route path="/student/notices" element={<StudentNotices />} />
           <Route path="/student/notice/:noticeId" element={<StudentNoticeDetail />} />
           <Route path="/student/subject/:subject" element={<SubjectPage />} />
+          <Route path="/student/subject/:subject/notes/:noteId" element={<ChapterNotes />} />
+          <Route path="/student/subject/:subject/video/:videoId" element={<ChapterVideo />} />
           <Route path="/teacher/profile" element={<TeacherProfile />} />
           <Route path="/teacher/classes" element={<TeacherClassList />} />
           <Route path="/teacher/class/:classId" element={<TeacherBatchView />} />

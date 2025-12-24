@@ -164,10 +164,11 @@ export default function SubjectPage() {
                                     <FileText className="h-5 w-5 text-primary" />
                                     <span className="font-medium">{note.title}</span>
                                   </div>
-                                  <Button size="sm" className="gap-2">
-                                    <Download className="h-4 w-4" />
-                                    Download
-                                  </Button>
+                                  <Link to={`/student/subject/${subject}/notes/${note.id}`}>
+                                    <Button size="sm" className="gap-2">
+                                      View Notes
+                                    </Button>
+                                  </Link>
                                 </CardContent>
                               </Card>
                             ))}
@@ -242,9 +243,11 @@ export default function SubjectPage() {
                                         )}
                                       </div>
                                       <p className="text-sm text-muted-foreground mt-1">{video.duration}</p>
-                                      <Button size="sm" className="mt-3">
-                                        {video.watched ? "Watch Again" : "Watch Now"}
-                                      </Button>
+                                      <Link to={`/student/subject/${subject}/video/${video.id}`}>
+                                        <Button size="sm" className="mt-3">
+                                          {video.watched ? "Watch Again" : "Watch Now"}
+                                        </Button>
+                                      </Link>
                                     </div>
                                   </div>
                                 </CardContent>
