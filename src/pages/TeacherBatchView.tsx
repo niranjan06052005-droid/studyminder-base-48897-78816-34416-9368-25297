@@ -159,9 +159,11 @@ export default function TeacherBatchView() {
                                 </div>
                               </div>
                               <div className="flex gap-2">
-                                <Button variant="outline" size="sm">
-                                  <Eye className="h-4 w-4" />
-                                </Button>
+                                <Link to={`/teacher/class/${batchId}/notes/${note.id}`}>
+                                  <Button variant="outline" size="sm">
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                </Link>
                                 <Button variant="outline" size="sm">
                                   <Download className="h-4 w-4" />
                                 </Button>
@@ -204,9 +206,11 @@ export default function TeacherBatchView() {
                                 </div>
                               </div>
                               <div className="flex gap-2">
-                                <Button variant="outline" size="sm">
-                                  <Eye className="h-4 w-4" />
-                                </Button>
+                                <Link to={`/teacher/class/${batchId}/video/${video.id}`}>
+                                  <Button variant="outline" size="sm">
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                </Link>
                                 <Button variant="outline" size="sm">
                                   <Trash2 className="h-4 w-4" />
                                 </Button>
