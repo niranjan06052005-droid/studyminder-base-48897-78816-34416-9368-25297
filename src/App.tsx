@@ -21,6 +21,7 @@ import AdminStudentManagement from "./pages/AdminStudentManagement";
 import AdminAddStudent from "./pages/AdminAddStudent";
 import AdminStudentView from "./pages/AdminStudentView";
 import AdminStaffManagement from "./pages/AdminStaffManagement";
+import AdminAddStaff from "./pages/AdminAddStaff";
 import AdminStaffView from "./pages/AdminStaffView";
 import AdminFeeManagement from "./pages/AdminFeeManagement";
 import AdminBatchList from "./pages/AdminBatchList";
@@ -43,6 +44,7 @@ import StudentLeaderboard from "./pages/StudentLeaderboard";
 import StudentFees from "./pages/StudentFees";
 import StudentNotices from "./pages/StudentNotices";
 import StudentNoticeDetail from "./pages/StudentNoticeDetail";
+import StudentSubjectNoticeDetail from "./pages/StudentSubjectNoticeDetail";
 import PrimaryProgram from "./pages/PrimaryProgram";
 import BatchDetails from "./pages/BatchDetails";
 import GetStarted from "./pages/GetStarted";
@@ -70,6 +72,7 @@ const App = () => (
           <Route path="/student/fees" element={<StudentFees />} />
           <Route path="/student/notices" element={<StudentNotices />} />
           <Route path="/student/notice/:noticeId" element={<StudentNoticeDetail />} />
+          <Route path="/student/subject-notice/:noticeId" element={<StudentSubjectNoticeDetail />} />
           <Route path="/student/subject/:subject" element={<SubjectPage />} />
           <Route path="/student/subject/:subject/notes/:noteId" element={<ChapterNotes />} />
           <Route path="/student/subject/:subject/video/:videoId" element={<ChapterVideo />} />
@@ -90,6 +93,7 @@ const App = () => (
           <Route path="/admin/students/add" element={<AdminAddStudent />} />
           <Route path="/admin/students/:studentId" element={<AdminStudentView />} />
           <Route path="/admin/staff" element={<AdminStaffManagement />} />
+          <Route path="/admin/staff/add" element={<AdminAddStaff />} />
           <Route path="/admin/staff/:staffId" element={<AdminStaffView />} />
           <Route path="/admin/batches" element={<AdminBatchList />} />
           <Route path="/admin/batches/create" element={<AdminCreateBatch />} />
