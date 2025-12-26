@@ -152,6 +152,11 @@ const StudentLeaderboard = () => {
               <span>Home</span>
             </Link>
             
+            <Link to="/student/profile" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
+              <Target className="h-5 w-5" />
+              <span>My Profile</span>
+            </Link>
+            
             <Link to="/student/report" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
               <ClipboardList className="h-5 w-5" />
               <span>My Report</span>
@@ -373,7 +378,6 @@ const StudentLeaderboard = () => {
                     <TableHead>Student Name</TableHead>
                     <TableHead>Score</TableHead>
                     <TableHead>Percentage</TableHead>
-                    <TableHead>Grade</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -417,17 +421,6 @@ const StudentLeaderboard = () => {
                             </div>
                             <span className="font-medium">{student.percentage}%</span>
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className={`px-3 py-1 rounded-full font-bold text-sm ${
-                            student.grade === "A+" || student.grade === "A" 
-                              ? "bg-success/20 text-success border border-success/50" :
-                            student.grade === "B" 
-                              ? "bg-accent/20 text-accent-foreground border border-accent/50" :
-                              "bg-destructive/20 text-destructive border border-destructive/50"
-                          }`}>
-                            {student.grade}
-                          </span>
                         </TableCell>
                       </TableRow>
                     );

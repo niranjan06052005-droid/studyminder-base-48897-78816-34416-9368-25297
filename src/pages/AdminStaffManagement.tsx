@@ -110,7 +110,10 @@ const AdminStaffManagement = () => {
                 </SelectContent>
               </Select>
               
-              <Button className="whitespace-nowrap bg-[#3b82f6] hover:bg-[#2563eb] text-white">
+              <Button 
+                className="whitespace-nowrap bg-[#3b82f6] hover:bg-[#2563eb] text-white"
+                onClick={() => navigate("/admin/staff/add")}
+              >
                 + Add New Staff
               </Button>
             </div>

@@ -360,7 +360,7 @@ const StudentNotices = () => {
                           <div 
                             key={notice.id} 
                             className="group p-5 border rounded-xl hover:shadow-lg hover:border-primary/30 transition-all duration-300 cursor-pointer bg-card"
-                            onClick={() => navigate(`/student/notice/${notice.id}`, { state: { notice, type: 'subject' } })}
+                            onClick={() => navigate(`/student/subject-notice/${notice.id}`, { state: { notice } })}
                           >
                             <div className="flex items-start gap-4">
                               <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
@@ -385,7 +385,7 @@ const StudentNotices = () => {
                                     className="flex-shrink-0 group-hover:bg-primary/10 group-hover:text-primary"
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      navigate(`/student/notice/${notice.id}`, { state: { notice, type: 'subject' } });
+                                      navigate(`/student/subject-notice/${notice.id}`, { state: { notice } });
                                     }}
                                   >
                                     View
