@@ -1,10 +1,106 @@
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Users, Award, BookOpen, Target, GraduationCap, Calendar, MapPin, Phone, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { Users, Award, BookOpen, Target, GraduationCap, Calendar, MapPin, Phone, Mail, Camera, User, MessageSquare, ArrowRight, Sparkles } from "lucide-react";
 
 const About = () => {
+  const { toast } = useToast();
+  
+  const [formData, setFormData] = useState({
+    parentName: "",
+    childName: "",
+    section: "",
+    standard: "",
+    contactNo: "",
+    description: ""
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const sections = [
+    { value: "primary", label: "Primary (Std. 1-4)" },
+    { value: "middle", label: "Middle (Std. 5-8)" },
+    { value: "secondary", label: "Secondary (Std. 9-10)" }
+  ];
+
+  const standardsBySection: Record<string, { value: string; label: string }[]> = {
+    primary: [
+      { value: "1", label: "Standard 1" },
+      { value: "2", label: "Standard 2" },
+      { value: "3", label: "Standard 3" },
+      { value: "4", label: "Standard 4" }
+    ],
+    middle: [
+      { value: "5", label: "Standard 5" },
+      { value: "6", label: "Standard 6" },
+      { value: "7", label: "Standard 7" },
+      { value: "8", label: "Standard 8" }
+    ],
+    secondary: [
+      { value: "9", label: "Standard 9" },
+      { value: "10", label: "Standard 10" }
+    ]
+  };
+
+  const handleSectionChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      section: value,
+      standard: ""
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.parentName || !formData.childName || !formData.section || !formData.standard || !formData.contactNo) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(formData.contactNo)) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Please enter a valid 10-digit Indian mobile number.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      toast({
+        title: "Enquiry Submitted Successfully! 🎉",
+        description: "Our team will contact you within 24 hours.",
+      });
+      setIsSubmitting(false);
+      
+      setFormData({
+        parentName: "",
+        childName: "",
+        section: "",
+        standard: "",
+        contactNo: "",
+        description: ""
+      });
+    }, 1500);
+  };
+
   const milestones = [
     { year: "2011", title: "Foundation", description: "EduCoach was established with a vision to provide quality education" },
     { year: "2014", title: "First Batch Success", description: "100% of our first batch cleared competitive exams" },
@@ -63,6 +159,49 @@ const About = () => {
     { number: "95%", label: "Success Rate" },
     { number: "50+", label: "Top Rankers" },
     { number: "13+", label: "Years Experience" },
+  ];
+
+  const galleryImages = [
+    { 
+      src: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=400&fit=crop",
+      title: "Classroom Learning",
+      category: "Classes"
+    },
+    { 
+      src: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&h=400&fit=crop",
+      title: "Annual Day Celebration",
+      category: "Events"
+    },
+    { 
+      src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop",
+      title: "Science Exhibition",
+      category: "Activities"
+    },
+    { 
+      src: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&h=400&fit=crop",
+      title: "Library",
+      category: "Facilities"
+    },
+    { 
+      src: "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=600&h=400&fit=crop",
+      title: "Sports Day",
+      category: "Events"
+    },
+    { 
+      src: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=400&fit=crop",
+      title: "Study Materials",
+      category: "Resources"
+    },
+    { 
+      src: "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=600&h=400&fit=crop",
+      title: "Interactive Sessions",
+      category: "Classes"
+    },
+    { 
+      src: "https://images.unsplash.com/photo-1522661067900-ab829854a57f?w=600&h=400&fit=crop",
+      title: "Prize Distribution",
+      category: "Events"
+    },
   ];
 
   return (
@@ -272,41 +411,289 @@ const About = () => {
         </div>
       </section>
 
-      {/* Contact Info */}
-      <section className="py-16 px-4 bg-muted/30">
+      {/* Life at EduCoach - Photo Gallery */}
+      <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground text-center mb-12">Visit Us</h2>
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <MapPin className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-bold text-foreground mb-2">Address</h3>
-              <p className="text-muted-foreground">
-                123 Education Street<br />
-                Knowledge City, State 400001
-              </p>
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Camera className="h-8 w-8 text-primary" />
+              <h2 className="text-3xl font-bold text-foreground">Life at EduCoach</h2>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <Phone className="h-8 w-8 text-primary" />
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Glimpses of our vibrant learning environment, events, and activities
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {galleryImages.map((image, index) => (
+              <div 
+                key={index}
+                onClick={() => setSelectedImage(image.src)}
+                className={`relative overflow-hidden rounded-xl cursor-pointer group
+                  ${index === 0 || index === 5 ? 'md:col-span-2 md:row-span-2' : ''}
+                  animate-fade-in`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <img 
+                  src={image.src}
+                  alt={image.title}
+                  className={`w-full object-cover transition-transform duration-500 group-hover:scale-110
+                    ${index === 0 || index === 5 ? 'h-64 md:h-full' : 'h-48 md:h-56'}`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <Badge className="mb-2 bg-primary/80">{image.category}</Badge>
+                  <p className="text-white font-semibold">{image.title}</p>
+                </div>
               </div>
-              <h3 className="font-bold text-foreground mb-2">Phone</h3>
-              <p className="text-muted-foreground">
-                +91 98765 43210<br />
-                +91 12345 67890
-              </p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setSelectedImage(null)}
+        >
+          <img 
+            src={selectedImage.replace('w=600&h=400', 'w=1200&h=800')}
+            alt="Gallery"
+            className="max-w-full max-h-[90vh] object-contain rounded-lg animate-scale-in"
+          />
+          <button 
+            className="absolute top-4 right-4 text-white text-4xl hover:text-primary transition-colors"
+            onClick={() => setSelectedImage(null)}
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Visit Us & Enquiry Section */}
+      <section className="py-16 px-4 bg-gradient-to-br from-primary/5 via-muted/30 to-secondary/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Get In Touch</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Visit us or submit an enquiry. We'd love to hear from you!
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Contact Info Cards */}
+            <div className="space-y-6">
+              {/* Address Card */}
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                <CardContent className="p-0">
+                  <div className="flex">
+                    <div className="w-24 bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <MapPin className="h-10 w-10 text-primary-foreground" />
+                    </div>
+                    <div className="flex-1 p-6">
+                      <h3 className="font-bold text-lg text-foreground mb-2">Our Location</h3>
+                      <p className="text-muted-foreground">
+                        123 Education Street<br />
+                        Knowledge City, State 400001
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Phone Card */}
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                <CardContent className="p-0">
+                  <div className="flex">
+                    <div className="w-24 bg-gradient-to-br from-secondary to-secondary/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Phone className="h-10 w-10 text-secondary-foreground" />
+                    </div>
+                    <div className="flex-1 p-6">
+                      <h3 className="font-bold text-lg text-foreground mb-2">Call Us</h3>
+                      <p className="text-muted-foreground">
+                        +91 98765 43210<br />
+                        +91 12345 67890
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Email Card */}
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                <CardContent className="p-0">
+                  <div className="flex">
+                    <div className="w-24 bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Mail className="h-10 w-10 text-accent-foreground" />
+                    </div>
+                    <div className="flex-1 p-6">
+                      <h3 className="font-bold text-lg text-foreground mb-2">Email Us</h3>
+                      <p className="text-muted-foreground">
+                        info@educoach.com<br />
+                        admissions@educoach.com
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Timing Card */}
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group">
+                <CardContent className="p-0">
+                  <div className="flex">
+                    <div className="w-24 bg-gradient-to-br from-primary/70 to-secondary/70 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Calendar className="h-10 w-10 text-white" />
+                    </div>
+                    <div className="flex-1 p-6">
+                      <h3 className="font-bold text-lg text-foreground mb-2">Office Hours</h3>
+                      <p className="text-muted-foreground">
+                        Mon - Sat: 8:00 AM - 8:00 PM<br />
+                        Sunday: 9:00 AM - 1:00 PM
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <Mail className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-bold text-foreground mb-2">Email</h3>
-              <p className="text-muted-foreground">
-                info@educoach.com<br />
-                admissions@educoach.com
-              </p>
-            </div>
+
+            {/* Enquiry Form */}
+            <Card className="shadow-2xl border-primary/10 overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-border">
+                <CardTitle className="text-xl text-primary flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-accent" />
+                  Admission Enquiry
+                </CardTitle>
+                <CardDescription>
+                  Fill out the form and we'll get back to you within 24 hours
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="parentName" className="flex items-center gap-2 text-sm">
+                        <Users className="h-3 w-3 text-primary" />
+                        Parent's Name *
+                      </Label>
+                      <Input
+                        id="parentName"
+                        placeholder="Parent's full name"
+                        value={formData.parentName}
+                        onChange={(e) => setFormData(prev => ({ ...prev, parentName: e.target.value }))}
+                        className="h-10"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="childName" className="flex items-center gap-2 text-sm">
+                        <User className="h-3 w-3 text-primary" />
+                        Child's Name *
+                      </Label>
+                      <Input
+                        id="childName"
+                        placeholder="Child's full name"
+                        value={formData.childName}
+                        onChange={(e) => setFormData(prev => ({ ...prev, childName: e.target.value }))}
+                        className="h-10"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="section" className="flex items-center gap-2 text-sm">
+                        <BookOpen className="h-3 w-3 text-primary" />
+                        Section *
+                      </Label>
+                      <Select value={formData.section} onValueChange={handleSectionChange}>
+                        <SelectTrigger className="h-10">
+                          <SelectValue placeholder="Select section" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background">
+                          {sections.map((section) => (
+                            <SelectItem key={section.value} value={section.value}>
+                              {section.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="standard" className="flex items-center gap-2 text-sm">
+                        <GraduationCap className="h-3 w-3 text-primary" />
+                        Standard *
+                      </Label>
+                      <Select 
+                        value={formData.standard} 
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, standard: value }))}
+                        disabled={!formData.section}
+                      >
+                        <SelectTrigger className="h-10">
+                          <SelectValue placeholder={formData.section ? "Select standard" : "Select section first"} />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background">
+                          {formData.section && standardsBySection[formData.section]?.map((std) => (
+                            <SelectItem key={std.value} value={std.value}>
+                              {std.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="contactNo" className="flex items-center gap-2 text-sm">
+                      <Phone className="h-3 w-3 text-primary" />
+                      Contact Number *
+                    </Label>
+                    <Input
+                      id="contactNo"
+                      type="tel"
+                      placeholder="10-digit mobile number"
+                      value={formData.contactNo}
+                      onChange={(e) => setFormData(prev => ({ ...prev, contactNo: e.target.value.replace(/\D/g, '').slice(0, 10) }))}
+                      className="h-10"
+                      maxLength={10}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="description" className="flex items-center gap-2 text-sm">
+                      <MessageSquare className="h-3 w-3 text-primary" />
+                      Message (Optional)
+                    </Label>
+                    <Textarea
+                      id="description"
+                      placeholder="Any questions or requirements..."
+                      value={formData.description}
+                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                      rows={3}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="w-full h-12 font-semibold bg-primary hover:bg-primary/90 group"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit Enquiry
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
