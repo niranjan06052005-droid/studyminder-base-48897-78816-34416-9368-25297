@@ -50,6 +50,7 @@ import PrimaryProgram from "./pages/PrimaryProgram";
 import BatchDetails from "./pages/BatchDetails";
 import GetStarted from "./pages/GetStarted";
 import Activities from "./pages/Activities";
+import Results from "./pages/Results";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,7 @@ const App = () => (
           <Route path="/programs/primary/batch/:standard" element={<BatchDetails />} />
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/activities" element={<Activities />} />
+          <Route path="/results" element={<Results />} />
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/profile" element={<StudentProfile />} />
           <Route path="/student/report" element={<StudentReport />} />
