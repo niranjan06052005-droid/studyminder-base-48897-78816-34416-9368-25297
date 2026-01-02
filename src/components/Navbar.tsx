@@ -26,8 +26,8 @@ const Navbar = () => {
             <Link to="/activities" className="text-gray-800 hover:text-gray-900 transition-colors font-medium">
               Activities
             </Link>
-            <Link to="/contact" className="text-gray-800 hover:text-gray-900 transition-colors font-medium">
-              Contact
+            <Link to="/results" className="text-gray-800 hover:text-gray-900 transition-colors font-medium">
+              Results
             </Link>
             <Link to="/login">
               <Button className="bg-gray-900 text-white hover:bg-gray-800 shadow-lg">
@@ -71,11 +71,11 @@ const Navbar = () => {
                 Activities
               </Link>
               <Link
-                to="/contact"
+                to="/results"
                 className="text-gray-800 hover:text-gray-900 transition-colors font-medium"
                 onClick={() => setIsOpen(false)}
               >
-                Contact
+                Results
               </Link>
               <Link to="/login" onClick={() => setIsOpen(false)}>
                 <Button className="w-full bg-gray-900 text-white hover:bg-gray-800 shadow-lg">
