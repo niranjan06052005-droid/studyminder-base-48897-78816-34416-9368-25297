@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BookOpen, Award, TrendingUp, CheckCircle2, ArrowRight, Sparkles, Star, Zap, Target, GraduationCap, Medal } from "lucide-react";
+import { Users, BookOpen, Award, TrendingUp, CheckCircle2, ArrowRight, Sparkles, Star, GraduationCap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import HeroAnimation3D from "@/components/HeroAnimation3D";
+import HeroSection from "@/components/HeroSection";
 import LearningJourneyCTA from "@/components/LearningJourneyCTA";
-import heroBackgroundImage from "@/assets/hero-background.png";
 
 const Index = () => {
   return (
@@ -14,99 +13,7 @@ const Index = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative min-h-[100vh] flex items-center justify-center overflow-hidden pt-32 pb-20">
-        {/* Hero Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-no-repeat"
-          style={{ 
-            backgroundImage: `url(${heroBackgroundImage})`,
-            backgroundPosition: 'center center'
-          }}
-        />
-        
-        {/* Animated Gradient Orbs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-secondary/30 to-accent/30 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-accent/10 to-success/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        </div>
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <Sparkles className="absolute top-32 left-[15%] w-8 h-8 text-accent animate-bounce" style={{ animationDelay: '0.5s' }} />
-          <Star className="absolute top-48 right-[20%] w-6 h-6 text-accent/80 animate-bounce" style={{ animationDelay: '1s' }} />
-          <GraduationCap className="absolute bottom-40 left-[25%] w-10 h-10 text-secondary/60 animate-bounce" style={{ animationDelay: '1.5s' }} />
-          <Medal className="absolute bottom-32 right-[30%] w-8 h-8 text-accent/70 animate-bounce" style={{ animationDelay: '0.8s' }} />
-          <Zap className="absolute top-60 left-[8%] w-6 h-6 text-secondary/70 animate-bounce" style={{ animationDelay: '1.2s' }} />
-          <Target className="absolute top-72 right-[12%] w-7 h-7 text-success/60 animate-bounce" style={{ animationDelay: '0.3s' }} />
-        </div>
-        
-        {/* 3D Animation Overlay */}
-        <HeroAnimation3D />
-        
-        {/* Gradient Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/30 via-transparent to-primary/50" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <div className="text-white max-w-4xl mx-auto space-y-8">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 animate-fade-in">
-              <Sparkles className="w-4 h-4 text-accent" />
-              <span className="text-sm font-medium">Trusted by 10,000+ Students</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight drop-shadow-2xl">
-              <span className="inline-block animate-[scale-in_0.5s_ease-out] bg-gradient-to-r from-white via-white to-white/80 bg-clip-text">Unlock</span>{" "}
-              <span className="inline-block animate-[scale-in_0.5s_ease-out_0.1s] bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Your</span>{" "}
-              <span className="inline-block animate-[scale-in_0.5s_ease-out_0.2s] bg-gradient-to-r from-white via-white to-white/80 bg-clip-text">Potential</span>
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/95 drop-shadow-lg animate-[fade-in_0.6s_ease-out_0.3s] opacity-0 [animation-fill-mode:forwards] font-medium">
-              Quality Coaching from Std. 1st to 10th
-            </p>
-            <p className="text-lg md:text-xl text-white/80 drop-shadow-lg animate-[fade-in_0.6s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards] max-w-2xl mx-auto">
-              Expert teachers, personalized attention, and a proven track record of success
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-[fade-in_0.6s_ease-out_0.7s] opacity-0 [animation-fill-mode:forwards] pt-4">
-              <Link to="/login">
-                <Button size="lg" className="group relative px-8 py-6 text-lg bg-gradient-to-r from-accent to-accent/80 text-primary-foreground hover:from-accent/90 hover:to-accent/70 shadow-2xl shadow-accent/30 hover:shadow-accent/50 transition-all duration-300 hover:scale-105 rounded-xl border-0">
-                  <span className="relative z-10 flex items-center font-semibold">
-                    Enroll Now
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent to-accent/80 blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
-                </Button>
-              </Link>
-              <Link to="/courses">
-                <Button size="lg" variant="outline" className="px-8 py-6 text-lg bg-white/10 text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 backdrop-blur-md transition-all duration-300 hover:scale-105 rounded-xl">
-                  Explore Courses
-                </Button>
-              </Link>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="flex flex-wrap justify-center gap-8 pt-8 animate-[fade-in_0.6s_ease-out_0.9s] opacity-0 [animation-fill-mode:forwards]">
-              {[
-                { value: "500+", label: "Students" },
-                { value: "95%", label: "Success Rate" },
-                { value: "10+", label: "Expert Teachers" },
-                { value: "15+", label: "Years Experience" }
-              ].map((stat, index) => (
-                <div key={index} className="text-center px-4">
-                  <div className="text-2xl md:text-3xl font-bold text-accent">{stat.value}</div>
-                  <div className="text-sm text-white/70">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
-            <div className="w-1.5 h-3 bg-white/50 rounded-full animate-pulse" />
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* Why Choose Us Section */}
       <section className="py-24 px-4 relative overflow-hidden">
