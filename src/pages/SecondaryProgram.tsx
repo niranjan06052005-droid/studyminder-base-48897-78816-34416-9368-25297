@@ -129,8 +129,8 @@ const SecondaryProgram = () => {
 
       {/* Hero Section */}
       <section className="relative py-32 px-4 mt-16 overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-accent via-accent/90 to-primary" />
+        {/* Animated Background - Softer amber/orange tones */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(35,65%,45%)] via-[hsl(30,60%,40%)] to-primary" />
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />

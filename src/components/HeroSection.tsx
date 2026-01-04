@@ -183,14 +183,6 @@ const HeroSection = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Button>
               </Link>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="group px-8 py-7 text-lg bg-white/5 text-white border-2 border-white/20 hover:bg-white/10 hover:border-accent/50 rounded-2xl transition-all duration-300 hover:scale-105 backdrop-blur-sm"
-              >
-                <Play className="w-5 h-5 mr-2 group-hover:scale-110 group-hover:text-accent transition-all" />
-                Watch Video
-              </Button>
             </div>
 
             {/* Trust Indicators */}
@@ -257,16 +249,8 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Seamless gradient transition to next section - NO LINE */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background via-background/80 to-transparent" />
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce z-10">
-        <span className="text-white/40 text-xs uppercase tracking-widest">Scroll</span>
-        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2 backdrop-blur-sm">
-          <div className="w-1.5 h-3 bg-accent/60 rounded-full animate-pulse" />
-        </div>
-      </div>
+      {/* Seamless gradient transition to next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background via-background/60 to-transparent" />
 
       {/* Custom keyframes style */}
       <style>{`

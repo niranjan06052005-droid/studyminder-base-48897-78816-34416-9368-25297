@@ -19,7 +19,7 @@ const Index = () => {
       <section className="py-24 px-4 relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-primary/5 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-background to-transparent" />
           <div className="absolute -top-20 -right-20 w-80 h-80 bg-gradient-to-br from-secondary/10 to-transparent rounded-full blur-3xl" />
           <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-gradient-to-tr from-accent/10 to-transparent rounded-full blur-3xl" />
         </div>
@@ -62,7 +62,7 @@ const Index = () => {
                 bgGlow: "bg-accent/20"
               },
               {
-                icon: TrendingUp,
+                icon: BookOpen,
                 title: "Digital Platform",
                 description: "Access resources anytime, anywhere online",
                 gradient: "from-success to-success/70",
