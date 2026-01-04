@@ -133,23 +133,23 @@ const Index = () => {
                 badge: "Foundation"
               },
               {
-                title: "Middle (Std. 5-8)",
+                title: "Middle (Std. 5-7)",
                 subjects: ["English", "Maths", "Science", "Social Studies"],
                 color: "from-secondary to-secondary/70",
                 borderColor: "border-secondary/30 hover:border-secondary",
                 bgColor: "bg-secondary/5",
                 iconBg: "bg-secondary",
-                link: "/courses",
+                link: "/programs/middle",
                 badge: "Growth"
               },
               {
-                title: "Secondary (Std. 9-10)",
+                title: "Secondary (Std. 8-10)",
                 subjects: ["English", "Maths", "Science", "Social Studies"],
                 color: "from-accent to-accent/70",
                 borderColor: "border-accent/30 hover:border-accent",
                 bgColor: "bg-accent/5",
                 iconBg: "bg-accent",
-                link: "/courses",
+                link: "/programs/secondary",
                 badge: "Excellence"
               }
             ].map((program, index) => (

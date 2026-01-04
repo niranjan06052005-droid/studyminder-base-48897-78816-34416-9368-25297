@@ -47,6 +47,8 @@ import StudentNotices from "./pages/StudentNotices";
 import StudentNoticeDetail from "./pages/StudentNoticeDetail";
 import StudentSubjectNoticeDetail from "./pages/StudentSubjectNoticeDetail";
 import PrimaryProgram from "./pages/PrimaryProgram";
+import MiddleProgram from "./pages/MiddleProgram";
+import SecondaryProgram from "./pages/SecondaryProgram";
 import BatchDetails from "./pages/BatchDetails";
 import GetStarted from "./pages/GetStarted";
 import Activities from "./pages/Activities";
@@ -67,6 +69,10 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/programs/primary" element={<PrimaryProgram />} />
           <Route path="/programs/primary/batch/:standard" element={<BatchDetails />} />
+          <Route path="/programs/middle" element={<MiddleProgram />} />
+          <Route path="/programs/middle/batch/:standard" element={<BatchDetails />} />
+          <Route path="/programs/secondary" element={<SecondaryProgram />} />
+          <Route path="/programs/secondary/batch/:standard" element={<BatchDetails />} />
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/activities" element={<Activities />} />
           <Route path="/results" element={<Results />} />
