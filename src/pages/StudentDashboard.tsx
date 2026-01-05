@@ -11,6 +11,7 @@ const StudentDashboard = () => {
       <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col fixed left-0 top-0 h-screen overflow-y-auto z-40">
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold">Student Portal</h1>
+          <p className="text-white/70 text-sm mt-1">Raj Kumar</p>
         </div>
         
         <nav className="flex-1 p-4">

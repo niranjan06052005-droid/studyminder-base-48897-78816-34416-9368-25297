@@ -204,11 +204,11 @@ const Activities = () => {
       {/* Activities Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
             {activities.map((activity, index) => (
               <div
                 key={activity.id}
-                className="group relative bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 animate-fade-in"
+                className="group relative bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 animate-fade-in flex flex-col h-full"
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
                 {/* Header Image */}
@@ -240,7 +240,7 @@ const Activities = () => {
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-grow">
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
                     {activity.description}
                   </p>
@@ -258,7 +258,7 @@ const Activities = () => {
                   </div>
 
                   {/* Mini Gallery */}
-                  <div className="flex gap-2 mb-4">
+                  <div className="flex gap-2 mb-4 mt-auto">
                     {activity.images.slice(1, 4).map((img, imgIndex) => (
                       <div
                         key={imgIndex}
@@ -312,7 +312,7 @@ const Activities = () => {
               <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
                 <Link to="/get-started">Enroll Now</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/20">
+              <Button asChild size="lg" variant="outline" className="border-white/50 text-white bg-white/10 hover:bg-white/30 backdrop-blur-sm">
                 <Link to="/about">Learn More About Us</Link>
               </Button>
             </div>

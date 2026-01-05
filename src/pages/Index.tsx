@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BookOpen, Award, TrendingUp, CheckCircle2, ArrowRight, Sparkles, Star, GraduationCap } from "lucide-react";
+import { Users, BookOpen, Award, Globe, CheckCircle2, ArrowRight, Sparkles, Star, GraduationCap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
@@ -62,7 +62,7 @@ const Index = () => {
                 bgGlow: "bg-accent/20"
               },
               {
-                icon: BookOpen,
+                icon: Globe,
                 title: "Digital Platform",
                 description: "Access resources anytime, anywhere online",
                 gradient: "from-success to-success/70",

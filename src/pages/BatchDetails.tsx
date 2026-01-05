@@ -18,10 +18,11 @@ const BatchDetails = () => {
   const { standard } = useParams();
   
   // Data for different standards
-  const batchData = {
-    "1": {
-      title: "Standard 1: Building Strong Foundations",
-      welcomeText: "Welcome to Standard 1 coaching program, where we make learning engaging and effective through expert teaching and personalized attention. Our 2-hour daily sessions ensure your child excels academically.",
+  const getBatchData = (std: string) => {
+    const standardNum = parseInt(std) || 1;
+    
+    // Define section-specific data
+    const primaryData = {
       subjects: [
         { name: "Mathematics", icon: <BookOpen className="h-5 w-5" /> },
         { name: "Science", icon: <BookOpen className="h-5 w-5" /> },
@@ -29,50 +30,128 @@ const BatchDetails = () => {
         { name: "Hindi", icon: <BookOpen className="h-5 w-5" /> },
         { name: "Marathi", icon: <BookOpen className="h-5 w-5" /> }
       ],
+      timings: "8:00 AM - 10:00 AM",
+      classSize: "15-20 Students",
+      ratio: "15:1"
+    };
+
+    const middleData = {
+      subjects: [
+        { name: "Mathematics", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Science", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "English", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Hindi", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Marathi", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Social Studies", icon: <BookOpen className="h-5 w-5" /> }
+      ],
+      timings: "4:00 PM - 6:30 PM",
+      classSize: "20-25 Students",
+      ratio: "12:1"
+    };
+
+    const secondaryData = {
+      subjects: [
+        { name: "Mathematics", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Science", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "English", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Hindi", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Marathi", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Social Studies", icon: <BookOpen className="h-5 w-5" /> },
+        { name: "Information Technology", icon: <BookOpen className="h-5 w-5" /> }
+      ],
+      timings: "5:00 PM - 8:00 PM",
+      classSize: "20-25 Students",
+      ratio: "10:1"
+    };
+
+    // Standard-specific titles and descriptions
+    const standardInfo: Record<number, { title: string; tagline: string; focus: string }> = {
+      1: { title: "Building Strong Foundations", tagline: "Where learning begins with joy", focus: "phonics, basic numeracy, and creative expression" },
+      2: { title: "Growing Curious Minds", tagline: "Nurturing curiosity and confidence", focus: "reading fluency, problem-solving, and exploratory learning" },
+      3: { title: "Strengthening Core Skills", tagline: "Building blocks for future success", focus: "mathematical reasoning, language skills, and scientific thinking" },
+      4: { title: "Preparing for Middle School", tagline: "Ready for the next big step", focus: "advanced concepts, independent learning, and analytical thinking" },
+      5: { title: "Transition Excellence", tagline: "Bridging primary to middle school", focus: "deeper conceptual understanding and skill development" },
+      6: { title: "Knowledge Expansion", tagline: "Broadening horizons", focus: "comprehensive subject coverage and exam preparation" },
+      7: { title: "Academic Advancement", tagline: "Preparing for board foundation", focus: "advanced topics and competitive exam preparation" },
+      8: { title: "Foundation Builders", tagline: "Strengthening fundamentals", focus: "board exam foundation and concept clarity" },
+      9: { title: "Excellence Path", tagline: "Intensive preparation begins", focus: "pre-board preparation and conceptual mastery" },
+      10: { title: "Success Summit", tagline: "Board exam excellence", focus: "comprehensive board exam preparation and result-oriented coaching" }
+    };
+
+    const info = standardInfo[standardNum] || standardInfo[1];
+    
+    // Determine section
+    let sectionData = primaryData;
+    if (standardNum >= 5 && standardNum <= 7) {
+      sectionData = middleData;
+    } else if (standardNum >= 8 && standardNum <= 10) {
+      sectionData = secondaryData;
+    }
+
+    // Generate teachers based on section
+    const getTeachers = () => {
+      if (standardNum <= 4) {
+        return [
+          { name: "Mrs. Priya Sharma", qualification: "M.A., B.Ed.", photo: "PS", bio: "With over 10 years of experience in primary education, Mrs. Sharma brings warmth and creativity to the classroom." },
+          { name: "Ms. Anjali Desai", qualification: "M.A., B.Ed.", photo: "AD", bio: "A passionate educator who believes in nurturing each child's unique potential through hands-on learning." }
+        ];
+      } else if (standardNum <= 7) {
+        return [
+          { name: "Mr. Suresh Patil", qualification: "M.Sc., B.Ed.", photo: "SP", bio: "Expert in making complex concepts simple, with 12 years of experience in middle school education." },
+          { name: "Mrs. Kavita Joshi", qualification: "M.A., B.Ed.", photo: "KJ", bio: "Specializes in language education and helps students develop strong communication skills." }
+        ];
+      } else {
+        return [
+          { name: "Dr. Ramesh Kulkarni", qualification: "Ph.D., M.Ed.", photo: "RK", bio: "Board exam specialist with 18 years of experience and numerous state toppers to his credit." },
+          { name: "Mrs. Sunita Deshpande", qualification: "M.Sc., B.Ed.", photo: "SD", bio: "Science expert who has trained multiple Olympiad winners and NTSE qualifiers." }
+        ];
+      }
+    };
+
+    // Calculate fees based on standard
+    const getFees = () => {
+      const baseFee = standardNum <= 4 ? 12000 : standardNum <= 7 ? 15000 : 18000;
+      const admission = standardNum <= 4 ? 5000 : standardNum <= 7 ? 6000 : 8000;
+      const annual = standardNum <= 4 ? 3000 : standardNum <= 7 ? 4000 : 5000;
+      const total = admission + (baseFee * 4) + annual;
+      return {
+        admission: `₹${admission.toLocaleString()}`,
+        tuitionPerQuarter: `₹${baseFee.toLocaleString()}`,
+        annualCharges: `₹${annual.toLocaleString()}`,
+        totalFirstYear: `₹${total.toLocaleString()}`
+      };
+    };
+
+    return {
+      title: `Standard ${standardNum}: ${info.title}`,
+      welcomeText: `Welcome to Standard ${standardNum} coaching program, ${info.tagline}. Our expert teaching methodology focuses on ${info.focus}. With personalized attention and comprehensive curriculum, we ensure your child excels academically.`,
+      subjects: sectionData.subjects,
       weeklySchedule: [
-        { day: "Monday", subject: "Mathematics", time: "8:00 AM - 10:00 AM" },
-        { day: "Tuesday", subject: "Science", time: "8:00 AM - 10:00 AM" },
-        { day: "Wednesday", subject: "Marathi", time: "8:00 AM - 10:00 AM" },
-        { day: "Thursday", subject: "Hindi", time: "8:00 AM - 10:00 AM" },
-        { day: "Friday", subject: "English", time: "8:00 AM - 10:00 AM" },
-        { day: "Saturday", subject: "Revision & Practice", time: "8:00 AM - 10:00 AM" }
+        { day: "Monday", subject: "Mathematics", time: sectionData.timings },
+        { day: "Tuesday", subject: "Science", time: sectionData.timings },
+        { day: "Wednesday", subject: "Languages", time: sectionData.timings },
+        { day: "Thursday", subject: "Social Studies", time: sectionData.timings },
+        { day: "Friday", subject: "English", time: sectionData.timings },
+        { day: "Saturday", subject: "Revision & Practice", time: sectionData.timings }
       ],
       demoVideos: [
         { subject: "Mathematics", duration: "15:30", thumbnail: "📐" },
         { subject: "Science", duration: "12:45", thumbnail: "🔬" },
         { subject: "English", duration: "10:20", thumbnail: "📚" }
       ],
-      teachers: [
-        {
-          name: "Mrs. Priya Sharma",
-          qualification: "M.A., B.Ed.",
-          photo: "PS",
-          bio: "With over 10 years of experience in primary education, Mrs. Sharma brings warmth and creativity to the classroom, making learning fun and engaging for every child."
-        },
-        {
-          name: "Ms. Anjali Desai",
-          qualification: "M.A., B.Ed.",
-          photo: "AD",
-          bio: "A passionate educator who believes in nurturing each child's unique potential through hands-on learning and positive encouragement."
-        }
-      ],
+      teachers: getTeachers(),
       batchInfo: {
-        classSize: "15-20 Students",
-        ratio: "15:1",
-        timings: "8:00 AM - 10:00 AM",
+        classSize: sectionData.classSize,
+        ratio: sectionData.ratio,
+        timings: sectionData.timings,
         academicYear: "June 2026 - April 2027"
       },
-      fees: {
-        admission: "₹5,000",
-        tuitionPerQuarter: "₹12,000",
-        annualCharges: "₹3,000",
-        totalFirstYear: "₹53,000"
-      }
-    }
+      fees: getFees()
+    };
   };
 
-  // Get current batch data or default to Standard 1
-  const currentBatch = batchData[standard as keyof typeof batchData] || batchData["1"];
+  // Get current batch data
+  const currentBatch = getBatchData(standard || "1");
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
