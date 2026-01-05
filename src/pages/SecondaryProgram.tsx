@@ -200,14 +200,14 @@ const SecondaryProgram = () => {
             {classes.map((classInfo, index) => (
               <Card
                 key={index}
-                className="group relative hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-accent/20 hover:border-accent overflow-hidden rounded-3xl animate-fade-in"
+                className="group relative hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-accent/20 hover:border-accent overflow-hidden rounded-3xl animate-fade-in flex flex-col h-full"
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
                 {/* Top Gradient */}
                 <div className="h-2 bg-gradient-to-r from-accent to-primary" />
                 
                 {/* Highlight Badge */}
-                <div className="absolute top-6 right-6">
+                <div className="absolute top-6 right-6 z-10">
                   <span className="px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold">
                     {classInfo.highlight}
                   </span>
@@ -216,16 +216,16 @@ const SecondaryProgram = () => {
                 {/* Decorative Circle */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/5 rounded-full group-hover:scale-150 transition-transform duration-700" />
                 
-                <CardHeader className="pt-8">
+                <CardHeader className="pt-8 flex-grow">
                   <div className="text-5xl mb-4">{classInfo.icon}</div>
                   <CardTitle className="text-2xl text-primary group-hover:text-accent transition-colors">
                     {classInfo.title}
                   </CardTitle>
-                  <CardDescription className="text-base mt-2">
+                  <CardDescription className="text-base mt-2 min-h-[48px]">
                     {classInfo.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="pb-8">
+                <CardContent className="pb-8 mt-auto">
                   <Link to={`/programs/secondary/batch/${classInfo.standard}`}>
                     <Button className="w-full py-6 bg-gradient-to-r from-accent to-primary text-white hover:opacity-90 rounded-xl text-base font-semibold shadow-lg group-hover:scale-[1.02] transition-all">
                       View Batch Details

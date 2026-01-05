@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Users, Award, BookOpen, Target, GraduationCap, Calendar, MapPin, Phone, Mail, Camera, User, MessageSquare, ArrowRight, Sparkles } from "lucide-react";
+import educoach2011 from "@/assets/educoach-2011.jpg";
 
 const About = () => {
   const { toast } = useToast();
@@ -246,7 +247,7 @@ const About = () => {
             <div className="relative">
               <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop" 
+                  src={educoach2011} 
                   alt="EduCoach classroom in 2011"
                   className="w-full h-80 object-cover"
                 />
@@ -424,7 +425,7 @@ const About = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-fr">
             {galleryImages.map((image, index) => (
               <div 
                 key={index}
@@ -437,8 +438,8 @@ const About = () => {
                 <img 
                   src={image.src}
                   alt={image.title}
-                  className={`w-full object-cover transition-transform duration-500 group-hover:scale-110
-                    ${index === 0 || index === 5 ? 'h-64 md:h-full' : 'h-48 md:h-56'}`}
+                  className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110
+                    ${index === 0 || index === 5 ? 'min-h-[300px] md:min-h-full' : 'min-h-[200px]'}`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
