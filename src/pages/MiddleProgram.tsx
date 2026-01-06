@@ -179,7 +179,7 @@ const MiddleProgram = () => {
             {classes.map((classInfo, index) => (
               <Card
                 key={index}
-                className="group relative hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-secondary/20 hover:border-secondary overflow-hidden rounded-3xl animate-fade-in"
+                className="group relative hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-secondary/20 hover:border-secondary overflow-hidden rounded-3xl animate-fade-in flex flex-col h-full"
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
                 {/* Top Gradient */}
@@ -188,16 +188,16 @@ const MiddleProgram = () => {
                 {/* Decorative Circle */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-secondary/5 rounded-full group-hover:scale-150 transition-transform duration-700" />
                 
-                <CardHeader className="pt-8">
+                <CardHeader className="pt-8 flex-1">
                   <div className="text-5xl mb-4">{classInfo.icon}</div>
-                  <CardTitle className="text-2xl text-primary group-hover:text-secondary transition-colors">
+                  <CardTitle className="text-2xl text-primary group-hover:text-secondary transition-colors min-h-[64px]">
                     {classInfo.title}
                   </CardTitle>
-                  <CardDescription className="text-base mt-2">
+                  <CardDescription className="text-base mt-2 min-h-[48px]">
                     {classInfo.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="pb-8">
+                <CardContent className="pb-8 mt-auto">
                   <Link to={`/programs/middle/batch/${classInfo.standard}`}>
                     <Button className="w-full py-6 bg-gradient-to-r from-secondary to-accent text-white hover:opacity-90 rounded-xl text-base font-semibold shadow-lg group-hover:scale-[1.02] transition-all">
                       View Batch Details

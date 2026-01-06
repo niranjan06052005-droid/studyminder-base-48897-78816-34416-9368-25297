@@ -62,11 +62,11 @@ const Index = () => {
                 bgGlow: "bg-accent/20"
               },
               {
-                icon: Globe,
+                icon: BookOpen,
                 title: "Digital Platform",
                 description: "Access resources anytime, anywhere online",
-                gradient: "from-success to-success/70",
-                bgGlow: "bg-success/20"
+                gradient: "from-primary to-secondary",
+                bgGlow: "bg-primary/20"
               }
             ].map((feature, index) => (
               <Card
