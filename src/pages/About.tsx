@@ -425,21 +425,20 @@ const About = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-fr">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {galleryImages.map((image, index) => (
               <div 
                 key={index}
                 onClick={() => setSelectedImage(image.src)}
                 className={`relative overflow-hidden rounded-xl cursor-pointer group
                   ${index === 0 || index === 5 ? 'md:col-span-2 md:row-span-2' : ''}
-                  animate-fade-in`}
+                  animate-fade-in h-[200px] ${index === 0 || index === 5 ? 'md:h-[416px]' : 'md:h-[200px]'}`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <img 
                   src={image.src}
                   alt={image.title}
-                  className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110
-                    ${index === 0 || index === 5 ? 'min-h-[300px] md:min-h-full' : 'min-h-[200px]'}`}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">

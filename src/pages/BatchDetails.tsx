@@ -158,7 +158,7 @@ const BatchDetails = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-20 px-4 mt-20 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
