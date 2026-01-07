@@ -33,6 +33,7 @@ import AdminNoticeManagement from "./pages/AdminNoticeManagement";
 import AdminNoticeView from "./pages/AdminNoticeView";
 import AdminEnquiries from "./pages/AdminEnquiries";
 import AdminEditTimetable from "./pages/AdminEditTimetable";
+import AdminReports from "./pages/AdminReports";
 import TeacherNoticeView from "./pages/TeacherNoticeView";
 import TeacherChapterNotes from "./pages/TeacherChapterNotes";
 import TeacherChapterVideo from "./pages/TeacherChapterVideo";
@@ -116,6 +117,7 @@ const App = () => (
           <Route path="/admin/notices/:noticeId" element={<AdminNoticeView />} />
           <Route path="/admin/fees" element={<AdminFeeManagement />} />
           <Route path="/admin/enquiries" element={<AdminEnquiries />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
