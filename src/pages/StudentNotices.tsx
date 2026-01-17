@@ -356,61 +356,64 @@ const StudentNotices = () => {
                   <CardContent>
                     {filteredSubjectNotices.length > 0 ? (
                       <div className="space-y-4">
-                        {filteredSubjectNotices.map((notice) => (
-                          <div 
-                            key={notice.id} 
-                            className="group p-5 border rounded-xl hover:shadow-lg hover:border-primary/30 transition-all duration-300 cursor-pointer bg-card"
-                            onClick={() => navigate(`/student/subject-notice/${notice.id}`, { state: { notice } })}
-                          >
-                            <div className="flex items-start gap-4">
-                              <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                <notice.icon className="h-6 w-6 text-primary" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-3 mb-2">
-                                  <div className="flex items-center gap-2 flex-wrap">
-                                    <h4 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
-                                      {notice.title}
-                                    </h4>
-                                    <Badge 
-                                      variant={notice.badgeColor as any}
-                                      className="text-xs font-semibold shadow-sm"
-                                    >
-                                      {notice.badge}
-                                    </Badge>
-                                  </div>
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm"
-                                    className="flex-shrink-0 group-hover:bg-primary/10 group-hover:text-primary"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      navigate(`/student/subject-notice/${notice.id}`, { state: { notice } });
-                                    }}
-                                  >
-                                    View
-                                  </Button>
+                        {filteredSubjectNotices.map((notice) => {
+                          const { icon: IconComponent, ...noticeWithoutIcon } = notice;
+                          return (
+                            <div 
+                              key={notice.id} 
+                              className="group p-5 border rounded-xl hover:shadow-lg hover:border-primary/30 transition-all duration-300 cursor-pointer bg-card"
+                              onClick={() => navigate(`/student/subject-notice/${notice.id}`, { state: { notice: noticeWithoutIcon } })}
+                            >
+                              <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                  <IconComponent className="h-6 w-6 text-primary" />
                                 </div>
-                                <p className="text-sm text-muted-foreground leading-relaxed mb-3 line-clamp-2">
-                                  {notice.message}
-                                </p>
-                                <div className="flex flex-wrap items-center gap-3 text-xs">
-                                  <span className="flex items-center gap-1.5 text-muted-foreground">
-                                    <Calendar className="h-3.5 w-3.5" />
-                                    <span className="font-medium">{notice.date}</span>
-                                  </span>
-                                  <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                                  <span className="flex items-center gap-1.5 font-semibold text-primary">
-                                    <BookOpen className="h-3.5 w-3.5" />
-                                    {notice.subject}
-                                  </span>
-                                  <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                                  <span className="text-muted-foreground font-medium">{notice.type}</span>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-start justify-between gap-3 mb-2">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <h4 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
+                                        {notice.title}
+                                      </h4>
+                                      <Badge 
+                                        variant={notice.badgeColor as any}
+                                        className="text-xs font-semibold shadow-sm"
+                                      >
+                                        {notice.badge}
+                                      </Badge>
+                                    </div>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm"
+                                      className="flex-shrink-0 group-hover:bg-primary/10 group-hover:text-primary"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/student/subject-notice/${notice.id}`, { state: { notice: noticeWithoutIcon } });
+                                      }}
+                                    >
+                                      View
+                                    </Button>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground leading-relaxed mb-3 line-clamp-2">
+                                    {notice.message}
+                                  </p>
+                                  <div className="flex flex-wrap items-center gap-3 text-xs">
+                                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                                      <Calendar className="h-3.5 w-3.5" />
+                                      <span className="font-medium">{notice.date}</span>
+                                    </span>
+                                    <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                                    <span className="flex items-center gap-1.5 font-semibold text-primary">
+                                      <BookOpen className="h-3.5 w-3.5" />
+                                      {notice.subject}
+                                    </span>
+                                    <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                                    <span className="text-muted-foreground font-medium">{notice.type}</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     ) : (
                       <div className="text-center py-8 text-muted-foreground">
