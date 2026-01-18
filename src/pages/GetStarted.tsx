@@ -28,8 +28,8 @@ const GetStarted = () => {
 
   const sections = [
     { value: "primary", label: "Primary (Std. 1-4)" },
-    { value: "middle", label: "Middle (Std. 5-8)" },
-    { value: "secondary", label: "Secondary (Std. 9-10)" }
+    { value: "middle", label: "Middle (Std. 5-7)" },
+    { value: "secondary", label: "Secondary (Std. 8-10)" }
   ];
 
   const standardsBySection: Record<string, { value: string; label: string }[]> = {
@@ -42,10 +42,10 @@ const GetStarted = () => {
     middle: [
       { value: "5", label: "Standard 5" },
       { value: "6", label: "Standard 6" },
-      { value: "7", label: "Standard 7" },
-      { value: "8", label: "Standard 8" }
+      { value: "7", label: "Standard 7" }
     ],
     secondary: [
+      { value: "8", label: "Standard 8" },
       { value: "9", label: "Standard 9" },
       { value: "10", label: "Standard 10" }
     ]

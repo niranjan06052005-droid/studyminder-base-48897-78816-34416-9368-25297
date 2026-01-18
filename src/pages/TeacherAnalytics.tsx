@@ -130,7 +130,7 @@ export default function TeacherAnalytics() {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
@@ -168,20 +168,6 @@ export default function TeacherAnalytics() {
                   <div>
                     <p className="text-sm text-muted-foreground">Top Performer</p>
                     <p className="text-lg font-bold">{analytics.batchStats.topPerformer}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center">
-                    <TrendingDown className="h-5 w-5 text-destructive" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Needs Attention</p>
-                    <p className="text-2xl font-bold">{analytics.batchStats.needsAttention}</p>
                   </div>
                 </div>
               </CardContent>
