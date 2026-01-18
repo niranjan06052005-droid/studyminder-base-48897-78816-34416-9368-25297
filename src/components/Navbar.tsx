@@ -1,36 +1,86 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, Menu } from "lucide-react";
 import { useState } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  // Determine navbar style based on current route
+  const getNavbarStyle = () => {
+    const path = location.pathname;
+    
+    // Secondary program pages - use deep teal/green theme
+    if (path.includes('/programs/secondary') || path === '/secondary-program') {
+      return {
+        bg: "bg-[hsl(180,45%,25%)]/95",
+        text: "text-white",
+        textMuted: "text-white/90",
+        buttonBg: "bg-white text-[hsl(180,45%,25%)]",
+        buttonHover: "hover:bg-white/90"
+      };
+    }
+    
+    // Middle program pages - use indigo theme
+    if (path.includes('/programs/middle') || path === '/middle-program') {
+      return {
+        bg: "bg-[hsl(240,50%,40%)]/95",
+        text: "text-white",
+        textMuted: "text-white/90",
+        buttonBg: "bg-white text-[hsl(240,50%,40%)]",
+        buttonHover: "hover:bg-white/90"
+      };
+    }
+    
+    // Primary program pages - use warm orange theme
+    if (path.includes('/programs/primary') || path === '/primary-program') {
+      return {
+        bg: "bg-[hsl(25,85%,50%)]/95",
+        text: "text-white",
+        textMuted: "text-white/90",
+        buttonBg: "bg-white text-[hsl(25,85%,50%)]",
+        buttonHover: "hover:bg-white/90"
+      };
+    }
+    
+    // Default - primary blue
+    return {
+      bg: "bg-primary/95",
+      text: "text-primary-foreground",
+      textMuted: "text-primary-foreground/90",
+      buttonBg: "bg-primary-foreground text-primary",
+      buttonHover: "hover:bg-primary-foreground/90"
+    };
+  };
+
+  const style = getNavbarStyle();
 
   return (
-    <nav className="fixed top-4 left-4 right-4 z-50 bg-primary/95 backdrop-blur-md rounded-2xl shadow-lg border border-primary-foreground/10">
+    <nav className={`fixed top-4 left-4 right-4 z-50 ${style.bg} backdrop-blur-md rounded-2xl shadow-lg border border-white/10`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center gap-2 text-primary-foreground hover:opacity-80 transition-opacity">
+          <Link to="/" className={`flex items-center gap-2 ${style.text} hover:opacity-80 transition-opacity`}>
             <GraduationCap className="h-8 w-8" />
             <span className="text-xl font-bold">EduCoach</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium">
+            <Link to="/" className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}>
               Home
             </Link>
-            <Link to="/about" className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium">
+            <Link to="/about" className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}>
               About
             </Link>
-            <Link to="/activities" className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium">
+            <Link to="/activities" className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}>
               Activities
             </Link>
-            <Link to="/results" className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium">
+            <Link to="/results" className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}>
               Results
             </Link>
             <Link to="/login">
-              <Button className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-lg">
+              <Button className={`${style.buttonBg} ${style.buttonHover} shadow-lg`}>
                 Login
               </Button>
             </Link>
@@ -38,7 +88,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-primary-foreground"
+            className={`md:hidden ${style.text}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             <Menu className="h-6 w-6" />
@@ -51,34 +101,34 @@ const Navbar = () => {
             <div className="flex flex-col gap-4">
               <Link
                 to="/"
-                className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium"
+                className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}
                 onClick={() => setIsOpen(false)}
               >
                 Home
               </Link>
               <Link
                 to="/about"
-                className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium"
+                className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}
                 onClick={() => setIsOpen(false)}
               >
                 About
               </Link>
               <Link
                 to="/activities"
-                className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium"
+                className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}
                 onClick={() => setIsOpen(false)}
               >
                 Activities
               </Link>
               <Link
                 to="/results"
-                className="text-primary-foreground/90 hover:text-primary-foreground transition-colors font-medium"
+                className={`${style.textMuted} hover:${style.text} transition-colors font-medium`}
                 onClick={() => setIsOpen(false)}
               >
                 Results
               </Link>
               <Link to="/login" onClick={() => setIsOpen(false)}>
-                <Button className="w-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-lg">
+                <Button className={`w-full ${style.buttonBg} ${style.buttonHover} shadow-lg`}>
                   Login
                 </Button>
               </Link>

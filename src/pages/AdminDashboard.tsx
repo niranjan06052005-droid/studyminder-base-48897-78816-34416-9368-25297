@@ -85,7 +85,7 @@ const AdminDashboard = () => {
                     <p className="text-4xl font-bold text-blue-600 dark:text-blue-500">12</p>
                     <p className="text-sm text-muted-foreground mt-1">Pending admissions</p>
                   </div>
-                  <Link to="/admin/students">
+                  <Link to="/admin/enquiries">
                     <Button variant="outline" size="sm" className="w-full border-blue-500 text-blue-600 hover:bg-blue-500/10">
                       Review Applications
                     </Button>

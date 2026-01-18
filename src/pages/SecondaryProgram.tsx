@@ -129,12 +129,12 @@ const SecondaryProgram = () => {
 
       {/* Hero Section */}
       <section className="relative py-32 px-4 mt-16 overflow-hidden">
-        {/* Animated Background - Softer amber/orange tones */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(35,65%,45%)] via-[hsl(30,60%,40%)] to-primary" />
+        {/* Animated Background - Deep Teal/Emerald theme */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(180,50%,30%)] via-[hsl(175,45%,25%)] to-[hsl(170,40%,20%)]" />
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-[hsl(175,60%,40%)]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[hsl(170,50%,50%)]/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
         </div>
         
         {/* Floating Elements */}
@@ -180,17 +180,17 @@ const SecondaryProgram = () => {
       {/* Explore Classes Section */}
       <section className="py-20 px-4 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -right-20 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -right-20 w-80 h-80 bg-[hsl(175,45%,35%)]/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[hsl(180,50%,30%)]/10 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-6">
-              <BookOpen className="w-4 h-4 text-accent" />
-              <span className="text-sm font-medium text-accent">Board Preparation</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(175,45%,35%)]/10 border border-[hsl(175,45%,35%)]/20 mb-6">
+              <BookOpen className="w-4 h-4 text-[hsl(175,45%,35%)]" />
+              <span className="text-sm font-medium text-[hsl(175,45%,35%)]">Board Preparation</span>
             </div>
-            <h2 className="text-4xl md:text-5xl mb-4 text-primary font-bold">Explore Our Classes</h2>
+            <h2 className="text-4xl md:text-5xl mb-4 text-[hsl(180,50%,25%)] font-bold">Explore Our Classes</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Structured learning paths designed for board exam success
             </p>
@@ -200,25 +200,25 @@ const SecondaryProgram = () => {
             {classes.map((classInfo, index) => (
               <Card
                 key={index}
-                className="group relative hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-accent/20 hover:border-accent overflow-hidden rounded-3xl animate-fade-in flex flex-col h-full"
+                className="group relative hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-[hsl(175,45%,35%)]/20 hover:border-[hsl(175,45%,35%)] overflow-hidden rounded-3xl animate-fade-in flex flex-col h-full"
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
                 {/* Top Gradient */}
-                <div className="h-2 bg-gradient-to-r from-accent to-primary" />
+                <div className="h-2 bg-gradient-to-r from-[hsl(175,45%,35%)] to-[hsl(180,50%,25%)]" />
                 
                 {/* Highlight Badge */}
                 <div className="absolute top-6 right-6 z-10">
-                  <span className="px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-[hsl(175,45%,35%)]/10 text-[hsl(175,45%,35%)] text-xs font-semibold">
                     {classInfo.highlight}
                   </span>
                 </div>
                 
                 {/* Decorative Circle */}
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent/5 rounded-full group-hover:scale-150 transition-transform duration-700" />
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[hsl(175,45%,35%)]/5 rounded-full group-hover:scale-150 transition-transform duration-700" />
                 
                 <CardHeader className="pt-8 flex-grow">
                   <div className="text-5xl mb-4">{classInfo.icon}</div>
-                  <CardTitle className="text-2xl text-primary group-hover:text-accent transition-colors">
+                  <CardTitle className="text-2xl text-[hsl(180,50%,25%)] group-hover:text-[hsl(175,45%,35%)] transition-colors">
                     {classInfo.title}
                   </CardTitle>
                   <CardDescription className="text-base mt-2 min-h-[48px]">
@@ -227,7 +227,7 @@ const SecondaryProgram = () => {
                 </CardHeader>
                 <CardContent className="pb-8 mt-auto">
                   <Link to={`/programs/secondary/batch/${classInfo.standard}`}>
-                    <Button className="w-full py-6 bg-gradient-to-r from-accent to-primary text-white hover:opacity-90 rounded-xl text-base font-semibold shadow-lg group-hover:scale-[1.02] transition-all">
+                    <Button className="w-full py-6 bg-gradient-to-r from-[hsl(175,45%,35%)] to-[hsl(180,50%,25%)] text-white hover:opacity-90 rounded-xl text-base font-semibold shadow-lg group-hover:scale-[1.02] transition-all">
                       View Batch Details
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>
@@ -242,16 +242,16 @@ const SecondaryProgram = () => {
       {/* Meet Our Educators */}
       <section className="py-20 px-4 bg-gradient-to-b from-muted/30 to-muted/50 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/4 left-0 w-96 h-96 bg-[hsl(175,45%,35%)]/5 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <GraduationCap className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Expert Faculty</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(180,50%,25%)]/10 border border-[hsl(180,50%,25%)]/20 mb-6">
+              <GraduationCap className="w-4 h-4 text-[hsl(180,50%,25%)]" />
+              <span className="text-sm font-medium text-[hsl(180,50%,25%)]">Expert Faculty</span>
             </div>
-            <h2 className="text-4xl md:text-5xl mb-4 text-primary font-bold">Meet Our Educators</h2>
+            <h2 className="text-4xl md:text-5xl mb-4 text-[hsl(180,50%,25%)] font-bold">Meet Our Educators</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Highly qualified and experienced teachers with proven board exam results
             </p>
@@ -265,10 +265,10 @@ const SecondaryProgram = () => {
                 style={{ animationDelay: `${0.1 * index}s` }}
               >
                 <CardHeader className="pt-8">
-                  <div className="mx-auto mb-4 w-28 h-28 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <div className="mx-auto mb-4 w-28 h-28 bg-gradient-to-br from-[hsl(175,45%,35%)] to-[hsl(180,50%,25%)] rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
                     {teacher.photo}
                   </div>
-                  <CardTitle className="text-xl text-primary">{teacher.name}</CardTitle>
+                  <CardTitle className="text-xl text-[hsl(180,50%,25%)]">{teacher.name}</CardTitle>
                   <CardDescription className="text-sm text-muted-foreground">
                     {teacher.qualification}
                   </CardDescription>
@@ -278,7 +278,7 @@ const SecondaryProgram = () => {
                     <Users className="h-4 w-4" />
                     <span>{teacher.subjects}</span>
                   </div>
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[hsl(175,45%,35%)]/10 text-[hsl(175,45%,35%)] text-sm font-medium">
                     <Award className="h-3 w-3" />
                     {teacher.specialty}
                   </span>
@@ -292,16 +292,16 @@ const SecondaryProgram = () => {
       {/* Our Shining Stars */}
       <section className="py-20 px-4 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+          <div className="absolute -top-20 right-1/4 w-80 h-80 bg-[hsl(175,45%,35%)]/5 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-6">
-              <Trophy className="w-4 h-4 text-accent" />
-              <span className="text-sm font-medium text-accent">Board Exam Toppers</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[hsl(175,45%,35%)]/10 border border-[hsl(175,45%,35%)]/20 mb-6">
+              <Trophy className="w-4 h-4 text-[hsl(175,45%,35%)]" />
+              <span className="text-sm font-medium text-[hsl(175,45%,35%)]">Board Exam Toppers</span>
             </div>
-            <h2 className="text-4xl md:text-5xl mb-4 text-primary font-bold">Our Shining Stars</h2>
+            <h2 className="text-4xl md:text-5xl mb-4 text-[hsl(180,50%,25%)] font-bold">Our Shining Stars</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Celebrating academic excellence and outstanding achievements
             </p>
@@ -330,8 +330,8 @@ const SecondaryProgram = () => {
                       
                       <CardHeader className="pt-8">
                         <div className="flex items-center gap-3">
-                          <Star className="h-6 w-6 text-accent fill-accent" />
-                          <CardTitle className="text-xl text-primary">{achiever.name}</CardTitle>
+                          <Star className="h-6 w-6 text-[hsl(175,45%,35%)] fill-[hsl(175,45%,35%)]" />
+                          <CardTitle className="text-xl text-[hsl(180,50%,25%)]">{achiever.name}</CardTitle>
                         </div>
                         <div className="inline-block mt-2 px-3 py-1 rounded-full bg-success/10 text-success text-sm font-bold">
                           {achiever.score}

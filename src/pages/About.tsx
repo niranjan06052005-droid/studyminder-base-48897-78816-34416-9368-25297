@@ -29,8 +29,8 @@ const About = () => {
 
   const sections = [
     { value: "primary", label: "Primary (Std. 1-4)" },
-    { value: "middle", label: "Middle (Std. 5-8)" },
-    { value: "secondary", label: "Secondary (Std. 9-10)" }
+    { value: "middle", label: "Middle (Std. 5-7)" },
+    { value: "secondary", label: "Secondary (Std. 8-10)" }
   ];
 
   const standardsBySection: Record<string, { value: string; label: string }[]> = {
@@ -43,10 +43,10 @@ const About = () => {
     middle: [
       { value: "5", label: "Standard 5" },
       { value: "6", label: "Standard 6" },
-      { value: "7", label: "Standard 7" },
-      { value: "8", label: "Standard 8" }
+      { value: "7", label: "Standard 7" }
     ],
     secondary: [
+      { value: "8", label: "Standard 8" },
       { value: "9", label: "Standard 9" },
       { value: "10", label: "Standard 10" }
     ]
@@ -413,40 +413,96 @@ const About = () => {
       </section>
 
       {/* Life at EduCoach - Photo Gallery */}
-      <section className="py-16 px-4">
+      <section className="py-20 px-4 bg-gradient-to-br from-muted/20 via-background to-primary/5">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Camera className="h-8 w-8 text-primary" />
-              <h2 className="text-3xl font-bold text-foreground">Life at EduCoach</h2>
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+              <Camera className="h-5 w-5 text-primary" />
+              <span className="text-sm font-medium text-primary">Campus Life</span>
             </div>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Life at EduCoach</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Glimpses of our vibrant learning environment, events, and activities
             </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {galleryImages.map((image, index) => (
+          {/* Modern Masonry-style Gallery */}
+          <div className="grid grid-cols-12 gap-4 auto-rows-[200px]">
+            {/* Large featured image */}
+            <div 
+              onClick={() => setSelectedImage(galleryImages[0].src)}
+              className="col-span-12 md:col-span-8 row-span-2 relative overflow-hidden rounded-3xl cursor-pointer group shadow-xl"
+            >
+              <img 
+                src={galleryImages[0].src}
+                alt={galleryImages[0].title}
+                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <Badge className="mb-3 bg-white/20 backdrop-blur-sm text-white border-0">{galleryImages[0].category}</Badge>
+                <h3 className="text-2xl font-bold text-white">{galleryImages[0].title}</h3>
+              </div>
+            </div>
+
+            {/* Two stacked images on right */}
+            {galleryImages.slice(1, 3).map((image, index) => (
               <div 
                 key={index}
                 onClick={() => setSelectedImage(image.src)}
-                className={`relative overflow-hidden rounded-xl cursor-pointer group
-                  ${index === 0 || index === 5 ? 'md:col-span-2 md:row-span-2' : ''}
-                  animate-fade-in h-[200px] ${index === 0 || index === 5 ? 'md:h-[416px]' : 'md:h-[200px]'}`}
-                style={{ animationDelay: `${index * 100}ms` }}
+                className="col-span-6 md:col-span-4 row-span-1 relative overflow-hidden rounded-2xl cursor-pointer group shadow-lg"
               >
                 <img 
                   src={image.src}
                   alt={image.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <Badge className="mb-2 bg-primary/80">{image.category}</Badge>
-                  <p className="text-white font-semibold">{image.title}</p>
+                  <Badge className="mb-1 bg-primary/90 text-xs">{image.category}</Badge>
+                  <p className="text-white font-medium text-sm">{image.title}</p>
                 </div>
               </div>
             ))}
+
+            {/* Four images in a row */}
+            {galleryImages.slice(3, 7).map((image, index) => (
+              <div 
+                key={index + 3}
+                onClick={() => setSelectedImage(image.src)}
+                className="col-span-6 md:col-span-3 row-span-1 relative overflow-hidden rounded-2xl cursor-pointer group shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <img 
+                  src={image.src}
+                  alt={image.title}
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <Badge className="mb-1 bg-primary/90 text-xs">{image.category}</Badge>
+                  <p className="text-white font-medium text-sm">{image.title}</p>
+                </div>
+              </div>
+            ))}
+
+            {/* Last image spanning full width on mobile, partial on desktop */}
+            {galleryImages[7] && (
+              <div 
+                onClick={() => setSelectedImage(galleryImages[7].src)}
+                className="col-span-12 md:col-span-6 row-span-1 relative overflow-hidden rounded-2xl cursor-pointer group shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <img 
+                  src={galleryImages[7].src}
+                  alt={galleryImages[7].title}
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <Badge className="mb-1 bg-primary/90 text-xs">{galleryImages[7].category}</Badge>
+                  <p className="text-white font-medium text-sm">{galleryImages[7].title}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
