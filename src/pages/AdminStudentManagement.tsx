@@ -44,7 +44,7 @@ const AdminStudentManagement = () => {
     { id: "STU008", name: "Pooja Reddy", std: "9th - C", contact: "21098-76543" },
   ];
 
-  const standards = ["all", "8th", "9th", "10th", "11th", "12th"];
+  const standards = ["all", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"];
 
   const filteredStudents = students.filter((student) => {
     const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
