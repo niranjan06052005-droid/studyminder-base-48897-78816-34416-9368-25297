@@ -14,7 +14,7 @@ const Navbar = () => {
     // Secondary program pages - use deep teal/green theme
     if (path.includes('/programs/secondary') || path === '/secondary-program') {
       return {
-        bg: "bg-[hsl(180,45%,25%)]/95",
+        bg: "bg-[hsl(180,45%,25%)]/80",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(180,45%,25%)]",
@@ -25,7 +25,7 @@ const Navbar = () => {
     // Middle program pages - use indigo theme
     if (path.includes('/programs/middle') || path === '/middle-program') {
       return {
-        bg: "bg-[hsl(240,50%,40%)]/95",
+        bg: "bg-[hsl(240,50%,40%)]/80",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(240,50%,40%)]",
@@ -36,7 +36,7 @@ const Navbar = () => {
     // Primary program pages - use warm orange theme
     if (path.includes('/programs/primary') || path === '/primary-program') {
       return {
-        bg: "bg-[hsl(25,85%,50%)]/95",
+        bg: "bg-[hsl(25,85%,50%)]/80",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(25,85%,50%)]",
@@ -44,9 +44,20 @@ const Navbar = () => {
       };
     }
     
+    // About, Activities, Results pages - use dark navy blue theme
+    if (path === '/about' || path === '/activities' || path === '/results') {
+      return {
+        bg: "bg-[hsl(210,60%,20%)]/80",
+        text: "text-white",
+        textMuted: "text-white/90",
+        buttonBg: "bg-white text-[hsl(210,60%,20%)]",
+        buttonHover: "hover:bg-white/90"
+      };
+    }
+    
     // Default - primary blue
     return {
-      bg: "bg-primary/95",
+      bg: "bg-primary/80",
       text: "text-primary-foreground",
       textMuted: "text-primary-foreground/90",
       buttonBg: "bg-primary-foreground text-primary",
@@ -57,7 +68,7 @@ const Navbar = () => {
   const style = getNavbarStyle();
 
   return (
-    <nav className={`fixed top-4 left-4 right-4 z-50 ${style.bg} backdrop-blur-md rounded-2xl shadow-lg border border-white/10`}>
+    <nav className={`fixed top-4 left-4 right-4 z-50 ${style.bg} backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-white/20`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className={`flex items-center gap-2 ${style.text} hover:opacity-80 transition-opacity`}>

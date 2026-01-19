@@ -5,13 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { LogOut, Home, ArrowLeft, Users, UserCheck, TrendingUp, DollarSign, BookOpen, Calendar, MessageSquare, Award, Trophy, Target } from "lucide-react";
+import { LogOut, Home, ArrowLeft, Users, UserCheck, TrendingUp, DollarSign, BookOpen, Calendar, MessageSquare, Award, Trophy, Target, RefreshCw } from "lucide-react";
 import AdminSidebar from "@/components/AdminSidebar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
 const AdminBatchDetails = () => {
@@ -20,6 +21,32 @@ const AdminBatchDetails = () => {
   const [addStudentOpen, setAddStudentOpen] = useState(false);
   const [studentIdInput, setStudentIdInput] = useState("");
   const [validatedStudent, setValidatedStudent] = useState<{ id: string; name: string } | null>(null);
+  const [changeTeacherOpen, setChangeTeacherOpen] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [selectedNewTeacher, setSelectedNewTeacher] = useState<string>("");
+
+  // Mock available teachers
+  const availableTeachers = [
+    { id: "T001", name: "Mr. Sharma", subject: "Mathematics", qualification: "M.Sc Mathematics" },
+    { id: "T002", name: "Dr. Verma", subject: "Science", qualification: "Ph.D Physics" },
+    { id: "T003", name: "Ms. Patel", subject: "English", qualification: "M.A English" },
+    { id: "T004", name: "Mr. Kumar", subject: "Social Studies", qualification: "M.A History" },
+    { id: "T005", name: "Mrs. Gupta", subject: "Hindi", qualification: "M.A Hindi" },
+    { id: "T006", name: "Mr. Singh", subject: "Mathematics", qualification: "B.Sc Mathematics, B.Ed" },
+    { id: "T007", name: "Ms. Reddy", subject: "Science", qualification: "M.Sc Chemistry" },
+  ];
+
+  const handleChangeTeacher = () => {
+    if (!selectedNewTeacher) {
+      toast.error("Please select a new teacher");
+      return;
+    }
+    const teacher = availableTeachers.find(t => t.id === selectedNewTeacher);
+    toast.success(`Teacher changed to ${teacher?.name} for ${selectedSubject}!`);
+    setChangeTeacherOpen(false);
+    setSelectedSubject("");
+    setSelectedNewTeacher("");
+  };
 
   // Mock student database for validation
   const studentDatabase: Record<string, string> = {
@@ -485,7 +512,87 @@ const AdminBatchDetails = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div className="flex gap-2 pt-2">
-                        <Button variant="outline" size="sm" className="flex-1">Change Teacher</Button>
+                        <Dialog open={changeTeacherOpen && selectedSubject === subject.subject} onOpenChange={(open) => {
+                          setChangeTeacherOpen(open);
+                          if (open) setSelectedSubject(subject.subject);
+                          if (!open) {
+                            setSelectedSubject("");
+                            setSelectedNewTeacher("");
+                          }
+                        }}>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm" className="flex-1">
+                              <RefreshCw className="h-3 w-3 mr-1" />
+                              Change Teacher
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-md">
+                            <DialogHeader>
+                              <DialogTitle>Change Teacher</DialogTitle>
+                              <DialogDescription>
+                                Select a new teacher for {subject.subject}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 pt-4">
+                              <div className="p-3 bg-muted rounded-lg">
+                                <p className="text-sm text-muted-foreground">Current Teacher</p>
+                                <p className="font-medium">{subject.teacher}</p>
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <Label htmlFor="newTeacher">Select New Teacher</Label>
+                                <Select value={selectedNewTeacher} onValueChange={setSelectedNewTeacher}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Choose a teacher" />
+                                  </SelectTrigger>
+                                  <SelectContent className="bg-background">
+                                    {availableTeachers
+                                      .filter(t => t.subject === subject.subject || t.subject === "Mathematics" || t.subject === "Science")
+                                      .map(teacher => (
+                                        <SelectItem key={teacher.id} value={teacher.id}>
+                                          <div className="flex flex-col">
+                                            <span>{teacher.name}</span>
+                                            <span className="text-xs text-muted-foreground">{teacher.qualification}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))
+                                    }
+                                  </SelectContent>
+                                </Select>
+                              </div>
+
+                              {selectedNewTeacher && (
+                                <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                                  <p className="text-sm text-muted-foreground">New Assignment Preview</p>
+                                  <p className="font-medium text-primary">
+                                    {availableTeachers.find(t => t.id === selectedNewTeacher)?.name} → {subject.subject}
+                                  </p>
+                                </div>
+                              )}
+
+                              <div className="flex gap-2 pt-2">
+                                <Button 
+                                  onClick={handleChangeTeacher} 
+                                  className="flex-1"
+                                  disabled={!selectedNewTeacher}
+                                >
+                                  Confirm Change
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  onClick={() => {
+                                    setChangeTeacherOpen(false);
+                                    setSelectedSubject("");
+                                    setSelectedNewTeacher("");
+                                  }}
+                                  className="flex-1"
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                         <Button variant="ghost" size="sm">Remove</Button>
                       </div>
                     </CardContent>
