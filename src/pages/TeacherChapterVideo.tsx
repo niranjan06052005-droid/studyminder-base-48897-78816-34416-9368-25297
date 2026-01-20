@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Play, Pause, Volume2, VolumeX, Maximize, SkipBack, SkipForward, Settings, Clock, BookOpen, Video, Eye, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Play, Pause, Volume2, VolumeX, Maximize, SkipBack, SkipForward, Settings, Clock, BookOpen, Video, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,6 @@ const videosData: Record<string, {
   subject: string;
   description: string;
   uploadedDate: string;
-  views: number;
   uploadedBy: string;
 }> = {
   "v1": {
@@ -26,7 +25,6 @@ const videosData: Record<string, {
     subject: "Mathematics",
     description: "In this video, we will learn about linear equations in two variables. We'll understand what constitutes a linear equation, how to identify them, and their graphical representation on a coordinate plane.",
     uploadedDate: "2024-01-10",
-    views: 42,
     uploadedBy: "You"
   },
   "v2": {
@@ -37,7 +35,6 @@ const videosData: Record<string, {
     subject: "Mathematics",
     description: "Learn how to solve simultaneous linear equations using Cramer's Rule. This powerful method uses determinants to find solutions efficiently.",
     uploadedDate: "2024-01-12",
-    views: 35,
     uploadedBy: "You"
   },
   "v3": {
@@ -48,7 +45,6 @@ const videosData: Record<string, {
     subject: "Mathematics",
     description: "Understanding the nature of roots of quadratic equations using discriminant. Learn how to determine whether roots are real, equal, or imaginary.",
     uploadedDate: "2024-01-20",
-    views: 28,
     uploadedBy: "You"
   },
 };
@@ -108,17 +104,15 @@ export default function TeacherChapterVideo() {
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className="gap-1">
-                <Eye className="h-3 w-3" />
-                {video.views} views
-              </Badge>
-              <Badge variant="secondary" className="gap-1">
                 <Clock className="h-3 w-3" />
                 {video.duration}
               </Badge>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Edit className="h-4 w-4" />
-                Edit
-              </Button>
+              <Link to={`/teacher/class/${classId}/video/${videoId}/edit`}>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Edit className="h-4 w-4" />
+                  Edit
+                </Button>
+              </Link>
               <Button variant="outline" size="sm" className="gap-2 text-destructive hover:text-destructive">
                 <Trash2 className="h-4 w-4" />
                 Delete
@@ -233,8 +227,6 @@ export default function TeacherChapterVideo() {
                     month: 'short', 
                     year: 'numeric' 
                   })}</span>
-                  <span>•</span>
-                  <span>{video.views} student views</span>
                 </div>
                 <p className="text-muted-foreground">{video.description}</p>
               </CardContent>
@@ -266,7 +258,7 @@ export default function TeacherChapterVideo() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="font-medium text-sm line-clamp-2">{relatedVideo.title}</h4>
-                              <p className="text-xs text-muted-foreground mt-1">{relatedVideo.duration} • {relatedVideo.views} views</p>
+                              <p className="text-xs text-muted-foreground mt-1">{relatedVideo.duration}</p>
                             </div>
                           </div>
                         </CardContent>
