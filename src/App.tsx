@@ -37,6 +37,7 @@ import AdminReports from "./pages/AdminReports";
 import TeacherNoticeView from "./pages/TeacherNoticeView";
 import TeacherChapterNotes from "./pages/TeacherChapterNotes";
 import TeacherChapterVideo from "./pages/TeacherChapterVideo";
+import TeacherVideoEdit from "./pages/TeacherVideoEdit";
 import SubjectPage from "./pages/SubjectPage";
 import ChapterNotes from "./pages/ChapterNotes";
 import ChapterVideo from "./pages/ChapterVideo";
@@ -94,6 +95,7 @@ const App = () => (
           <Route path="/teacher/class/:classId" element={<TeacherBatchView />} />
           <Route path="/teacher/class/:classId/notes/:noteId" element={<TeacherChapterNotes />} />
           <Route path="/teacher/class/:classId/video/:videoId" element={<TeacherChapterVideo />} />
+          <Route path="/teacher/class/:classId/video/:videoId/edit" element={<TeacherVideoEdit />} />
           <Route path="/teacher/attendance" element={<TeacherAttendance />} />
           <Route path="/teacher/test-results" element={<TeacherTestResults />} />
           <Route path="/teacher/notices" element={<TeacherNotices />} />
