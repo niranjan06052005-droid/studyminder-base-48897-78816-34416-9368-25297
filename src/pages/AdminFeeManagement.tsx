@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,7 +15,7 @@ import AdminSidebar from "@/components/AdminSidebar";
 import { toast } from "@/hooks/use-toast";
 
 const AdminFeeManagement = () => {
-  const [timePeriod, setTimePeriod] = useState("Monthly");
+  const [timePeriod, setTimePeriod] = useState("Yearly");
   const [selectedSection, setSelectedSection] = useState("all");
   const [selectedBatch, setSelectedBatch] = useState("all");
   const [expenditures, setExpenditures] = useState([
@@ -31,63 +31,109 @@ const AdminFeeManagement = () => {
   // Academic months from June to April
   const academicMonths = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"];
 
-  // Section-wise fee collection data
-  const sectionWiseData = {
+  // Define quarters
+  const quarter1Months = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov"]; // Jun - Nov
+  const quarter2Months = ["Dec", "Jan", "Feb", "Mar", "Apr"]; // Dec - Apr
+
+  // Standard-wise monthly collection data (June to April)
+  const standardMonthlyData = academicMonths.map((month) => ({
+    month,
+    "1st": Math.round(45000 + Math.random() * 10000),
+    "2nd": Math.round(48000 + Math.random() * 12000),
+    "3rd": Math.round(52000 + Math.random() * 8000),
+    "4th": Math.round(55000 + Math.random() * 10000),
+    "5th": Math.round(58000 + Math.random() * 12000),
+    "6th": Math.round(62000 + Math.random() * 10000),
+    "7th": Math.round(65000 + Math.random() * 15000),
+    "8th": Math.round(70000 + Math.random() * 12000),
+    "9th": Math.round(75000 + Math.random() * 10000),
+    "10th": Math.round(80000 + Math.random() * 15000),
+  }));
+
+  // Standard colors for the chart
+  const standardColors: Record<string, string> = {
+    "1st": "#f97316",
+    "2nd": "#fb923c",
+    "3rd": "#fbbf24",
+    "4th": "#84cc16",
+    "5th": "#22c55e",
+    "6th": "#14b8a6",
+    "7th": "#0ea5e9",
+    "8th": "#6366f1",
+    "9th": "#8b5cf6",
+    "10th": "#ec4899",
+  };
+
+  // Section-wise fee collection data - base yearly data
+  const sectionWiseDataBase = {
     primary: {
       name: "Primary (1st - 4th)",
-      totalFees: 850000,
-      collected: 765000,
-      pending: 85000,
+      yearlyFees: 850000,
+      yearlyCollected: 765000,
+      yearlyPending: 85000,
       students: 120,
       color: "#f97316"
     },
     middle: {
       name: "Middle (5th - 7th)", 
-      totalFees: 920000,
-      collected: 874000,
-      pending: 46000,
+      yearlyFees: 920000,
+      yearlyCollected: 874000,
+      yearlyPending: 46000,
       students: 95,
       color: "#6366f1"
     },
     secondary: {
       name: "Secondary (8th - 10th)",
-      totalFees: 1150000,
-      collected: 1035000,
-      pending: 115000,
+      yearlyFees: 1150000,
+      yearlyCollected: 1035000,
+      yearlyPending: 115000,
       students: 85,
       color: "#0d9488"
     }
   };
 
-  // Batch-wise monthly collection data (June to April)
-  const batchWiseMonthlyData = academicMonths.map((month, index) => ({
-    month,
-    "1st": 45000 + Math.random() * 10000,
-    "2nd": 48000 + Math.random() * 12000,
-    "3rd": 52000 + Math.random() * 8000,
-    "4th": 55000 + Math.random() * 10000,
-    "5th": 58000 + Math.random() * 12000,
-    "6th": 62000 + Math.random() * 10000,
-    "7th": 65000 + Math.random() * 15000,
-    "8th": 70000 + Math.random() * 12000,
-    "9th": 75000 + Math.random() * 10000,
-    "10th": 80000 + Math.random() * 15000,
-  }));
+  // Calculate section-wise data based on time period
+  const sectionWiseData = useMemo(() => {
+    let multiplier = 1;
+    let periodLabel = "June - April";
+    
+    if (timePeriod === "Monthly") {
+      multiplier = 1 / 11; // Divide by 11 months
+      periodLabel = "Current Month";
+    } else if (timePeriod === "Quarterly") {
+      multiplier = 6 / 11; // First quarter has 6 months
+      periodLabel = "Jun - Nov";
+    }
 
-  // Section-wise monthly trend
-  const sectionMonthlyTrend = academicMonths.map((month) => ({
-    month,
-    primary: Math.round(65000 + Math.random() * 20000),
-    middle: Math.round(75000 + Math.random() * 25000),
-    secondary: Math.round(95000 + Math.random() * 30000),
-  }));
+    return {
+      primary: {
+        ...sectionWiseDataBase.primary,
+        totalFees: Math.round(sectionWiseDataBase.primary.yearlyFees * multiplier),
+        collected: Math.round(sectionWiseDataBase.primary.yearlyCollected * multiplier),
+        pending: Math.round(sectionWiseDataBase.primary.yearlyPending * multiplier),
+      },
+      middle: {
+        ...sectionWiseDataBase.middle,
+        totalFees: Math.round(sectionWiseDataBase.middle.yearlyFees * multiplier),
+        collected: Math.round(sectionWiseDataBase.middle.yearlyCollected * multiplier),
+        pending: Math.round(sectionWiseDataBase.middle.yearlyPending * multiplier),
+      },
+      secondary: {
+        ...sectionWiseDataBase.secondary,
+        totalFees: Math.round(sectionWiseDataBase.secondary.yearlyFees * multiplier),
+        collected: Math.round(sectionWiseDataBase.secondary.yearlyCollected * multiplier),
+        pending: Math.round(sectionWiseDataBase.secondary.yearlyPending * multiplier),
+      },
+      periodLabel
+    };
+  }, [timePeriod]);
 
-  // Pie chart data for sections
-  const sectionPieData = [
-    { name: "Primary", value: sectionWiseData.primary.collected, color: sectionWiseData.primary.color },
-    { name: "Middle", value: sectionWiseData.middle.collected, color: sectionWiseData.middle.color },
-    { name: "Secondary", value: sectionWiseData.secondary.collected, color: sectionWiseData.secondary.color },
-  ];
+  // Get period label for section cards
+  const getPeriodLabel = () => {
+    if (timePeriod === "Monthly") return "Current Month";
+    if (timePeriod === "Quarterly") return "Jun - Nov";
+    return "June - April";
+  };
 
   // Batch collection summary
   const batchCollectionSummary = [
@@ -101,6 +147,13 @@ const AdminFeeManagement = () => {
     { batch: "8th Std", collected: 680000, pending: 48000, percentage: 93 },
     { batch: "9th Std", collected: 720000, pending: 55000, percentage: 93 },
     { batch: "10th Std", collected: 850000, pending: 68000, percentage: 93 },
+  ];
+
+  // Pie chart data for sections
+  const sectionPieData = [
+    { name: "Primary", value: sectionWiseData.primary.collected, color: sectionWiseData.primary.color },
+    { name: "Middle", value: sectionWiseData.middle.collected, color: sectionWiseData.middle.color },
+    { name: "Secondary", value: sectionWiseData.secondary.collected, color: sectionWiseData.secondary.color },
   ];
 
   // Delayed students data
@@ -160,9 +213,9 @@ const AdminFeeManagement = () => {
   };
 
   const totalExpenditure = expenditures.reduce((sum, exp) => sum + exp.amount, 0);
-  const totalCollected = Object.values(sectionWiseData).reduce((sum, s) => sum + s.collected, 0);
-  const totalPending = Object.values(sectionWiseData).reduce((sum, s) => sum + s.pending, 0);
-  const totalStudents = Object.values(sectionWiseData).reduce((sum, s) => sum + s.students, 0);
+  const totalCollected = sectionWiseData.primary.collected + sectionWiseData.middle.collected + sectionWiseData.secondary.collected;
+  const totalPending = sectionWiseData.primary.pending + sectionWiseData.middle.pending + sectionWiseData.secondary.pending;
+  const totalStudents = sectionWiseData.primary.students + sectionWiseData.middle.students + sectionWiseData.secondary.students;
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -315,41 +368,45 @@ const AdminFeeManagement = () => {
               <div>
                 <h3 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
-                  Section-wise Collection (June - April)
+                  Section-wise Collection ({getPeriodLabel()})
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {Object.entries(sectionWiseData).map(([key, section]) => (
+                  {[
+                    { key: "primary", data: sectionWiseData.primary },
+                    { key: "middle", data: sectionWiseData.middle },
+                    { key: "secondary", data: sectionWiseData.secondary }
+                  ].map(({ key, data }) => (
                     <Card key={key} className="overflow-hidden">
-                      <div className="h-2" style={{ backgroundColor: section.color }} />
+                      <div className="h-2" style={{ backgroundColor: data.color }} />
                       <CardContent className="p-5">
                         <div className="flex justify-between items-start mb-4">
                           <div>
-                            <h4 className="font-semibold text-lg">{section.name}</h4>
-                            <p className="text-sm text-muted-foreground">{section.students} Students</p>
+                            <h4 className="font-semibold text-lg">{data.name}</h4>
+                            <p className="text-sm text-muted-foreground">{data.students} Students</p>
                           </div>
                           <span 
                             className="text-2xl font-bold"
-                            style={{ color: section.color }}
+                            style={{ color: data.color }}
                           >
-                            {Math.round((section.collected / section.totalFees) * 100)}%
+                            {data.totalFees > 0 ? Math.round((data.collected / data.totalFees) * 100) : 0}%
                           </span>
                         </div>
                         
                         <div className="space-y-3">
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Collected</span>
-                            <span className="font-medium text-emerald-600">₹{(section.collected / 100000).toFixed(2)}L</span>
+                            <span className="font-medium text-emerald-600">₹{(data.collected / 100000).toFixed(2)}L</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Pending</span>
-                            <span className="font-medium text-amber-600">₹{(section.pending / 100000).toFixed(2)}L</span>
+                            <span className="font-medium text-amber-600">₹{(data.pending / 100000).toFixed(2)}L</span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-2 mt-2">
                             <div 
                               className="h-2 rounded-full transition-all"
                               style={{ 
-                                width: `${(section.collected / section.totalFees) * 100}%`,
-                                backgroundColor: section.color 
+                                width: `${data.totalFees > 0 ? (data.collected / data.totalFees) * 100 : 0}%`,
+                                backgroundColor: data.color 
                               }}
                             />
                           </div>
@@ -362,37 +419,39 @@ const AdminFeeManagement = () => {
 
               {/* Charts Section */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Monthly Trend by Section */}
+                {/* Monthly Trend by Standard */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Monthly Collection Trend (Section-wise)</CardTitle>
-                    <CardDescription>Fee collection from June to April by section</CardDescription>
+                    <CardTitle>Monthly Collection Trend (Standard-wise)</CardTitle>
+                    <CardDescription>Fee collection from June to April by standard (1st - 10th)</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <ResponsiveContainer width="100%" height={300}>
-                      <AreaChart data={sectionMonthlyTrend}>
+                    <ResponsiveContainer width="100%" height={350}>
+                      <AreaChart data={standardMonthlyData}>
                         <defs>
-                          <linearGradient id="colorPrimary" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
-                          </linearGradient>
-                          <linearGradient id="colorMiddle" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
-                          </linearGradient>
-                          <linearGradient id="colorSecondary" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#0d9488" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#0d9488" stopOpacity={0}/>
-                          </linearGradient>
+                          {Object.entries(standardColors).map(([std, color]) => (
+                            <linearGradient key={std} id={`color${std}`} x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor={color} stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor={color} stopOpacity={0}/>
+                            </linearGradient>
+                          ))}
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                         <XAxis dataKey="month" className="text-xs" />
                         <YAxis className="text-xs" tickFormatter={(value) => `₹${value/1000}K`} />
                         <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
                         <Legend />
-                        <Area type="monotone" dataKey="primary" name="Primary" stroke="#f97316" fill="url(#colorPrimary)" strokeWidth={2} />
-                        <Area type="monotone" dataKey="middle" name="Middle" stroke="#6366f1" fill="url(#colorMiddle)" strokeWidth={2} />
-                        <Area type="monotone" dataKey="secondary" name="Secondary" stroke="#0d9488" fill="url(#colorSecondary)" strokeWidth={2} />
+                        {Object.entries(standardColors).map(([std, color]) => (
+                          <Area 
+                            key={std}
+                            type="monotone" 
+                            dataKey={std} 
+                            name={`${std} Std`} 
+                            stroke={color} 
+                            fill={`url(#color${std})`} 
+                            strokeWidth={2} 
+                          />
+                        ))}
                       </AreaChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -478,29 +537,6 @@ const AdminFeeManagement = () => {
                       </TableBody>
                     </Table>
                   </div>
-                </CardContent>
-              </Card>
-
-              {/* Monthly Collection Bar Chart */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Monthly Batch-wise Collection</CardTitle>
-                  <CardDescription>Detailed monthly collection by batch (June - April)</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={350}>
-                    <BarChart data={batchWiseMonthlyData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis className="text-xs" tickFormatter={(value) => `₹${value/1000}K`} />
-                      <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
-                      <Legend />
-                      <Bar dataKey="1st" name="1st Std" fill="#f97316" radius={[2, 2, 0, 0]} />
-                      <Bar dataKey="5th" name="5th Std" fill="#6366f1" radius={[2, 2, 0, 0]} />
-                      <Bar dataKey="8th" name="8th Std" fill="#0d9488" radius={[2, 2, 0, 0]} />
-                      <Bar dataKey="10th" name="10th Std" fill="#ec4899" radius={[2, 2, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
                 </CardContent>
               </Card>
             </TabsContent>

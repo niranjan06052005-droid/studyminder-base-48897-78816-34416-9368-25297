@@ -9,22 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Home, LogOut, TrendingUp, TrendingDown, DollarSign, Users, 
   UserPlus, Wallet, PiggyBank, GraduationCap, Calendar,
-  Download, FileText, BarChart3
+  Download, FileText, BarChart3, Clock, Phone, CheckCircle, XCircle
 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend, AreaChart, Area } from "recharts";
 import AdminSidebar from "@/components/AdminSidebar";
 
 const AdminReports = () => {
   const [selectedYear, setSelectedYear] = useState("2025");
   const [selectedMonth, setSelectedMonth] = useState("all");
 
-  // Monthly revenue data
+  // Monthly revenue data (Academic Year: June to April)
   const monthlyRevenueData = [
-    { month: "Jan", collection: 1250000, expenses: 820000, balance: 430000 },
-    { month: "Feb", collection: 1180000, expenses: 790000, balance: 390000 },
-    { month: "Mar", collection: 1320000, expenses: 850000, balance: 470000 },
-    { month: "Apr", collection: 1150000, expenses: 780000, balance: 370000 },
-    { month: "May", collection: 980000, expenses: 720000, balance: 260000 },
     { month: "Jun", collection: 850000, expenses: 680000, balance: 170000 },
     { month: "Jul", collection: 1450000, expenses: 920000, balance: 530000 },
     { month: "Aug", collection: 1380000, expenses: 880000, balance: 500000 },
@@ -32,23 +27,34 @@ const AdminReports = () => {
     { month: "Oct", collection: 1350000, expenses: 860000, balance: 490000 },
     { month: "Nov", collection: 1420000, expenses: 890000, balance: 530000 },
     { month: "Dec", collection: 1280000, expenses: 830000, balance: 450000 },
+    { month: "Jan", collection: 1250000, expenses: 820000, balance: 430000 },
+    { month: "Feb", collection: 1180000, expenses: 790000, balance: 390000 },
+    { month: "Mar", collection: 1320000, expenses: 850000, balance: 470000 },
+    { month: "Apr", collection: 1150000, expenses: 780000, balance: 370000 },
   ];
 
-  // Student admission trends
-  const admissionData = [
-    { month: "Jan", newAdmissions: 12, totalStudents: 420 },
-    { month: "Feb", newAdmissions: 8, totalStudents: 428 },
-    { month: "Mar", newAdmissions: 15, totalStudents: 443 },
-    { month: "Apr", newAdmissions: 6, totalStudents: 449 },
-    { month: "May", newAdmissions: 4, totalStudents: 453 },
-    { month: "Jun", newAdmissions: 3, totalStudents: 456 },
-    { month: "Jul", newAdmissions: 45, totalStudents: 501 },
-    { month: "Aug", newAdmissions: 38, totalStudents: 539 },
-    { month: "Sep", newAdmissions: 22, totalStudents: 561 },
-    { month: "Oct", newAdmissions: 10, totalStudents: 571 },
-    { month: "Nov", newAdmissions: 7, totalStudents: 578 },
-    { month: "Dec", newAdmissions: 5, totalStudents: 583 },
+  // Admission/Enquiry data based on enquiry statuses
+  const enquiryData = [
+    { month: "Jun", new: 45, contacted: 38, scheduled: 25, enrolled: 20, rejected: 5 },
+    { month: "Jul", new: 85, contacted: 72, scheduled: 55, enrolled: 45, rejected: 8 },
+    { month: "Aug", new: 65, contacted: 58, scheduled: 42, enrolled: 35, rejected: 6 },
+    { month: "Sep", new: 35, contacted: 30, scheduled: 22, enrolled: 18, rejected: 4 },
+    { month: "Oct", new: 25, contacted: 22, scheduled: 15, enrolled: 12, rejected: 3 },
+    { month: "Nov", new: 18, contacted: 15, scheduled: 10, enrolled: 8, rejected: 2 },
+    { month: "Dec", new: 12, contacted: 10, scheduled: 7, enrolled: 5, rejected: 2 },
+    { month: "Jan", new: 22, contacted: 18, scheduled: 12, enrolled: 10, rejected: 2 },
+    { month: "Feb", new: 15, contacted: 12, scheduled: 8, enrolled: 6, rejected: 2 },
+    { month: "Mar", new: 28, contacted: 24, scheduled: 18, enrolled: 15, rejected: 3 },
+    { month: "Apr", new: 10, contacted: 8, scheduled: 5, enrolled: 4, rejected: 1 },
   ];
+
+  // Calculate enquiry totals
+  const totalEnquiries = enquiryData.reduce((sum, item) => sum + item.new, 0);
+  const totalContacted = enquiryData.reduce((sum, item) => sum + item.contacted, 0);
+  const totalScheduled = enquiryData.reduce((sum, item) => sum + item.scheduled, 0);
+  const totalEnrolled = enquiryData.reduce((sum, item) => sum + item.enrolled, 0);
+  const totalRejected = enquiryData.reduce((sum, item) => sum + item.rejected, 0);
+  const conversionRate = ((totalEnrolled / totalEnquiries) * 100).toFixed(1);
 
   // Expense breakdown
   const expenseBreakdown = [
@@ -63,14 +69,25 @@ const AdminReports = () => {
 
   const EXPENSE_COLORS = ['hsl(var(--primary))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))', '#8884d8', '#82ca9d'];
 
-  // Staff salary data
-  const staffSalaryData = [
-    { role: "Senior Teachers", count: 8, avgSalary: 45000, totalSalary: 360000 },
-    { role: "Junior Teachers", count: 10, avgSalary: 30000, totalSalary: 300000 },
-    { role: "Teaching Assistants", count: 4, avgSalary: 20000, totalSalary: 80000 },
-    { role: "Administrative Staff", count: 3, avgSalary: 25000, totalSalary: 75000 },
-    { role: "Support Staff", count: 5, avgSalary: 15000, totalSalary: 75000 },
+  // Staff salary data - individual staff members
+  const staffSalaryDetails = [
+    { id: 1, name: "Dr. Rajesh Kumar", role: "Senior Teacher", monthlySalary: 55000, annualPackage: 660000, disbursed: 605000, pending: 55000 },
+    { id: 2, name: "Priya Sharma", role: "Senior Teacher", monthlySalary: 48000, annualPackage: 576000, disbursed: 528000, pending: 48000 },
+    { id: 3, name: "Amit Patel", role: "Senior Teacher", monthlySalary: 45000, annualPackage: 540000, disbursed: 495000, pending: 45000 },
+    { id: 4, name: "Sunita Verma", role: "Junior Teacher", monthlySalary: 32000, annualPackage: 384000, disbursed: 352000, pending: 32000 },
+    { id: 5, name: "Rahul Gupta", role: "Junior Teacher", monthlySalary: 30000, annualPackage: 360000, disbursed: 330000, pending: 30000 },
+    { id: 6, name: "Meera Singh", role: "Junior Teacher", monthlySalary: 28000, annualPackage: 336000, disbursed: 308000, pending: 28000 },
+    { id: 7, name: "Vikram Joshi", role: "Teaching Assistant", monthlySalary: 22000, annualPackage: 264000, disbursed: 242000, pending: 22000 },
+    { id: 8, name: "Neha Reddy", role: "Teaching Assistant", monthlySalary: 20000, annualPackage: 240000, disbursed: 220000, pending: 20000 },
+    { id: 9, name: "Kiran Desai", role: "Administrative Staff", monthlySalary: 28000, annualPackage: 336000, disbursed: 308000, pending: 28000 },
+    { id: 10, name: "Manoj Tiwari", role: "Support Staff", monthlySalary: 18000, annualPackage: 216000, disbursed: 198000, pending: 18000 },
   ];
+
+  // Calculate salary totals
+  const totalMonthlySalary = staffSalaryDetails.reduce((sum, staff) => sum + staff.monthlySalary, 0);
+  const totalAnnualPackage = staffSalaryDetails.reduce((sum, staff) => sum + staff.annualPackage, 0);
+  const totalDisbursed = staffSalaryDetails.reduce((sum, staff) => sum + staff.disbursed, 0);
+  const totalPendingSalary = staffSalaryDetails.reduce((sum, staff) => sum + staff.pending, 0);
 
   // Yearly comparison
   const yearlyComparison = [
@@ -80,28 +97,11 @@ const AdminReports = () => {
     { year: "2025", revenue: 14900000, expenses: 9860000, students: 583, staff: 30 },
   ];
 
-  // Program-wise student distribution
-  const programDistribution = [
-    { name: "Primary (1-4)", value: 180, color: 'hsl(var(--chart-1))' },
-    { name: "Middle (5-7)", value: 210, color: 'hsl(var(--chart-2))' },
-    { name: "Secondary (8-10)", value: 193, color: 'hsl(var(--chart-3))' },
-  ];
-
-  // Fee collection status
-  const feeCollectionData = [
-    { status: "Collected", value: 12800000, percentage: 87 },
-    { status: "Pending", value: 1200000, percentage: 8 },
-    { status: "Overdue", value: 700000, percentage: 5 },
-  ];
-
-  const FEE_COLORS = ['hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
-
   // Calculate totals
   const totalCollection = monthlyRevenueData.reduce((sum, item) => sum + item.collection, 0);
   const totalExpenses = monthlyRevenueData.reduce((sum, item) => sum + item.expenses, 0);
   const totalBalance = totalCollection - totalExpenses;
-  const totalNewAdmissions = admissionData.reduce((sum, item) => sum + item.newAdmissions, 0);
-  const totalSalaries = staffSalaryData.reduce((sum, item) => sum + item.totalSalary, 0);
+  const totalNewAdmissions = totalEnrolled;
 
   const formatCurrency = (value: number) => {
     if (value >= 10000000) return `₹${(value / 10000000).toFixed(1)}Cr`;
@@ -160,11 +160,6 @@ const AdminReports = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Months</SelectItem>
-                <SelectItem value="jan">January</SelectItem>
-                <SelectItem value="feb">February</SelectItem>
-                <SelectItem value="mar">March</SelectItem>
-                <SelectItem value="apr">April</SelectItem>
-                <SelectItem value="may">May</SelectItem>
                 <SelectItem value="jun">June</SelectItem>
                 <SelectItem value="jul">July</SelectItem>
                 <SelectItem value="aug">August</SelectItem>
@@ -172,6 +167,10 @@ const AdminReports = () => {
                 <SelectItem value="oct">October</SelectItem>
                 <SelectItem value="nov">November</SelectItem>
                 <SelectItem value="dec">December</SelectItem>
+                <SelectItem value="jan">January</SelectItem>
+                <SelectItem value="feb">February</SelectItem>
+                <SelectItem value="mar">March</SelectItem>
+                <SelectItem value="apr">April</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" className="ml-auto">
@@ -253,73 +252,63 @@ const AdminReports = () => {
               <TabsTrigger value="yearly">Yearly</TabsTrigger>
             </TabsList>
 
-            {/* Revenue Tab */}
+            {/* Revenue Tab - Modern Design without Fee Collection Status */}
             <TabsContent value="revenue" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Card className="lg:col-span-2">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5" />
-                      Monthly Revenue Overview
-                    </CardTitle>
-                    <CardDescription>Collection vs Expenses ({selectedYear})</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={350}>
-                      <BarChart data={monthlyRevenueData}>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="month" className="text-xs" />
-                        <YAxis tickFormatter={(value) => formatCurrency(value)} className="text-xs" />
-                        <Tooltip 
-                          formatter={(value: number) => formatCurrency(value)}
-                          contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
-                        />
-                        <Legend />
-                        <Bar dataKey="collection" name="Collection" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="expenses" name="Expenses" fill="hsl(var(--destructive))" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Fee Collection Status</CardTitle>
-                    <CardDescription>Current year breakdown</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={250}>
-                      <PieChart>
-                        <Pie
-                          data={feeCollectionData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {feeCollectionData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={FEE_COLORS[index % FEE_COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="mt-4 space-y-2">
-                      {feeCollectionData.map((item, index) => (
-                        <div key={item.status} className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground">{item.status}</span>
-                          <Badge variant={index === 0 ? "default" : index === 1 ? "secondary" : "destructive"}>
-                            {item.percentage}%
-                          </Badge>
-                        </div>
-                      ))}
+              {/* Monthly Revenue Overview - Full Width Modern Card */}
+              <Card className="overflow-hidden">
+                <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-6 border-b">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="flex items-center gap-2 text-2xl">
+                        <BarChart3 className="h-6 w-6 text-primary" />
+                        Monthly Revenue Overview
+                      </CardTitle>
+                      <CardDescription className="mt-1">Collection vs Expenses - Academic Year {selectedYear} (June - April)</CardDescription>
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
+                    <div className="flex gap-4">
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Avg. Monthly Collection</p>
+                        <p className="text-2xl font-bold text-primary">{formatCurrency(totalCollection / 11)}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-muted-foreground">Avg. Monthly Profit</p>
+                        <p className="text-2xl font-bold text-emerald-600">{formatCurrency(totalBalance / 11)}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <CardContent className="p-6">
+                  <ResponsiveContainer width="100%" height={400}>
+                    <AreaChart data={monthlyRevenueData}>
+                      <defs>
+                        <linearGradient id="colorCollection" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                        </linearGradient>
+                        <linearGradient id="colorExpenses" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0}/>
+                        </linearGradient>
+                        <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis dataKey="month" className="text-xs" />
+                      <YAxis tickFormatter={(value) => formatCurrency(value)} className="text-xs" />
+                      <Tooltip 
+                        formatter={(value: number) => formatCurrency(value)}
+                        contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }}
+                      />
+                      <Legend />
+                      <Area type="monotone" dataKey="collection" name="Collection" stroke="hsl(var(--primary))" fill="url(#colorCollection)" strokeWidth={2} />
+                      <Area type="monotone" dataKey="expenses" name="Expenses" stroke="hsl(var(--destructive))" fill="url(#colorExpenses)" strokeWidth={2} />
+                      <Area type="monotone" dataKey="balance" name="Balance" stroke="#10b981" fill="url(#colorBalance)" strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
 
               {/* Monthly Revenue Table */}
               <Card>
@@ -360,75 +349,153 @@ const AdminReports = () => {
               </Card>
             </TabsContent>
 
-            {/* Admissions Tab */}
+            {/* Admissions Tab - Based on Enquiry System */}
             <TabsContent value="admissions" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Card className="lg:col-span-2">
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Total Enquiries</p>
+                        <p className="text-2xl font-bold text-blue-600">{totalEnquiries}</p>
+                      </div>
+                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <Clock className="h-5 w-5 text-blue-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-l-4 border-l-yellow-500">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Contacted</p>
+                        <p className="text-2xl font-bold text-yellow-600">{totalContacted}</p>
+                      </div>
+                      <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                        <Phone className="h-5 w-5 text-yellow-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-l-4 border-l-purple-500">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Scheduled</p>
+                        <p className="text-2xl font-bold text-purple-600">{totalScheduled}</p>
+                      </div>
+                      <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                        <Calendar className="h-5 w-5 text-purple-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border-l-4 border-l-green-500">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Enrolled</p>
+                        <p className="text-2xl font-bold text-green-600">{totalEnrolled}</p>
+                      </div>
+                      <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-l-4 border-l-red-500">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Rejected</p>
+                        <p className="text-2xl font-bold text-red-600">{totalRejected}</p>
+                      </div>
+                      <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
+                        <XCircle className="h-5 w-5 text-red-600" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Conversion Rate Card */}
+              <Card className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-emerald-100 text-sm">Enquiry to Enrollment Conversion Rate</p>
+                      <h3 className="text-4xl font-bold mt-1">{conversionRate}%</h3>
+                      <p className="text-emerald-100 text-sm mt-1">{totalEnrolled} enrolled out of {totalEnquiries} enquiries</p>
+                    </div>
+                    <div className="p-4 bg-white/20 rounded-xl">
+                      <TrendingUp className="h-10 w-10" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Charts */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Users className="h-5 w-5" />
-                      Student Enrollment Trends
+                      Monthly Enquiry Funnel
                     </CardTitle>
-                    <CardDescription>New admissions and total students ({selectedYear})</CardDescription>
+                    <CardDescription>Enquiry status progression by month</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={350}>
-                      <LineChart data={admissionData}>
+                      <BarChart data={enquiryData}>
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                         <XAxis dataKey="month" />
-                        <YAxis yAxisId="left" />
-                        <YAxis yAxisId="right" orientation="right" />
+                        <YAxis />
                         <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
                         <Legend />
-                        <Line yAxisId="left" type="monotone" dataKey="newAdmissions" name="New Admissions" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ fill: 'hsl(var(--primary))' }} />
-                        <Line yAxisId="right" type="monotone" dataKey="totalStudents" name="Total Students" stroke="hsl(var(--chart-2))" strokeWidth={2} dot={{ fill: 'hsl(var(--chart-2))' }} />
-                      </LineChart>
+                        <Bar dataKey="new" name="New Enquiries" fill="#3b82f6" radius={[2, 2, 0, 0]} />
+                        <Bar dataKey="contacted" name="Contacted" fill="#eab308" radius={[2, 2, 0, 0]} />
+                        <Bar dataKey="scheduled" name="Scheduled" fill="#a855f7" radius={[2, 2, 0, 0]} />
+                        <Bar dataKey="enrolled" name="Enrolled" fill="#22c55e" radius={[2, 2, 0, 0]} />
+                      </BarChart>
                     </ResponsiveContainer>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Program Distribution</CardTitle>
-                    <CardDescription>Students by program level</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      <GraduationCap className="h-5 w-5" />
+                      Enrollment Trend
+                    </CardTitle>
+                    <CardDescription>Monthly enrollment numbers</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <ResponsiveContainer width="100%" height={250}>
-                      <PieChart>
-                        <Pie
-                          data={programDistribution}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {programDistribution.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
+                    <ResponsiveContainer width="100%" height={350}>
+                      <LineChart data={enquiryData}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
                         <Legend />
-                      </PieChart>
+                        <Line type="monotone" dataKey="enrolled" name="Enrolled" stroke="#22c55e" strokeWidth={3} dot={{ fill: '#22c55e', r: 5 }} />
+                        <Line type="monotone" dataKey="new" name="New Enquiries" stroke="#3b82f6" strokeWidth={2} strokeDasharray="5 5" />
+                      </LineChart>
                     </ResponsiveContainer>
-                    <div className="mt-4 space-y-2">
-                      {programDistribution.map((item) => (
-                        <div key={item.name} className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground">{item.name}</span>
-                          <Badge variant="outline">{item.value} students</Badge>
-                        </div>
-                      ))}
-                    </div>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Monthly Admission Table */}
+              {/* Monthly Details Table */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5" />
+                    <FileText className="h-5 w-5" />
                     Monthly Admission Details
                   </CardTitle>
                 </CardHeader>
@@ -437,27 +504,41 @@ const AdminReports = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Month</TableHead>
-                        <TableHead className="text-right">New Admissions</TableHead>
-                        <TableHead className="text-right">Total Students</TableHead>
-                        <TableHead className="text-right">Growth</TableHead>
+                        <TableHead className="text-right">New Enquiries</TableHead>
+                        <TableHead className="text-right">Contacted</TableHead>
+                        <TableHead className="text-right">Scheduled</TableHead>
+                        <TableHead className="text-right">Enrolled</TableHead>
+                        <TableHead className="text-right">Rejected</TableHead>
+                        <TableHead className="text-right">Conversion</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {admissionData.map((row, index) => (
+                      {enquiryData.map((row) => (
                         <TableRow key={row.month}>
                           <TableCell className="font-medium">{row.month}</TableCell>
-                          <TableCell className="text-right text-primary font-medium">+{row.newAdmissions}</TableCell>
-                          <TableCell className="text-right">{row.totalStudents}</TableCell>
+                          <TableCell className="text-right text-blue-600">{row.new}</TableCell>
+                          <TableCell className="text-right text-yellow-600">{row.contacted}</TableCell>
+                          <TableCell className="text-right text-purple-600">{row.scheduled}</TableCell>
+                          <TableCell className="text-right text-green-600 font-medium">{row.enrolled}</TableCell>
+                          <TableCell className="text-right text-red-600">{row.rejected}</TableCell>
                           <TableCell className="text-right">
-                            <Badge variant={row.newAdmissions > 10 ? "default" : "secondary"}>
-                              {index > 0 
-                                ? `${(((row.totalStudents - admissionData[index-1].totalStudents) / admissionData[index-1].totalStudents) * 100).toFixed(1)}%`
-                                : "—"
-                              }
+                            <Badge variant={row.enrolled / row.new > 0.4 ? "default" : "secondary"}>
+                              {((row.enrolled / row.new) * 100).toFixed(0)}%
                             </Badge>
                           </TableCell>
                         </TableRow>
                       ))}
+                      <TableRow className="font-bold bg-muted/50">
+                        <TableCell>Total</TableCell>
+                        <TableCell className="text-right text-blue-600">{totalEnquiries}</TableCell>
+                        <TableCell className="text-right text-yellow-600">{totalContacted}</TableCell>
+                        <TableCell className="text-right text-purple-600">{totalScheduled}</TableCell>
+                        <TableCell className="text-right text-green-600">{totalEnrolled}</TableCell>
+                        <TableCell className="text-right text-red-600">{totalRejected}</TableCell>
+                        <TableCell className="text-right">
+                          <Badge>{conversionRate}%</Badge>
+                        </TableCell>
+                      </TableRow>
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -533,75 +614,103 @@ const AdminReports = () => {
               </div>
             </TabsContent>
 
-            {/* Salaries Tab */}
+            {/* Salaries Tab - Updated with new cards and table structure */}
             <TabsContent value="salaries" className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                <Card className="gradient-card">
-                  <CardHeader className="pb-3">
-                    <CardDescription>Total Monthly Salary</CardDescription>
-                    <CardTitle className="text-3xl text-primary">{formatCurrency(totalSalaries)}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">30 staff members</p>
+              {/* Salary Summary Cards - Modern Design */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card className="overflow-hidden">
+                  <div className="h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500" />
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground font-medium">Total Annual Package</p>
+                        <h3 className="text-3xl font-bold text-primary mt-2">{formatCurrency(totalAnnualPackage)}</h3>
+                        <p className="text-sm text-muted-foreground mt-2">{staffSalaryDetails.length} staff members</p>
+                      </div>
+                      <div className="p-4 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl">
+                        <Wallet className="h-8 w-8 text-indigo-600" />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
 
-                <Card className="gradient-card">
-                  <CardHeader className="pb-3">
-                    <CardDescription>Annual Salary Expense</CardDescription>
-                    <CardTitle className="text-3xl text-primary">{formatCurrency(totalSalaries * 12)}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">58% of total expenses</p>
+                <Card className="overflow-hidden">
+                  <div className="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-500" />
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground font-medium">Disbursed</p>
+                        <h3 className="text-3xl font-bold text-emerald-600 mt-2">{formatCurrency(totalDisbursed)}</h3>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          {((totalDisbursed / totalAnnualPackage) * 100).toFixed(0)}% of annual package
+                        </p>
+                      </div>
+                      <div className="p-4 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl">
+                        <CheckCircle className="h-8 w-8 text-emerald-600" />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
 
-                <Card className="gradient-card">
-                  <CardHeader className="pb-3">
-                    <CardDescription>Average Salary</CardDescription>
-                    <CardTitle className="text-3xl text-primary">{formatCurrency(totalSalaries / 30)}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">Per staff member</p>
+                <Card className="overflow-hidden">
+                  <div className="h-1.5 bg-gradient-to-r from-amber-500 to-orange-500" />
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground font-medium">Pending</p>
+                        <h3 className="text-3xl font-bold text-amber-600 mt-2">{formatCurrency(totalPendingSalary)}</h3>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          {((totalPendingSalary / totalAnnualPackage) * 100).toFixed(0)}% remaining
+                        </p>
+                      </div>
+                      <div className="p-4 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl">
+                        <Clock className="h-8 w-8 text-amber-600" />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
 
+              {/* Staff Salary Details Table */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5" />
                     Staff Salary Details
                   </CardTitle>
-                  <CardDescription>Role-wise salary breakdown</CardDescription>
+                  <CardDescription>Individual staff salary breakdown</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
+                        <TableHead>Staff Name</TableHead>
                         <TableHead>Role</TableHead>
-                        <TableHead className="text-right">Staff Count</TableHead>
-                        <TableHead className="text-right">Avg. Salary</TableHead>
-                        <TableHead className="text-right">Total Monthly</TableHead>
-                        <TableHead className="text-right">Annual</TableHead>
+                        <TableHead className="text-right">Monthly Salary</TableHead>
+                        <TableHead className="text-right">Annual Package</TableHead>
+                        <TableHead className="text-right">Disbursed</TableHead>
+                        <TableHead className="text-right">Pending</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {staffSalaryData.map((row) => (
-                        <TableRow key={row.role}>
-                          <TableCell className="font-medium">{row.role}</TableCell>
-                          <TableCell className="text-right">{row.count}</TableCell>
-                          <TableCell className="text-right">{formatCurrency(row.avgSalary)}</TableCell>
-                          <TableCell className="text-right text-primary font-medium">{formatCurrency(row.totalSalary)}</TableCell>
-                          <TableCell className="text-right">{formatCurrency(row.totalSalary * 12)}</TableCell>
+                      {staffSalaryDetails.map((staff) => (
+                        <TableRow key={staff.id}>
+                          <TableCell className="font-medium">{staff.name}</TableCell>
+                          <TableCell>
+                            <Badge variant="outline">{staff.role}</Badge>
+                          </TableCell>
+                          <TableCell className="text-right">{formatCurrency(staff.monthlySalary)}</TableCell>
+                          <TableCell className="text-right text-primary font-medium">{formatCurrency(staff.annualPackage)}</TableCell>
+                          <TableCell className="text-right text-emerald-600">{formatCurrency(staff.disbursed)}</TableCell>
+                          <TableCell className="text-right text-amber-600">{formatCurrency(staff.pending)}</TableCell>
                         </TableRow>
                       ))}
                       <TableRow className="font-bold bg-muted/50">
-                        <TableCell>Total</TableCell>
-                        <TableCell className="text-right">{staffSalaryData.reduce((sum, row) => sum + row.count, 0)}</TableCell>
-                        <TableCell className="text-right">—</TableCell>
-                        <TableCell className="text-right text-primary">{formatCurrency(totalSalaries)}</TableCell>
-                        <TableCell className="text-right">{formatCurrency(totalSalaries * 12)}</TableCell>
+                        <TableCell colSpan={2}>Total</TableCell>
+                        <TableCell className="text-right">{formatCurrency(totalMonthlySalary)}</TableCell>
+                        <TableCell className="text-right text-primary">{formatCurrency(totalAnnualPackage)}</TableCell>
+                        <TableCell className="text-right text-emerald-600">{formatCurrency(totalDisbursed)}</TableCell>
+                        <TableCell className="text-right text-amber-600">{formatCurrency(totalPendingSalary)}</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
