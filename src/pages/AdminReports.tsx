@@ -154,25 +154,6 @@ const AdminReports = () => {
                 <SelectItem value="2025">2025</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="Select Month" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Months</SelectItem>
-                <SelectItem value="jun">June</SelectItem>
-                <SelectItem value="jul">July</SelectItem>
-                <SelectItem value="aug">August</SelectItem>
-                <SelectItem value="sep">September</SelectItem>
-                <SelectItem value="oct">October</SelectItem>
-                <SelectItem value="nov">November</SelectItem>
-                <SelectItem value="dec">December</SelectItem>
-                <SelectItem value="jan">January</SelectItem>
-                <SelectItem value="feb">February</SelectItem>
-                <SelectItem value="mar">March</SelectItem>
-                <SelectItem value="apr">April</SelectItem>
-              </SelectContent>
-            </Select>
             <Button variant="outline" className="ml-auto">
               <Download className="h-4 w-4 mr-2" />
               Export Report
@@ -440,57 +421,6 @@ const AdminReports = () => {
                 </CardContent>
               </Card>
 
-              {/* Charts */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Users className="h-5 w-5" />
-                      Monthly Enquiry Funnel
-                    </CardTitle>
-                    <CardDescription>Enquiry status progression by month</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={350}>
-                      <BarChart data={enquiryData}>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
-                        <Legend />
-                        <Bar dataKey="new" name="New Enquiries" fill="#3b82f6" radius={[2, 2, 0, 0]} />
-                        <Bar dataKey="contacted" name="Contacted" fill="#eab308" radius={[2, 2, 0, 0]} />
-                        <Bar dataKey="scheduled" name="Scheduled" fill="#a855f7" radius={[2, 2, 0, 0]} />
-                        <Bar dataKey="enrolled" name="Enrolled" fill="#22c55e" radius={[2, 2, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <GraduationCap className="h-5 w-5" />
-                      Enrollment Trend
-                    </CardTitle>
-                    <CardDescription>Monthly enrollment numbers</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={350}>
-                      <LineChart data={enquiryData}>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
-                        <Legend />
-                        <Line type="monotone" dataKey="enrolled" name="Enrolled" stroke="#22c55e" strokeWidth={3} dot={{ fill: '#22c55e', r: 5 }} />
-                        <Line type="monotone" dataKey="new" name="New Enquiries" stroke="#3b82f6" strokeWidth={2} strokeDasharray="5 5" />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-              </div>
-
               {/* Monthly Details Table */}
               <Card>
                 <CardHeader>
@@ -685,7 +615,6 @@ const AdminReports = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Staff Name</TableHead>
-                        <TableHead>Role</TableHead>
                         <TableHead className="text-right">Monthly Salary</TableHead>
                         <TableHead className="text-right">Annual Package</TableHead>
                         <TableHead className="text-right">Disbursed</TableHead>
@@ -696,9 +625,6 @@ const AdminReports = () => {
                       {staffSalaryDetails.map((staff) => (
                         <TableRow key={staff.id}>
                           <TableCell className="font-medium">{staff.name}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{staff.role}</Badge>
-                          </TableCell>
                           <TableCell className="text-right">{formatCurrency(staff.monthlySalary)}</TableCell>
                           <TableCell className="text-right text-primary font-medium">{formatCurrency(staff.annualPackage)}</TableCell>
                           <TableCell className="text-right text-emerald-600">{formatCurrency(staff.disbursed)}</TableCell>
@@ -706,7 +632,7 @@ const AdminReports = () => {
                         </TableRow>
                       ))}
                       <TableRow className="font-bold bg-muted/50">
-                        <TableCell colSpan={2}>Total</TableCell>
+                        <TableCell>Total</TableCell>
                         <TableCell className="text-right">{formatCurrency(totalMonthlySalary)}</TableCell>
                         <TableCell className="text-right text-primary">{formatCurrency(totalAnnualPackage)}</TableCell>
                         <TableCell className="text-right text-emerald-600">{formatCurrency(totalDisbursed)}</TableCell>

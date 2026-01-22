@@ -17,21 +17,29 @@ const AdminNoticeManagement = () => {
   const [selectedBatches, setSelectedBatches] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [targetAudience, setTargetAudience] = useState({
-    students: false,
-    teachers: false,
-  });
 
-  // Mock batches data
+  // Mock batches data - 1st to 10th standard
   const batches = [
+    { id: "1a", name: "1st Standard - Section A" },
+    { id: "1b", name: "1st Standard - Section B" },
+    { id: "2a", name: "2nd Standard - Section A" },
+    { id: "2b", name: "2nd Standard - Section B" },
+    { id: "3a", name: "3rd Standard - Section A" },
+    { id: "3b", name: "3rd Standard - Section B" },
+    { id: "4a", name: "4th Standard - Section A" },
+    { id: "4b", name: "4th Standard - Section B" },
+    { id: "5a", name: "5th Standard - Section A" },
+    { id: "5b", name: "5th Standard - Section B" },
+    { id: "6a", name: "6th Standard - Section A" },
+    { id: "6b", name: "6th Standard - Section B" },
+    { id: "7a", name: "7th Standard - Section A" },
+    { id: "7b", name: "7th Standard - Section B" },
+    { id: "8a", name: "8th Standard - Section A" },
+    { id: "8b", name: "8th Standard - Section B" },
     { id: "9a", name: "9th Standard - Section A" },
     { id: "9b", name: "9th Standard - Section B" },
     { id: "10a", name: "10th Standard - Section A" },
     { id: "10b", name: "10th Standard - Section B" },
-    { id: "11sci", name: "11th Standard - Science" },
-    { id: "11com", name: "11th Standard - Commerce" },
-    { id: "12sci", name: "12th Standard - Science" },
-    { id: "12com", name: "12th Standard - Commerce" },
   ];
 
   // Mock sent notices
@@ -126,15 +134,6 @@ const AdminNoticeManagement = () => {
       return;
     }
 
-    if (!targetAudience.students && !targetAudience.teachers) {
-      toast({
-        title: "No audience selected",
-        description: "Please select at least one target audience",
-        variant: "destructive",
-      });
-      return;
-    }
-
     toast({
       title: "Notice sent successfully!",
       description: `Sent to ${selectedBatches.length} batch(es)`,
@@ -146,7 +145,6 @@ const AdminNoticeManagement = () => {
     setSelectedBatches([]);
     setSelectedImages([]);
     setImagePreviews([]);
-    setTargetAudience({ students: false, teachers: false });
   };
 
   return (
@@ -264,43 +262,6 @@ const AdminNoticeManagement = () => {
                         ))}
                       </div>
                     )}
-                  </div>
-
-                  {/* Target Audience */}
-                  <div className="space-y-2">
-                    <Label>Target Audience *</Label>
-                    <div className="flex gap-6">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="students"
-                          checked={targetAudience.students}
-                          onCheckedChange={(checked) =>
-                            setTargetAudience((prev) => ({ ...prev, students: checked as boolean }))
-                          }
-                        />
-                        <label
-                          htmlFor="students"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Students
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="teachers"
-                          checked={targetAudience.teachers}
-                          onCheckedChange={(checked) =>
-                            setTargetAudience((prev) => ({ ...prev, teachers: checked as boolean }))
-                          }
-                        />
-                        <label
-                          htmlFor="teachers"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Teachers
-                        </label>
-                      </div>
-                    </div>
                   </div>
 
                   {/* Send Button */}
