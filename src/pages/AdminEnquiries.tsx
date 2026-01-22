@@ -336,88 +336,147 @@ const AdminEnquiries = () => {
         </main>
       </div>
 
-      {/* Enquiry Detail Dialog */}
+      {/* Enquiry Detail Dialog - Redesigned */}
       <Dialog open={!!selectedEnquiry} onOpenChange={() => setSelectedEnquiry(null)}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-primary" />
-              Enquiry Details - {selectedEnquiry?.id}
-            </DialogTitle>
-            <DialogDescription>
-              Submitted on {selectedEnquiry && formatDate(selectedEnquiry.submittedAt)}
-            </DialogDescription>
-          </DialogHeader>
-          
+        <DialogContent className="max-w-md p-0 overflow-hidden">
           {selectedEnquiry && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Users className="h-4 w-4" /> Parent's Name
-                  </p>
-                  <p className="font-medium">{selectedEnquiry.parentName}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <User className="h-4 w-4" /> Child's Name
-                  </p>
-                  <p className="font-medium">{selectedEnquiry.childName}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <BookOpen className="h-4 w-4" /> Section
-                  </p>
-                  <p className="font-medium">{selectedEnquiry.section}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <BookOpen className="h-4 w-4" /> Standard
-                  </p>
-                  <p className="font-medium">{selectedEnquiry.standard}</p>
-                </div>
+            <>
+              {/* Header */}
+              <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-5 border-b">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2 text-lg">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <MessageSquare className="h-5 w-5 text-primary" />
+                    </div>
+                    Enquiry Details - {selectedEnquiry.id}
+                  </DialogTitle>
+                  <DialogDescription className="flex items-center gap-1 mt-1">
+                    <Calendar className="h-3.5 w-3.5" />
+                    Submitted on {formatDate(selectedEnquiry.submittedAt)}
+                  </DialogDescription>
+                </DialogHeader>
               </div>
               
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground flex items-center gap-2">
-                  <Phone className="h-4 w-4" /> Contact Number
-                </p>
-                <a href={`tel:${selectedEnquiry.contactNo}`} className="font-medium text-primary hover:underline">
-                  +91 {selectedEnquiry.contactNo}
-                </a>
-              </div>
-              
-              {selectedEnquiry.description && (
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" /> Additional Information
-                  </p>
-                  <p className="text-sm bg-muted p-3 rounded-lg">{selectedEnquiry.description}</p>
+              <div className="p-5 space-y-5">
+                {/* Parent & Child Info */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+                    <p className="text-xs text-blue-600 font-medium flex items-center gap-1.5 mb-1">
+                      <Users className="h-3.5 w-3.5" /> Parent's Name
+                    </p>
+                    <p className="font-semibold text-foreground">{selectedEnquiry.parentName}</p>
+                  </div>
+                  <div className="bg-purple-50 rounded-xl p-4 border border-purple-100">
+                    <p className="text-xs text-purple-600 font-medium flex items-center gap-1.5 mb-1">
+                      <User className="h-3.5 w-3.5" /> Child's Name
+                    </p>
+                    <p className="font-semibold text-foreground">{selectedEnquiry.childName}</p>
+                  </div>
                 </div>
-              )}
-              
-              <div className="border-t pt-4">
-                <p className="text-sm text-muted-foreground mb-2">Update Status</p>
-                <div className="flex flex-wrap gap-2">
-                  {(["new", "contacted", "scheduled", "enrolled", "rejected"] as const).map((status) => (
+
+                {/* Section & Standard */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                    <p className="text-xs text-amber-600 font-medium flex items-center gap-1.5 mb-1">
+                      <BookOpen className="h-3.5 w-3.5" /> Section
+                    </p>
+                    <p className="font-semibold text-foreground">{selectedEnquiry.section}</p>
+                  </div>
+                  <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+                    <p className="text-xs text-emerald-600 font-medium flex items-center gap-1.5 mb-1">
+                      <BookOpen className="h-3.5 w-3.5" /> Standard
+                    </p>
+                    <p className="font-semibold text-foreground">{selectedEnquiry.standard}</p>
+                  </div>
+                </div>
+                
+                {/* Contact Number */}
+                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-4 border border-indigo-100">
+                  <p className="text-xs text-indigo-600 font-medium flex items-center gap-1.5 mb-1">
+                    <Phone className="h-3.5 w-3.5" /> Contact Number
+                  </p>
+                  <a href={`tel:${selectedEnquiry.contactNo}`} className="font-semibold text-primary hover:underline text-lg">
+                    +91 {selectedEnquiry.contactNo}
+                  </a>
+                </div>
+                
+                {/* Additional Information */}
+                {selectedEnquiry.description && (
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <p className="text-xs text-slate-600 font-medium flex items-center gap-1.5 mb-2">
+                      <MessageSquare className="h-3.5 w-3.5" /> Additional Information
+                    </p>
+                    <p className="text-sm text-foreground leading-relaxed bg-white p-3 rounded-lg border">
+                      {selectedEnquiry.description}
+                    </p>
+                  </div>
+                )}
+                
+                {/* Update Status */}
+                <div className="pt-2">
+                  <p className="text-sm font-medium text-muted-foreground mb-3">Update Status</p>
+                  <div className="flex flex-wrap gap-2">
                     <Button
-                      key={status}
-                      variant={selectedEnquiry.status === status ? "default" : "outline"}
+                      variant={selectedEnquiry.status === "new" ? "default" : "outline"}
                       size="sm"
                       onClick={() => {
-                        handleStatusChange(selectedEnquiry.id, status);
-                        setSelectedEnquiry({ ...selectedEnquiry, status });
+                        handleStatusChange(selectedEnquiry.id, "new");
+                        setSelectedEnquiry({ ...selectedEnquiry, status: "new" });
                       }}
-                      className={selectedEnquiry.status === status ? "" : getStatusBadge(status)}
+                      className={selectedEnquiry.status === "new" ? "bg-blue-600 hover:bg-blue-700" : "border-blue-200 text-blue-700 hover:bg-blue-50"}
                     >
-                      {status === "enrolled" && <CheckCircle className="h-4 w-4 mr-1" />}
-                      {status === "rejected" && <XCircle className="h-4 w-4 mr-1" />}
-                      {getStatusLabel(status)}
+                      New
                     </Button>
-                  ))}
+                    <Button
+                      variant={selectedEnquiry.status === "contacted" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        handleStatusChange(selectedEnquiry.id, "contacted");
+                        setSelectedEnquiry({ ...selectedEnquiry, status: "contacted" });
+                      }}
+                      className={selectedEnquiry.status === "contacted" ? "bg-yellow-500 hover:bg-yellow-600" : "border-yellow-200 text-yellow-700 hover:bg-yellow-50"}
+                    >
+                      Contacted
+                    </Button>
+                    <Button
+                      variant={selectedEnquiry.status === "scheduled" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        handleStatusChange(selectedEnquiry.id, "scheduled");
+                        setSelectedEnquiry({ ...selectedEnquiry, status: "scheduled" });
+                      }}
+                      className={selectedEnquiry.status === "scheduled" ? "bg-purple-600 hover:bg-purple-700" : "border-purple-200 text-purple-700 hover:bg-purple-50"}
+                    >
+                      Visit Scheduled
+                    </Button>
+                    <Button
+                      variant={selectedEnquiry.status === "enrolled" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        handleStatusChange(selectedEnquiry.id, "enrolled");
+                        setSelectedEnquiry({ ...selectedEnquiry, status: "enrolled" });
+                      }}
+                      className={selectedEnquiry.status === "enrolled" ? "bg-green-600 hover:bg-green-700" : "border-green-200 text-green-700 hover:bg-green-50"}
+                    >
+                      <CheckCircle className="h-4 w-4 mr-1" />
+                      Enrolled
+                    </Button>
+                    <Button
+                      variant={selectedEnquiry.status === "rejected" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        handleStatusChange(selectedEnquiry.id, "rejected");
+                        setSelectedEnquiry({ ...selectedEnquiry, status: "rejected" });
+                      }}
+                      className={selectedEnquiry.status === "rejected" ? "bg-red-600 hover:bg-red-700" : "border-red-200 text-red-700 hover:bg-red-50"}
+                    >
+                      <XCircle className="h-4 w-4 mr-1" />
+                      Rejected
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>

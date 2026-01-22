@@ -8,8 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, AreaChart, Area } from "recharts";
-import { AlertCircle, TrendingUp, Home, LogOut, Plus, Trash2, GraduationCap, Users, IndianRupee, CalendarDays, BookOpen } from "lucide-react";
+import { AlertCircle, TrendingUp, Home, LogOut, Plus, Trash2, GraduationCap, Users, IndianRupee, CalendarDays, BookOpen, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import AdminSidebar from "@/components/AdminSidebar";
 import { toast } from "@/hooks/use-toast";
@@ -324,172 +323,60 @@ const AdminFeeManagement = () => {
                 </Card>
               </div>
 
-              {/* Filters */}
-              <div className="flex flex-wrap gap-4 items-center">
-                <div className="flex gap-2">
-                  {["Monthly", "Quarterly", "Yearly"].map((period) => (
-                    <Button
-                      key={period}
-                      variant={timePeriod === period ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setTimePeriod(period)}
-                    >
-                      {period}
-                    </Button>
-                  ))}
-                </div>
-                
-                <Select value={selectedSection} onValueChange={setSelectedSection}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filter by Section" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background">
-                    <SelectItem value="all">All Sections</SelectItem>
-                    <SelectItem value="primary">Primary (1st - 4th)</SelectItem>
-                    <SelectItem value="middle">Middle (5th - 7th)</SelectItem>
-                    <SelectItem value="secondary">Secondary (8th - 10th)</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={selectedBatch} onValueChange={setSelectedBatch}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filter by Batch" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-background">
-                    <SelectItem value="all">All Batches</SelectItem>
-                    {["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"].map(std => (
-                      <SelectItem key={std} value={std}>{std} Std</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Section-wise Collection Cards */}
+              {/* Section-wise Monthly Collection */}
               <div>
                 <h3 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
-                  Section-wise Collection ({getPeriodLabel()})
+                  Section-wise Monthly Collection
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {[
-                    { key: "primary", data: sectionWiseData.primary },
-                    { key: "middle", data: sectionWiseData.middle },
-                    { key: "secondary", data: sectionWiseData.secondary }
-                  ].map(({ key, data }) => (
-                    <Card key={key} className="overflow-hidden">
-                      <div className="h-2" style={{ backgroundColor: data.color }} />
-                      <CardContent className="p-5">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h4 className="font-semibold text-lg">{data.name}</h4>
-                            <p className="text-sm text-muted-foreground">{data.students} Students</p>
-                          </div>
-                          <span 
-                            className="text-2xl font-bold"
-                            style={{ color: data.color }}
-                          >
-                            {data.totalFees > 0 ? Math.round((data.collected / data.totalFees) * 100) : 0}%
-                          </span>
-                        </div>
-                        
-                        <div className="space-y-3">
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Collected</span>
-                            <span className="font-medium text-emerald-600">₹{(data.collected / 100000).toFixed(2)}L</span>
-                          </div>
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Pending</span>
-                            <span className="font-medium text-amber-600">₹{(data.pending / 100000).toFixed(2)}L</span>
-                          </div>
-                          <div className="w-full bg-muted rounded-full h-2 mt-2">
-                            <div 
-                              className="h-2 rounded-full transition-all"
-                              style={{ 
-                                width: `${data.totalFees > 0 ? (data.collected / data.totalFees) * 100 : 0}%`,
-                                backgroundColor: data.color 
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Charts Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Monthly Trend by Standard */}
+                
+                {/* Monthly Section-wise Collection Table */}
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Monthly Collection Trend (Standard-wise)</CardTitle>
-                    <CardDescription>Fee collection from June to April by standard (1st - 10th)</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={350}>
-                      <AreaChart data={standardMonthlyData}>
-                        <defs>
-                          {Object.entries(standardColors).map(([std, color]) => (
-                            <linearGradient key={std} id={`color${std}`} x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor={color} stopOpacity={0.3}/>
-                              <stop offset="95%" stopColor={color} stopOpacity={0}/>
-                            </linearGradient>
-                          ))}
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="month" className="text-xs" />
-                        <YAxis className="text-xs" tickFormatter={(value) => `₹${value/1000}K`} />
-                        <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
-                        <Legend />
-                        {Object.entries(standardColors).map(([std, color]) => (
-                          <Area 
-                            key={std}
-                            type="monotone" 
-                            dataKey={std} 
-                            name={`${std} Std`} 
-                            stroke={color} 
-                            fill={`url(#color${std})`} 
-                            strokeWidth={2} 
-                          />
-                        ))}
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-
-                {/* Section Distribution Pie */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Collection Distribution</CardTitle>
-                    <CardDescription>Total collection by section</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={300}>
-                      <PieChart>
-                        <Pie
-                          data={sectionPieData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={70}
-                          outerRadius={100}
-                          paddingAngle={5}
-                          dataKey="value"
-                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        >
-                          {sectionPieData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value: number) => `₹${(value / 100000).toFixed(2)}L`} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="flex justify-center gap-6 mt-4">
-                      {sectionPieData.map((item) => (
-                        <div key={item.name} className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                          <span className="text-sm">{item.name}</span>
-                        </div>
-                      ))}
+                  <CardContent className="p-0">
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="bg-muted/50">
+                            <TableHead className="font-bold">Month</TableHead>
+                            <TableHead className="text-right">
+                              <div className="flex flex-col items-end">
+                                <span className="text-orange-600">Primary</span>
+                                <span className="text-xs text-muted-foreground">(1st - 4th)</span>
+                              </div>
+                            </TableHead>
+                            <TableHead className="text-right">
+                              <div className="flex flex-col items-end">
+                                <span className="text-indigo-600">Middle</span>
+                                <span className="text-xs text-muted-foreground">(5th - 7th)</span>
+                              </div>
+                            </TableHead>
+                            <TableHead className="text-right">
+                              <div className="flex flex-col items-end">
+                                <span className="text-teal-600">Secondary</span>
+                                <span className="text-xs text-muted-foreground">(8th - 10th)</span>
+                              </div>
+                            </TableHead>
+                            <TableHead className="text-right font-bold">Total</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {academicMonths.map((month) => {
+                            const primaryCollection = Math.round(70000 + Math.random() * 15000);
+                            const middleCollection = Math.round(85000 + Math.random() * 20000);
+                            const secondaryCollection = Math.round(95000 + Math.random() * 25000);
+                            const total = primaryCollection + middleCollection + secondaryCollection;
+                            return (
+                              <TableRow key={month}>
+                                <TableCell className="font-medium">{month}</TableCell>
+                                <TableCell className="text-right text-orange-600">₹{(primaryCollection / 1000).toFixed(1)}K</TableCell>
+                                <TableCell className="text-right text-indigo-600">₹{(middleCollection / 1000).toFixed(1)}K</TableCell>
+                                <TableCell className="text-right text-teal-600">₹{(secondaryCollection / 1000).toFixed(1)}K</TableCell>
+                                <TableCell className="text-right font-bold">₹{(total / 1000).toFixed(1)}K</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
                     </div>
                   </CardContent>
                 </Card>
@@ -611,57 +498,69 @@ const AdminFeeManagement = () => {
 
             {/* Expenditure Tab */}
             <TabsContent value="expenditure">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Operational Costs Distribution</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={300}>
-                      <PieChart>
-                        <Pie
-                          data={expenditures.map((exp) => ({
-                            name: exp.category,
-                            value: exp.amount,
-                          }))}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={70}
-                          outerRadius={110}
-                          paddingAngle={3}
-                          dataKey="value"
-                        >
-                          {expenditures.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={`hsl(${(index * 360) / expenditures.length}, 70%, 50%)`} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="mt-4 space-y-2">
-                      {expenditures.map((item, index) => (
-                        <div key={item.id} className="flex items-center justify-between text-sm">
-                          <div className="flex items-center gap-2">
-                            <div
-                              className="w-3 h-3 rounded-full"
-                              style={{ backgroundColor: `hsl(${(index * 360) / expenditures.length}, 70%, 50%)` }}
-                            />
-                            <span>{item.category}</span>
-                          </div>
-                          <span className="font-medium">₹{item.amount.toLocaleString()}</span>
+              <div className="space-y-6">
+                {/* Summary Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Card className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-blue-100 text-sm">Total Monthly Expenses</p>
+                          <h3 className="text-3xl font-bold mt-1">₹{totalExpenditure.toLocaleString()}</h3>
+                          <p className="text-blue-100 text-xs mt-1">{expenditures.length} expense categories</p>
                         </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                        <div className="p-3 bg-white/20 rounded-xl">
+                          <Wallet className="h-8 w-8" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
 
+                  <Card className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-emerald-100 text-sm">Largest Expense</p>
+                          <h3 className="text-2xl font-bold mt-1">Staff Salaries</h3>
+                          <p className="text-emerald-100 text-xs mt-1">₹4,55,000 (Monthly)</p>
+                        </div>
+                        <div className="p-3 bg-white/20 rounded-xl">
+                          <Users className="h-8 w-8" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-amber-500 to-orange-600 text-white">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-amber-100 text-sm">Fixed Costs</p>
+                          <h3 className="text-3xl font-bold mt-1">₹5,05,000</h3>
+                          <p className="text-amber-100 text-xs mt-1">Salaries + Rent</p>
+                        </div>
+                        <div className="p-3 bg-white/20 rounded-xl">
+                          <CalendarDays className="h-8 w-8" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Expense Categories Grid */}
                 <Card>
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle>Operational Costs</CardTitle>
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          <Wallet className="h-5 w-5 text-primary" />
+                          Operational Expenses
+                        </CardTitle>
+                        <CardDescription>Monthly recurring expenses breakdown</CardDescription>
+                      </div>
                       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <DialogTrigger asChild>
-                          <Button size="sm">
+                          <Button>
                             <Plus className="h-4 w-4 mr-2" />
                             Add Expenditure
                           </Button>
@@ -674,12 +573,24 @@ const AdminFeeManagement = () => {
                           <div className="space-y-4 pt-4">
                             <div className="space-y-2">
                               <Label htmlFor="category">Category *</Label>
-                              <Input
-                                id="category"
-                                placeholder="e.g., Staff Salaries"
+                              <Select
                                 value={newExpenditure.category}
-                                onChange={(e) => setNewExpenditure({ ...newExpenditure, category: e.target.value })}
-                              />
+                                onValueChange={(value) => setNewExpenditure({ ...newExpenditure, category: value })}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select category" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-background">
+                                  <SelectItem value="Staff Salaries">Staff Salaries</SelectItem>
+                                  <SelectItem value="Rent & Utilities">Rent & Utilities</SelectItem>
+                                  <SelectItem value="Study Materials">Study Materials</SelectItem>
+                                  <SelectItem value="Printing & Notes">Printing & Notes</SelectItem>
+                                  <SelectItem value="Maintenance">Maintenance</SelectItem>
+                                  <SelectItem value="Marketing">Marketing</SelectItem>
+                                  <SelectItem value="Events & Activities">Events & Activities</SelectItem>
+                                  <SelectItem value="Miscellaneous">Miscellaneous</SelectItem>
+                                </SelectContent>
+                              </Select>
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="amount">Amount (₹) *</Label>
@@ -692,10 +603,10 @@ const AdminFeeManagement = () => {
                               />
                             </div>
                             <div className="space-y-2">
-                              <Label htmlFor="subcategory">Subcategory (Optional)</Label>
+                              <Label htmlFor="subcategory">Description (Optional)</Label>
                               <Input
                                 id="subcategory"
-                                placeholder="e.g., Monthly"
+                                placeholder="e.g., Monthly payment"
                                 value={newExpenditure.subcategory}
                                 onChange={(e) => setNewExpenditure({ ...newExpenditure, subcategory: e.target.value })}
                               />
@@ -708,32 +619,54 @@ const AdminFeeManagement = () => {
                       </Dialog>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    {expenditures.map((exp) => (
-                      <div key={exp.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                        <div>
-                          <p className="font-medium">{exp.category}</p>
-                          {exp.subcategory && (
-                            <p className="text-sm text-muted-foreground">{exp.subcategory}</p>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">₹{exp.amount.toLocaleString()}</span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteExpenditure(exp.id)}
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {expenditures.map((exp, index) => {
+                        const colors = [
+                          { bg: "from-blue-50 to-indigo-50", border: "border-blue-200", text: "text-blue-700", icon: "bg-blue-100" },
+                          { bg: "from-purple-50 to-pink-50", border: "border-purple-200", text: "text-purple-700", icon: "bg-purple-100" },
+                          { bg: "from-amber-50 to-orange-50", border: "border-amber-200", text: "text-amber-700", icon: "bg-amber-100" },
+                          { bg: "from-emerald-50 to-teal-50", border: "border-emerald-200", text: "text-emerald-700", icon: "bg-emerald-100" },
+                          { bg: "from-rose-50 to-red-50", border: "border-rose-200", text: "text-rose-700", icon: "bg-rose-100" },
+                        ];
+                        const color = colors[index % colors.length];
+                        
+                        return (
+                          <Card key={exp.id} className={`bg-gradient-to-br ${color.bg} border ${color.border} overflow-hidden`}>
+                            <CardContent className="p-4">
+                              <div className="flex items-start justify-between">
+                                <div className={`p-2 rounded-lg ${color.icon}`}>
+                                  <Wallet className={`h-5 w-5 ${color.text}`} />
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 hover:bg-destructive/10"
+                                  onClick={() => handleDeleteExpenditure(exp.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </div>
+                              <div className="mt-3">
+                                <p className={`font-semibold ${color.text}`}>{exp.category}</p>
+                                {exp.subcategory && (
+                                  <p className="text-sm text-muted-foreground">{exp.subcategory}</p>
+                                )}
+                                <p className="text-2xl font-bold mt-2">₹{exp.amount.toLocaleString()}</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                    </div>
 
-                    <div className="pt-4 border-t mt-4">
+                    <div className="mt-6 p-4 bg-primary/5 rounded-xl border border-primary/20">
                       <div className="flex justify-between items-center">
-                        <span className="font-semibold">Total Expenditure</span>
-                        <span className="text-xl font-bold text-primary">
+                        <div>
+                          <span className="text-muted-foreground">Total Monthly Expenditure</span>
+                          <p className="text-sm text-muted-foreground">All operational costs combined</p>
+                        </div>
+                        <span className="text-3xl font-bold text-primary">
                           ₹{totalExpenditure.toLocaleString()}
                         </span>
                       </div>
