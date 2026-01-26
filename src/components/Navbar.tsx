@@ -33,10 +33,10 @@ const Navbar = () => {
       };
     }
     
-    // Primary program pages - use warm orange theme
+    // Primary program pages - use warm orange/coral gradient theme
     if (path.includes('/programs/primary') || path === '/primary-program') {
       return {
-        bg: "bg-[hsl(25,85%,50%)]/80",
+        bg: "bg-gradient-to-r from-[hsl(25,85%,55%)] via-[hsl(30,80%,52%)] to-[hsl(20,90%,50%)]",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(25,85%,50%)]",
