@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Login from "./pages/Login";
+import ActivateAccount from "./pages/ActivateAccount";
 import StudentDashboard from "./pages/StudentDashboard";
 import StudentProfile from "./pages/StudentProfile";
 import TeacherProfile from "./pages/TeacherProfile";
@@ -69,6 +70,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/activate-account" element={<ActivateAccount />} />
           <Route path="/programs/primary" element={<PrimaryProgram />} />
           <Route path="/programs/primary/batch/:standard" element={<BatchDetails />} />
           <Route path="/programs/middle" element={<MiddleProgram />} />
