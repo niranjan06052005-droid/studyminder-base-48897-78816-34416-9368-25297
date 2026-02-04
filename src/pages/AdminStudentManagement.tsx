@@ -18,7 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Home, LogOut, Search, Eye } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Home, LogOut, Search, Eye, KeyRound } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import AdminSidebar from "@/components/AdminSidebar";
 
 interface Student {
@@ -31,7 +41,11 @@ interface Student {
 const AdminStudentManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStandard, setSelectedStandard] = useState("all");
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
+  const [resetStudentId, setResetStudentId] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const students: Student[] = [
     { id: "STU001", name: "Raj Kumar", std: "10th - A", contact: "98765-43210" },
@@ -53,6 +67,39 @@ const AdminStudentManagement = () => {
     const matchesStandard = selectedStandard === "all" || student.std.toLowerCase().includes(selectedStandard.toLowerCase());
     return matchesSearch && matchesStandard;
   });
+
+  const handleResetPassword = () => {
+    if (!resetStudentId.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a Student ID",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const student = students.find(s => s.id.toLowerCase() === resetStudentId.trim().toLowerCase());
+    if (!student) {
+      toast({
+        title: "Student Not Found",
+        description: `No student found with ID: ${resetStudentId}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsResetting(true);
+    // Simulate sending reset link
+    setTimeout(() => {
+      toast({
+        title: "Password Reset Link Sent",
+        description: `A password reset link has been sent to ${student.name}'s registered email.`,
+      });
+      setIsResetting(false);
+      setResetDialogOpen(false);
+      setResetStudentId("");
+    }, 1500);
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -114,6 +161,15 @@ const AdminStudentManagement = () => {
               </Select>
               
               <Button 
+                variant="outline"
+                className="whitespace-nowrap"
+                onClick={() => setResetDialogOpen(true)}
+              >
+                <KeyRound className="h-4 w-4 mr-2" />
+                Reset Password
+              </Button>
+              
+              <Button 
                 className="whitespace-nowrap bg-[#3b82f6] hover:bg-[#2563eb] text-white"
                 onClick={() => navigate("/admin/students/add")}
               >
@@ -157,6 +213,47 @@ const AdminStudentManagement = () => {
           </Card>
         </main>
       </div>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Reset Student Password</DialogTitle>
+            <DialogDescription>
+              Enter the Student ID to send a password reset link to their registered email.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="student-id">Student ID</Label>
+              <Input
+                id="student-id"
+                placeholder="e.g., STU001"
+                value={resetStudentId}
+                onChange={(e) => setResetStudentId(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setResetDialogOpen(false);
+                setResetStudentId("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleResetPassword}
+              disabled={isResetting}
+              className="bg-[#3b82f6] hover:bg-[#2563eb] text-white"
+            >
+              {isResetting ? "Sending..." : "Send Reset Link"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
