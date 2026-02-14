@@ -47,7 +47,7 @@ const Navbar = () => {
     // About page - deep blue/teal theme
     if (path === '/about') {
       return {
-        bg: "bg-[hsl(210,60%,20%)]/80",
+        bg: "bg-[hsl(210,55%,35%)]/80",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(210,60%,20%)]",
@@ -58,7 +58,7 @@ const Navbar = () => {
     // Activities page - purple/pink gradient theme
     if (path === '/activities') {
       return {
-        bg: "bg-gradient-to-r from-[hsl(270,50%,35%)] via-[hsl(280,45%,40%)] to-[hsl(320,50%,40%)]/90",
+        bg: "bg-gradient-to-r from-[hsl(270,45%,50%)] via-[hsl(280,40%,55%)] to-[hsl(320,45%,55%)]/85",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(270,50%,35%)]",
@@ -69,7 +69,7 @@ const Navbar = () => {
     // Results page - golden amber theme
     if (path === '/results') {
       return {
-        bg: "bg-gradient-to-r from-[hsl(40,85%,45%)] via-[hsl(35,80%,48%)] to-[hsl(25,85%,45%)]/90",
+        bg: "bg-gradient-to-r from-[hsl(40,80%,55%)] via-[hsl(35,75%,58%)] to-[hsl(25,80%,55%)]/85",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(35,80%,40%)]",
