@@ -44,13 +44,35 @@ const Navbar = () => {
       };
     }
     
-    // About, Activities, Results pages - use dark navy blue theme
-    if (path === '/about' || path === '/activities' || path === '/results') {
+    // About page - deep blue/teal theme
+    if (path === '/about') {
       return {
         bg: "bg-[hsl(210,60%,20%)]/80",
         text: "text-white",
         textMuted: "text-white/90",
         buttonBg: "bg-white text-[hsl(210,60%,20%)]",
+        buttonHover: "hover:bg-white/90"
+      };
+    }
+
+    // Activities page - purple/pink gradient theme
+    if (path === '/activities') {
+      return {
+        bg: "bg-gradient-to-r from-[hsl(270,50%,35%)] via-[hsl(280,45%,40%)] to-[hsl(320,50%,40%)]/90",
+        text: "text-white",
+        textMuted: "text-white/90",
+        buttonBg: "bg-white text-[hsl(270,50%,35%)]",
+        buttonHover: "hover:bg-white/90"
+      };
+    }
+
+    // Results page - golden amber theme
+    if (path === '/results') {
+      return {
+        bg: "bg-gradient-to-r from-[hsl(40,85%,45%)] via-[hsl(35,80%,48%)] to-[hsl(25,85%,45%)]/90",
+        text: "text-white",
+        textMuted: "text-white/90",
+        buttonBg: "bg-white text-[hsl(35,80%,40%)]",
         buttonHover: "hover:bg-white/90"
       };
     }
