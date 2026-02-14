@@ -22,24 +22,24 @@ const Navbar = () => {
       };
     }
     
-    // Middle program pages - use indigo theme
+    // Middle program pages - match hero gradient (secondary teal to accent amber)
     if (path.includes('/programs/middle') || path === '/middle-program') {
       return {
-        bg: "bg-[hsl(240,50%,40%)]/80",
+        bg: "bg-gradient-to-r from-[hsl(184,65%,35%)] via-[hsl(160,50%,38%)] to-[hsl(38,80%,50%)]/85",
         text: "text-white",
         textMuted: "text-white/90",
-        buttonBg: "bg-white text-[hsl(240,50%,40%)]",
+        buttonBg: "bg-white text-[hsl(184,65%,35%)]",
         buttonHover: "hover:bg-white/90"
       };
     }
     
-    // Primary program pages - use warm orange/coral gradient theme
+    // Primary program pages - match hero gradient (primary navy to secondary teal)
     if (path.includes('/programs/primary') || path === '/primary-program') {
       return {
-        bg: "bg-gradient-to-r from-[hsl(25,85%,55%)] via-[hsl(30,80%,52%)] to-[hsl(20,90%,50%)]",
+        bg: "bg-gradient-to-r from-[hsl(210,70%,30%)] via-[hsl(200,60%,32%)] to-[hsl(184,65%,35%)]/85",
         text: "text-white",
         textMuted: "text-white/90",
-        buttonBg: "bg-white text-[hsl(25,85%,50%)]",
+        buttonBg: "bg-white text-[hsl(210,70%,30%)]",
         buttonHover: "hover:bg-white/90"
       };
     }
