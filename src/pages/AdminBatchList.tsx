@@ -15,62 +15,58 @@ interface Batch {
   attendance: number;
 }
 
-interface AcademicYear {
-  year: string;
-  isActive: boolean;
+interface ProgramSection {
+  name: string;
+  label: string;
+  icon: string;
   batches: Batch[];
 }
 
+interface AcademicYear {
+  year: string;
+  isActive: boolean;
+  programs: ProgramSection[];
+}
+
+const buildPrograms = (yearPrefix: string, offset: number): ProgramSection[] => [
+  {
+    name: "primary",
+    label: "Primary",
+    icon: "🟢",
+    batches: [
+      { id: `${yearPrefix}-1a`, standard: "1st Standard", section: "A", students: 35 - offset, teachers: 3, attendance: 94 - offset },
+      { id: `${yearPrefix}-2a`, standard: "2nd Standard", section: "A", students: 38 - offset, teachers: 3, attendance: 92 - offset },
+      { id: `${yearPrefix}-3a`, standard: "3rd Standard", section: "A", students: 40 - offset, teachers: 4, attendance: 91 - offset },
+      { id: `${yearPrefix}-4a`, standard: "4th Standard", section: "A", students: 36 - offset, teachers: 4, attendance: 93 - offset },
+    ],
+  },
+  {
+    name: "middle",
+    label: "Middle",
+    icon: "🔵",
+    batches: [
+      { id: `${yearPrefix}-5a`, standard: "5th Standard", section: "A", students: 42 - offset, teachers: 4, attendance: 90 - offset },
+      { id: `${yearPrefix}-6a`, standard: "6th Standard", section: "A", students: 39 - offset, teachers: 5, attendance: 89 - offset },
+      { id: `${yearPrefix}-7a`, standard: "7th Standard", section: "A", students: 41 - offset, teachers: 5, attendance: 91 - offset },
+    ],
+  },
+  {
+    name: "secondary",
+    label: "Secondary",
+    icon: "🟠",
+    batches: [
+      { id: `${yearPrefix}-8a`, standard: "8th Standard", section: "A", students: 37 - offset, teachers: 5, attendance: 88 - offset },
+      { id: `${yearPrefix}-9a`, standard: "9th Standard", section: "A", students: 44 - offset, teachers: 6, attendance: 92 - offset },
+      { id: `${yearPrefix}-10a`, standard: "10th Standard", section: "A", students: 46 - offset, teachers: 6, attendance: 95 - offset },
+    ],
+  },
+];
+
 const AdminBatchList = () => {
   const academicYears: AcademicYear[] = [
-    {
-      year: "2025-2026",
-      isActive: true,
-      batches: [
-        { id: "25-1a", standard: "1st Standard", section: "A", students: 35, teachers: 3, attendance: 94 },
-        { id: "25-2a", standard: "2nd Standard", section: "A", students: 38, teachers: 3, attendance: 92 },
-        { id: "25-3a", standard: "3rd Standard", section: "A", students: 40, teachers: 4, attendance: 91 },
-        { id: "25-4a", standard: "4th Standard", section: "A", students: 36, teachers: 4, attendance: 93 },
-        { id: "25-5a", standard: "5th Standard", section: "A", students: 42, teachers: 4, attendance: 90 },
-        { id: "25-6a", standard: "6th Standard", section: "A", students: 39, teachers: 5, attendance: 89 },
-        { id: "25-7a", standard: "7th Standard", section: "A", students: 41, teachers: 5, attendance: 91 },
-        { id: "25-8a", standard: "8th Standard", section: "A", students: 37, teachers: 5, attendance: 88 },
-        { id: "25-9a", standard: "9th Standard", section: "A", students: 44, teachers: 6, attendance: 92 },
-        { id: "25-10a", standard: "10th Standard", section: "A", students: 46, teachers: 6, attendance: 95 },
-      ],
-    },
-    {
-      year: "2024-2025",
-      isActive: false,
-      batches: [
-        { id: "24-1a", standard: "1st Standard", section: "A", students: 33, teachers: 3, attendance: 91 },
-        { id: "24-2a", standard: "2nd Standard", section: "A", students: 36, teachers: 3, attendance: 90 },
-        { id: "24-3a", standard: "3rd Standard", section: "A", students: 38, teachers: 4, attendance: 89 },
-        { id: "24-4a", standard: "4th Standard", section: "A", students: 34, teachers: 4, attendance: 92 },
-        { id: "24-5a", standard: "5th Standard", section: "A", students: 40, teachers: 4, attendance: 88 },
-        { id: "24-6a", standard: "6th Standard", section: "A", students: 37, teachers: 5, attendance: 87 },
-        { id: "24-7a", standard: "7th Standard", section: "A", students: 39, teachers: 5, attendance: 90 },
-        { id: "24-8a", standard: "8th Standard", section: "A", students: 35, teachers: 5, attendance: 86 },
-        { id: "24-9a", standard: "9th Standard", section: "A", students: 42, teachers: 6, attendance: 91 },
-        { id: "24-10a", standard: "10th Standard", section: "A", students: 43, teachers: 6, attendance: 93 },
-      ],
-    },
-    {
-      year: "2023-2024",
-      isActive: false,
-      batches: [
-        { id: "23-1a", standard: "1st Standard", section: "A", students: 30, teachers: 3, attendance: 89 },
-        { id: "23-2a", standard: "2nd Standard", section: "A", students: 32, teachers: 3, attendance: 88 },
-        { id: "23-3a", standard: "3rd Standard", section: "A", students: 35, teachers: 4, attendance: 87 },
-        { id: "23-4a", standard: "4th Standard", section: "A", students: 31, teachers: 4, attendance: 90 },
-        { id: "23-5a", standard: "5th Standard", section: "A", students: 37, teachers: 4, attendance: 86 },
-        { id: "23-6a", standard: "6th Standard", section: "A", students: 34, teachers: 5, attendance: 85 },
-        { id: "23-7a", standard: "7th Standard", section: "A", students: 36, teachers: 5, attendance: 88 },
-        { id: "23-8a", standard: "8th Standard", section: "A", students: 33, teachers: 5, attendance: 84 },
-        { id: "23-9a", standard: "9th Standard", section: "A", students: 40, teachers: 6, attendance: 89 },
-        { id: "23-10a", standard: "10th Standard", section: "A", students: 41, teachers: 6, attendance: 91 },
-      ],
-    },
+    { year: "2025-2026", isActive: true, programs: buildPrograms("25", 0) },
+    { year: "2024-2025", isActive: false, programs: buildPrograms("24", 2) },
+    { year: "2023-2024", isActive: false, programs: buildPrograms("23", 5) },
   ];
 
   const [expandedYears, setExpandedYears] = useState<string[]>(["2025-2026"]);
