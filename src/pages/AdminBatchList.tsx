@@ -130,12 +130,13 @@ const AdminBatchList = () => {
           <div className="space-y-6">
             {academicYears.map((academicYear) => {
               const isExpanded = expandedYears.includes(academicYear.year);
-              const totalStudents = getTotalStudents(academicYear.batches);
-              const avgAttendance = getAvgAttendance(academicYear.batches);
+              const allBatches = academicYear.programs.flatMap((p) => p.batches);
+              const totalStudents = getTotalStudents(allBatches);
+              const avgAttendance = getAvgAttendance(allBatches);
 
               return (
                 <div key={academicYear.year} className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
-                  {/* Year Header - Clickable */}
+                  {/* Year Header */}
                   <button
                     onClick={() => toggleYear(academicYear.year)}
                     className="w-full flex items-center justify-between px-6 py-5 hover:bg-muted/30 transition-colors group"
@@ -156,13 +157,12 @@ const AdminBatchList = () => {
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground mt-0.5">
-                          {academicYear.batches.length} batches · {totalStudents} students · {avgAttendance}% avg attendance
+                          {allBatches.length} batches · {totalStudents} students · {avgAttendance}% avg attendance
                         </p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-6">
-                      {/* Summary Stats */}
                       <div className="hidden md:flex items-center gap-5 mr-4">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Users className="h-4 w-4 text-primary" />
@@ -176,7 +176,6 @@ const AdminBatchList = () => {
                           <span>Attendance</span>
                         </div>
                       </div>
-
                       <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                         {isExpanded ? (
                           <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -187,55 +186,77 @@ const AdminBatchList = () => {
                     </div>
                   </button>
 
-                  {/* Expanded Batch Cards */}
+                  {/* Expanded: Program Sections */}
                   {isExpanded && (
-                    <div className="px-6 pb-6 pt-2 border-t border-border/50 bg-muted/20">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                        {academicYear.batches.map((batch) => (
-                          <Card
-                            key={batch.id}
-                            className="group hover:shadow-md hover:border-primary/30 transition-all duration-200 bg-card"
-                          >
-                            <CardHeader className="pb-2 pt-4 px-4">
-                              <div className="flex items-center gap-2 mb-1">
-                                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                                  <GraduationCap className="h-4 w-4 text-primary" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <CardTitle className="text-sm font-bold truncate">{batch.standard}</CardTitle>
-                                  <CardDescription className="text-[11px]">Section {batch.section}</CardDescription>
-                                </div>
-                              </div>
-                            </CardHeader>
-                            <CardContent className="px-4 pb-4 space-y-3">
-                              <div className="grid grid-cols-3 gap-1.5">
-                                <div className="text-center p-1.5 bg-primary/5 rounded-md">
-                                  <div className="text-base font-bold text-primary">{batch.students}</div>
-                                  <div className="text-[9px] text-muted-foreground">Students</div>
-                                </div>
-                                <div className="text-center p-1.5 bg-secondary/10 rounded-md">
-                                  <div className="text-base font-bold text-secondary">{batch.teachers}</div>
-                                  <div className="text-[9px] text-muted-foreground">Teachers</div>
-                                </div>
-                                <div className="text-center p-1.5 bg-success/10 rounded-md">
-                                  <div className="text-base font-bold text-success">{batch.attendance}%</div>
-                                  <div className="text-[9px] text-muted-foreground">Attend.</div>
-                                </div>
-                              </div>
+                    <div className="border-t border-border/50 bg-muted/10">
+                      {academicYear.programs.map((program) => {
+                        const programStudents = getTotalStudents(program.batches);
+                        const programAttendance = getAvgAttendance(program.batches);
 
-                              <Link to={`/admin/batches/${batch.id}`} className="block">
-                                <Button
-                                  className="w-full text-xs group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                                  variant="outline"
-                                  size="sm"
-                                >
-                                  View Details
-                                </Button>
-                              </Link>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </div>
+                        return (
+                          <div key={program.name} className="border-b border-border/30 last:border-b-0">
+                            {/* Program Header */}
+                            <div className="px-6 py-3 flex items-center gap-3 bg-muted/30">
+                              <span className="text-lg">{program.icon}</span>
+                              <h4 className="text-sm font-bold text-foreground uppercase tracking-wide">
+                                {program.label} Section
+                              </h4>
+                              <Badge variant="outline" className="text-[10px] ml-1">
+                                {program.batches.length} batches · {programStudents} students · {programAttendance}% att.
+                              </Badge>
+                            </div>
+
+                            {/* Batch Cards Grid */}
+                            <div className="px-6 pb-5 pt-3">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                {program.batches.map((batch) => (
+                                  <Card
+                                    key={batch.id}
+                                    className="group hover:shadow-md hover:border-primary/30 transition-all duration-200 bg-card"
+                                  >
+                                    <CardHeader className="pb-2 pt-4 px-4">
+                                      <div className="flex items-center gap-2 mb-1">
+                                        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                          <GraduationCap className="h-4 w-4 text-primary" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <CardTitle className="text-sm font-bold truncate">{batch.standard}</CardTitle>
+                                          <CardDescription className="text-[11px]">Section {batch.section}</CardDescription>
+                                        </div>
+                                      </div>
+                                    </CardHeader>
+                                    <CardContent className="px-4 pb-4 space-y-3">
+                                      <div className="grid grid-cols-3 gap-1.5">
+                                        <div className="text-center p-1.5 bg-primary/5 rounded-md">
+                                          <div className="text-base font-bold text-primary">{batch.students}</div>
+                                          <div className="text-[9px] text-muted-foreground">Students</div>
+                                        </div>
+                                        <div className="text-center p-1.5 bg-secondary/10 rounded-md">
+                                          <div className="text-base font-bold text-secondary">{batch.teachers}</div>
+                                          <div className="text-[9px] text-muted-foreground">Teachers</div>
+                                        </div>
+                                        <div className="text-center p-1.5 bg-success/10 rounded-md">
+                                          <div className="text-base font-bold text-success">{batch.attendance}%</div>
+                                          <div className="text-[9px] text-muted-foreground">Attend.</div>
+                                        </div>
+                                      </div>
+                                      <Link to={`/admin/batches/${batch.id}`} className="block">
+                                        <Button
+                                          className="w-full text-xs group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                                          variant="outline"
+                                          size="sm"
+                                        >
+                                          View Details
+                                        </Button>
+                                      </Link>
+                                    </CardContent>
+                                  </Card>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
