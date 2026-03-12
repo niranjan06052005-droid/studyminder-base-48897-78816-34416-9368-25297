@@ -116,7 +116,7 @@ const AdminBatchList = () => {
           <div className="mb-8 flex justify-between items-center animate-fade-in">
             <div>
               <h2 className="text-3xl font-bold text-primary mb-2">All Batches</h2>
-              <p className="text-muted-foreground">Manage and monitor batches grouped by academic year</p>
+              <p className="text-muted-foreground">Manage and monitor batches grouped by academic year & program</p>
             </div>
             <Link to="/admin/batches/create">
               <Button className="bg-primary hover:bg-primary/90">
