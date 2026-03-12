@@ -1,20 +1,93 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogOut, Home, Plus, Users, UserCheck, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { LogOut, Home, Plus, Users, UserCheck, TrendingUp, ChevronDown, ChevronRight, Calendar, GraduationCap } from "lucide-react";
 import AdminSidebar from "@/components/AdminSidebar";
 
+interface Batch {
+  id: string;
+  standard: string;
+  section: string;
+  students: number;
+  teachers: number;
+  attendance: number;
+}
+
+interface AcademicYear {
+  year: string;
+  isActive: boolean;
+  batches: Batch[];
+}
+
 const AdminBatchList = () => {
-  const batches = [
-    { id: "9a", name: "9th Standard - Section A", students: 42, teachers: 5, attendance: 91 },
-    { id: "9b", name: "9th Standard - Section B", students: 38, teachers: 5, attendance: 88 },
-    { id: "10a", name: "10th Standard - Section A", students: 45, teachers: 6, attendance: 93 },
-    { id: "10b", name: "10th Standard - Section B", students: 40, teachers: 6, attendance: 89 },
-    { id: "11sci", name: "11th Standard - Science", students: 35, teachers: 7, attendance: 90 },
-    { id: "11com", name: "11th Standard - Commerce", students: 28, teachers: 5, attendance: 87 },
-    { id: "12sci", name: "12th Standard - Science", students: 32, teachers: 7, attendance: 92 },
-    { id: "12com", name: "12th Standard - Commerce", students: 25, teachers: 5, attendance: 86 },
+  const academicYears: AcademicYear[] = [
+    {
+      year: "2025-2026",
+      isActive: true,
+      batches: [
+        { id: "25-1a", standard: "1st Standard", section: "A", students: 35, teachers: 3, attendance: 94 },
+        { id: "25-2a", standard: "2nd Standard", section: "A", students: 38, teachers: 3, attendance: 92 },
+        { id: "25-3a", standard: "3rd Standard", section: "A", students: 40, teachers: 4, attendance: 91 },
+        { id: "25-4a", standard: "4th Standard", section: "A", students: 36, teachers: 4, attendance: 93 },
+        { id: "25-5a", standard: "5th Standard", section: "A", students: 42, teachers: 4, attendance: 90 },
+        { id: "25-6a", standard: "6th Standard", section: "A", students: 39, teachers: 5, attendance: 89 },
+        { id: "25-7a", standard: "7th Standard", section: "A", students: 41, teachers: 5, attendance: 91 },
+        { id: "25-8a", standard: "8th Standard", section: "A", students: 37, teachers: 5, attendance: 88 },
+        { id: "25-9a", standard: "9th Standard", section: "A", students: 44, teachers: 6, attendance: 92 },
+        { id: "25-10a", standard: "10th Standard", section: "A", students: 46, teachers: 6, attendance: 95 },
+      ],
+    },
+    {
+      year: "2024-2025",
+      isActive: false,
+      batches: [
+        { id: "24-1a", standard: "1st Standard", section: "A", students: 33, teachers: 3, attendance: 91 },
+        { id: "24-2a", standard: "2nd Standard", section: "A", students: 36, teachers: 3, attendance: 90 },
+        { id: "24-3a", standard: "3rd Standard", section: "A", students: 38, teachers: 4, attendance: 89 },
+        { id: "24-4a", standard: "4th Standard", section: "A", students: 34, teachers: 4, attendance: 92 },
+        { id: "24-5a", standard: "5th Standard", section: "A", students: 40, teachers: 4, attendance: 88 },
+        { id: "24-6a", standard: "6th Standard", section: "A", students: 37, teachers: 5, attendance: 87 },
+        { id: "24-7a", standard: "7th Standard", section: "A", students: 39, teachers: 5, attendance: 90 },
+        { id: "24-8a", standard: "8th Standard", section: "A", students: 35, teachers: 5, attendance: 86 },
+        { id: "24-9a", standard: "9th Standard", section: "A", students: 42, teachers: 6, attendance: 91 },
+        { id: "24-10a", standard: "10th Standard", section: "A", students: 43, teachers: 6, attendance: 93 },
+      ],
+    },
+    {
+      year: "2023-2024",
+      isActive: false,
+      batches: [
+        { id: "23-1a", standard: "1st Standard", section: "A", students: 30, teachers: 3, attendance: 89 },
+        { id: "23-2a", standard: "2nd Standard", section: "A", students: 32, teachers: 3, attendance: 88 },
+        { id: "23-3a", standard: "3rd Standard", section: "A", students: 35, teachers: 4, attendance: 87 },
+        { id: "23-4a", standard: "4th Standard", section: "A", students: 31, teachers: 4, attendance: 90 },
+        { id: "23-5a", standard: "5th Standard", section: "A", students: 37, teachers: 4, attendance: 86 },
+        { id: "23-6a", standard: "6th Standard", section: "A", students: 34, teachers: 5, attendance: 85 },
+        { id: "23-7a", standard: "7th Standard", section: "A", students: 36, teachers: 5, attendance: 88 },
+        { id: "23-8a", standard: "8th Standard", section: "A", students: 33, teachers: 5, attendance: 84 },
+        { id: "23-9a", standard: "9th Standard", section: "A", students: 40, teachers: 6, attendance: 89 },
+        { id: "23-10a", standard: "10th Standard", section: "A", students: 41, teachers: 6, attendance: 91 },
+      ],
+    },
   ];
+
+  const [expandedYears, setExpandedYears] = useState<string[]>(["2025-2026"]);
+
+  const toggleYear = (year: string) => {
+    setExpandedYears((prev) =>
+      prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]
+    );
+  };
+
+  const getTotalStudents = (batches: Batch[]) => batches.reduce((sum, b) => sum + b.students, 0);
+  const getTotalTeachers = (batches: Batch[]) => {
+    const unique = new Set(batches.flatMap((b) => Array.from({ length: b.teachers }, (_, i) => `${b.id}-${i}`)));
+    return batches.reduce((sum, b) => sum + b.teachers, 0);
+  };
+  const getAvgAttendance = (batches: Batch[]) =>
+    Math.round(batches.reduce((sum, b) => sum + b.attendance, 0) / batches.length);
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -43,11 +116,11 @@ const AdminBatchList = () => {
         </header>
 
         <main className="flex-1 p-8">
-          {/* Header Section */}
+          {/* Page Header */}
           <div className="mb-8 flex justify-between items-center animate-fade-in">
             <div>
               <h2 className="text-3xl font-bold text-primary mb-2">All Batches</h2>
-              <p className="text-muted-foreground">Manage and monitor all coaching batches</p>
+              <p className="text-muted-foreground">Manage and monitor batches grouped by academic year</p>
             </div>
             <Link to="/admin/batches/create">
               <Button className="bg-primary hover:bg-primary/90">
@@ -57,41 +130,121 @@ const AdminBatchList = () => {
             </Link>
           </div>
 
-          {/* Batch Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {batches.map((batch) => (
-              <Card key={batch.id} className="gradient-card hover:shadow-lg transition-all">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg truncate">{batch.name}</CardTitle>
-                  <CardDescription className="text-xs">Active Batch</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="text-center p-2 bg-primary/5 rounded-lg min-w-0">
-                      <Users className="h-4 w-4 text-primary mx-auto mb-1 flex-shrink-0" />
-                      <div className="text-xl font-bold text-primary">{batch.students}</div>
-                      <div className="text-[10px] text-muted-foreground truncate">Students</div>
+          {/* Academic Year Groups */}
+          <div className="space-y-6">
+            {academicYears.map((academicYear) => {
+              const isExpanded = expandedYears.includes(academicYear.year);
+              const totalStudents = getTotalStudents(academicYear.batches);
+              const avgAttendance = getAvgAttendance(academicYear.batches);
+
+              return (
+                <div key={academicYear.year} className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
+                  {/* Year Header - Clickable */}
+                  <button
+                    onClick={() => toggleYear(academicYear.year)}
+                    className="w-full flex items-center justify-between px-6 py-5 hover:bg-muted/30 transition-colors group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-primary/10 text-primary">
+                        <Calendar className="h-5 w-5" />
+                      </div>
+                      <div className="text-left">
+                        <div className="flex items-center gap-3">
+                          <h3 className="text-xl font-bold text-foreground">
+                            Academic Year {academicYear.year}
+                          </h3>
+                          {academicYear.isActive && (
+                            <Badge className="bg-success/15 text-success border-success/30 text-xs font-medium">
+                              Current Year
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-0.5">
+                          {academicYear.batches.length} batches · {totalStudents} students · {avgAttendance}% avg attendance
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-center p-2 bg-secondary/5 rounded-lg min-w-0">
-                      <UserCheck className="h-4 w-4 text-secondary mx-auto mb-1 flex-shrink-0" />
-                      <div className="text-xl font-bold text-secondary">{batch.teachers}</div>
-                      <div className="text-[10px] text-muted-foreground truncate">Teachers</div>
+
+                    <div className="flex items-center gap-6">
+                      {/* Summary Stats */}
+                      <div className="hidden md:flex items-center gap-5 mr-4">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Users className="h-4 w-4 text-primary" />
+                          <span className="font-semibold text-foreground">{totalStudents}</span>
+                          <span>Students</span>
+                        </div>
+                        <div className="h-4 w-px bg-border" />
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <TrendingUp className="h-4 w-4 text-success" />
+                          <span className="font-semibold text-foreground">{avgAttendance}%</span>
+                          <span>Attendance</span>
+                        </div>
+                      </div>
+
+                      <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                        {isExpanded ? (
+                          <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        )}
+                      </div>
                     </div>
-                    <div className="text-center p-2 bg-success/5 rounded-lg min-w-0">
-                      <TrendingUp className="h-4 w-4 text-success mx-auto mb-1 flex-shrink-0" />
-                      <div className="text-xl font-bold text-success">{batch.attendance}%</div>
-                      <div className="text-[10px] text-muted-foreground truncate">Attend.</div>
+                  </button>
+
+                  {/* Expanded Batch Cards */}
+                  {isExpanded && (
+                    <div className="px-6 pb-6 pt-2 border-t border-border/50 bg-muted/20">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+                        {academicYear.batches.map((batch) => (
+                          <Card
+                            key={batch.id}
+                            className="group hover:shadow-md hover:border-primary/30 transition-all duration-200 bg-card"
+                          >
+                            <CardHeader className="pb-2 pt-4 px-4">
+                              <div className="flex items-center gap-2 mb-1">
+                                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                  <GraduationCap className="h-4 w-4 text-primary" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <CardTitle className="text-sm font-bold truncate">{batch.standard}</CardTitle>
+                                  <CardDescription className="text-[11px]">Section {batch.section}</CardDescription>
+                                </div>
+                              </div>
+                            </CardHeader>
+                            <CardContent className="px-4 pb-4 space-y-3">
+                              <div className="grid grid-cols-3 gap-1.5">
+                                <div className="text-center p-1.5 bg-primary/5 rounded-md">
+                                  <div className="text-base font-bold text-primary">{batch.students}</div>
+                                  <div className="text-[9px] text-muted-foreground">Students</div>
+                                </div>
+                                <div className="text-center p-1.5 bg-secondary/10 rounded-md">
+                                  <div className="text-base font-bold text-secondary">{batch.teachers}</div>
+                                  <div className="text-[9px] text-muted-foreground">Teachers</div>
+                                </div>
+                                <div className="text-center p-1.5 bg-success/10 rounded-md">
+                                  <div className="text-base font-bold text-success">{batch.attendance}%</div>
+                                  <div className="text-[9px] text-muted-foreground">Attend.</div>
+                                </div>
+                              </div>
+
+                              <Link to={`/admin/batches/${batch.id}`} className="block">
+                                <Button
+                                  className="w-full text-xs group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                                  variant="outline"
+                                  size="sm"
+                                >
+                                  View Details
+                                </Button>
+                              </Link>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  
-                  <Link to={`/admin/batches/${batch.id}`} className="block">
-                    <Button className="w-full" variant="outline" size="sm">
-                      View Details
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
+                  )}
+                </div>
+              );
+            })}
           </div>
         </main>
       </div>
