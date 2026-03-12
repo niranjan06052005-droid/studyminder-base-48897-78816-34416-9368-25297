@@ -15,62 +15,58 @@ interface Batch {
   attendance: number;
 }
 
-interface AcademicYear {
-  year: string;
-  isActive: boolean;
+interface ProgramSection {
+  name: string;
+  label: string;
+  icon: string;
   batches: Batch[];
 }
 
+interface AcademicYear {
+  year: string;
+  isActive: boolean;
+  programs: ProgramSection[];
+}
+
+const buildPrograms = (yearPrefix: string, offset: number): ProgramSection[] => [
+  {
+    name: "primary",
+    label: "Primary",
+    icon: "🟢",
+    batches: [
+      { id: `${yearPrefix}-1a`, standard: "1st Standard", section: "A", students: 35 - offset, teachers: 3, attendance: 94 - offset },
+      { id: `${yearPrefix}-2a`, standard: "2nd Standard", section: "A", students: 38 - offset, teachers: 3, attendance: 92 - offset },
+      { id: `${yearPrefix}-3a`, standard: "3rd Standard", section: "A", students: 40 - offset, teachers: 4, attendance: 91 - offset },
+      { id: `${yearPrefix}-4a`, standard: "4th Standard", section: "A", students: 36 - offset, teachers: 4, attendance: 93 - offset },
+    ],
+  },
+  {
+    name: "middle",
+    label: "Middle",
+    icon: "🔵",
+    batches: [
+      { id: `${yearPrefix}-5a`, standard: "5th Standard", section: "A", students: 42 - offset, teachers: 4, attendance: 90 - offset },
+      { id: `${yearPrefix}-6a`, standard: "6th Standard", section: "A", students: 39 - offset, teachers: 5, attendance: 89 - offset },
+      { id: `${yearPrefix}-7a`, standard: "7th Standard", section: "A", students: 41 - offset, teachers: 5, attendance: 91 - offset },
+    ],
+  },
+  {
+    name: "secondary",
+    label: "Secondary",
+    icon: "🟠",
+    batches: [
+      { id: `${yearPrefix}-8a`, standard: "8th Standard", section: "A", students: 37 - offset, teachers: 5, attendance: 88 - offset },
+      { id: `${yearPrefix}-9a`, standard: "9th Standard", section: "A", students: 44 - offset, teachers: 6, attendance: 92 - offset },
+      { id: `${yearPrefix}-10a`, standard: "10th Standard", section: "A", students: 46 - offset, teachers: 6, attendance: 95 - offset },
+    ],
+  },
+];
+
 const AdminBatchList = () => {
   const academicYears: AcademicYear[] = [
-    {
-      year: "2025-2026",
-      isActive: true,
-      batches: [
-        { id: "25-1a", standard: "1st Standard", section: "A", students: 35, teachers: 3, attendance: 94 },
-        { id: "25-2a", standard: "2nd Standard", section: "A", students: 38, teachers: 3, attendance: 92 },
-        { id: "25-3a", standard: "3rd Standard", section: "A", students: 40, teachers: 4, attendance: 91 },
-        { id: "25-4a", standard: "4th Standard", section: "A", students: 36, teachers: 4, attendance: 93 },
-        { id: "25-5a", standard: "5th Standard", section: "A", students: 42, teachers: 4, attendance: 90 },
-        { id: "25-6a", standard: "6th Standard", section: "A", students: 39, teachers: 5, attendance: 89 },
-        { id: "25-7a", standard: "7th Standard", section: "A", students: 41, teachers: 5, attendance: 91 },
-        { id: "25-8a", standard: "8th Standard", section: "A", students: 37, teachers: 5, attendance: 88 },
-        { id: "25-9a", standard: "9th Standard", section: "A", students: 44, teachers: 6, attendance: 92 },
-        { id: "25-10a", standard: "10th Standard", section: "A", students: 46, teachers: 6, attendance: 95 },
-      ],
-    },
-    {
-      year: "2024-2025",
-      isActive: false,
-      batches: [
-        { id: "24-1a", standard: "1st Standard", section: "A", students: 33, teachers: 3, attendance: 91 },
-        { id: "24-2a", standard: "2nd Standard", section: "A", students: 36, teachers: 3, attendance: 90 },
-        { id: "24-3a", standard: "3rd Standard", section: "A", students: 38, teachers: 4, attendance: 89 },
-        { id: "24-4a", standard: "4th Standard", section: "A", students: 34, teachers: 4, attendance: 92 },
-        { id: "24-5a", standard: "5th Standard", section: "A", students: 40, teachers: 4, attendance: 88 },
-        { id: "24-6a", standard: "6th Standard", section: "A", students: 37, teachers: 5, attendance: 87 },
-        { id: "24-7a", standard: "7th Standard", section: "A", students: 39, teachers: 5, attendance: 90 },
-        { id: "24-8a", standard: "8th Standard", section: "A", students: 35, teachers: 5, attendance: 86 },
-        { id: "24-9a", standard: "9th Standard", section: "A", students: 42, teachers: 6, attendance: 91 },
-        { id: "24-10a", standard: "10th Standard", section: "A", students: 43, teachers: 6, attendance: 93 },
-      ],
-    },
-    {
-      year: "2023-2024",
-      isActive: false,
-      batches: [
-        { id: "23-1a", standard: "1st Standard", section: "A", students: 30, teachers: 3, attendance: 89 },
-        { id: "23-2a", standard: "2nd Standard", section: "A", students: 32, teachers: 3, attendance: 88 },
-        { id: "23-3a", standard: "3rd Standard", section: "A", students: 35, teachers: 4, attendance: 87 },
-        { id: "23-4a", standard: "4th Standard", section: "A", students: 31, teachers: 4, attendance: 90 },
-        { id: "23-5a", standard: "5th Standard", section: "A", students: 37, teachers: 4, attendance: 86 },
-        { id: "23-6a", standard: "6th Standard", section: "A", students: 34, teachers: 5, attendance: 85 },
-        { id: "23-7a", standard: "7th Standard", section: "A", students: 36, teachers: 5, attendance: 88 },
-        { id: "23-8a", standard: "8th Standard", section: "A", students: 33, teachers: 5, attendance: 84 },
-        { id: "23-9a", standard: "9th Standard", section: "A", students: 40, teachers: 6, attendance: 89 },
-        { id: "23-10a", standard: "10th Standard", section: "A", students: 41, teachers: 6, attendance: 91 },
-      ],
-    },
+    { year: "2025-2026", isActive: true, programs: buildPrograms("25", 0) },
+    { year: "2024-2025", isActive: false, programs: buildPrograms("24", 2) },
+    { year: "2023-2024", isActive: false, programs: buildPrograms("23", 5) },
   ];
 
   const [expandedYears, setExpandedYears] = useState<string[]>(["2025-2026"]);
@@ -120,7 +116,7 @@ const AdminBatchList = () => {
           <div className="mb-8 flex justify-between items-center animate-fade-in">
             <div>
               <h2 className="text-3xl font-bold text-primary mb-2">All Batches</h2>
-              <p className="text-muted-foreground">Manage and monitor batches grouped by academic year</p>
+              <p className="text-muted-foreground">Manage and monitor batches grouped by academic year & program</p>
             </div>
             <Link to="/admin/batches/create">
               <Button className="bg-primary hover:bg-primary/90">
@@ -134,12 +130,13 @@ const AdminBatchList = () => {
           <div className="space-y-6">
             {academicYears.map((academicYear) => {
               const isExpanded = expandedYears.includes(academicYear.year);
-              const totalStudents = getTotalStudents(academicYear.batches);
-              const avgAttendance = getAvgAttendance(academicYear.batches);
+              const allBatches = academicYear.programs.flatMap((p) => p.batches);
+              const totalStudents = getTotalStudents(allBatches);
+              const avgAttendance = getAvgAttendance(allBatches);
 
               return (
                 <div key={academicYear.year} className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
-                  {/* Year Header - Clickable */}
+                  {/* Year Header */}
                   <button
                     onClick={() => toggleYear(academicYear.year)}
                     className="w-full flex items-center justify-between px-6 py-5 hover:bg-muted/30 transition-colors group"
@@ -160,13 +157,12 @@ const AdminBatchList = () => {
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground mt-0.5">
-                          {academicYear.batches.length} batches · {totalStudents} students · {avgAttendance}% avg attendance
+                          {allBatches.length} batches · {totalStudents} students · {avgAttendance}% avg attendance
                         </p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-6">
-                      {/* Summary Stats */}
                       <div className="hidden md:flex items-center gap-5 mr-4">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Users className="h-4 w-4 text-primary" />
@@ -180,7 +176,6 @@ const AdminBatchList = () => {
                           <span>Attendance</span>
                         </div>
                       </div>
-
                       <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                         {isExpanded ? (
                           <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -191,55 +186,77 @@ const AdminBatchList = () => {
                     </div>
                   </button>
 
-                  {/* Expanded Batch Cards */}
+                  {/* Expanded: Program Sections */}
                   {isExpanded && (
-                    <div className="px-6 pb-6 pt-2 border-t border-border/50 bg-muted/20">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                        {academicYear.batches.map((batch) => (
-                          <Card
-                            key={batch.id}
-                            className="group hover:shadow-md hover:border-primary/30 transition-all duration-200 bg-card"
-                          >
-                            <CardHeader className="pb-2 pt-4 px-4">
-                              <div className="flex items-center gap-2 mb-1">
-                                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                                  <GraduationCap className="h-4 w-4 text-primary" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <CardTitle className="text-sm font-bold truncate">{batch.standard}</CardTitle>
-                                  <CardDescription className="text-[11px]">Section {batch.section}</CardDescription>
-                                </div>
-                              </div>
-                            </CardHeader>
-                            <CardContent className="px-4 pb-4 space-y-3">
-                              <div className="grid grid-cols-3 gap-1.5">
-                                <div className="text-center p-1.5 bg-primary/5 rounded-md">
-                                  <div className="text-base font-bold text-primary">{batch.students}</div>
-                                  <div className="text-[9px] text-muted-foreground">Students</div>
-                                </div>
-                                <div className="text-center p-1.5 bg-secondary/10 rounded-md">
-                                  <div className="text-base font-bold text-secondary">{batch.teachers}</div>
-                                  <div className="text-[9px] text-muted-foreground">Teachers</div>
-                                </div>
-                                <div className="text-center p-1.5 bg-success/10 rounded-md">
-                                  <div className="text-base font-bold text-success">{batch.attendance}%</div>
-                                  <div className="text-[9px] text-muted-foreground">Attend.</div>
-                                </div>
-                              </div>
+                    <div className="border-t border-border/50 bg-muted/10">
+                      {academicYear.programs.map((program) => {
+                        const programStudents = getTotalStudents(program.batches);
+                        const programAttendance = getAvgAttendance(program.batches);
 
-                              <Link to={`/admin/batches/${batch.id}`} className="block">
-                                <Button
-                                  className="w-full text-xs group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                                  variant="outline"
-                                  size="sm"
-                                >
-                                  View Details
-                                </Button>
-                              </Link>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </div>
+                        return (
+                          <div key={program.name} className="border-b border-border/30 last:border-b-0">
+                            {/* Program Header */}
+                            <div className="px-6 py-3 flex items-center gap-3 bg-muted/30">
+                              <span className="text-lg">{program.icon}</span>
+                              <h4 className="text-sm font-bold text-foreground uppercase tracking-wide">
+                                {program.label} Section
+                              </h4>
+                              <Badge variant="outline" className="text-[10px] ml-1">
+                                {program.batches.length} batches · {programStudents} students · {programAttendance}% att.
+                              </Badge>
+                            </div>
+
+                            {/* Batch Cards Grid */}
+                            <div className="px-6 pb-5 pt-3">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                {program.batches.map((batch) => (
+                                  <Card
+                                    key={batch.id}
+                                    className="group hover:shadow-md hover:border-primary/30 transition-all duration-200 bg-card"
+                                  >
+                                    <CardHeader className="pb-2 pt-4 px-4">
+                                      <div className="flex items-center gap-2 mb-1">
+                                        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                          <GraduationCap className="h-4 w-4 text-primary" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <CardTitle className="text-sm font-bold truncate">{batch.standard}</CardTitle>
+                                          <CardDescription className="text-[11px]">Section {batch.section}</CardDescription>
+                                        </div>
+                                      </div>
+                                    </CardHeader>
+                                    <CardContent className="px-4 pb-4 space-y-3">
+                                      <div className="grid grid-cols-3 gap-1.5">
+                                        <div className="text-center p-1.5 bg-primary/5 rounded-md">
+                                          <div className="text-base font-bold text-primary">{batch.students}</div>
+                                          <div className="text-[9px] text-muted-foreground">Students</div>
+                                        </div>
+                                        <div className="text-center p-1.5 bg-secondary/10 rounded-md">
+                                          <div className="text-base font-bold text-secondary">{batch.teachers}</div>
+                                          <div className="text-[9px] text-muted-foreground">Teachers</div>
+                                        </div>
+                                        <div className="text-center p-1.5 bg-success/10 rounded-md">
+                                          <div className="text-base font-bold text-success">{batch.attendance}%</div>
+                                          <div className="text-[9px] text-muted-foreground">Attend.</div>
+                                        </div>
+                                      </div>
+                                      <Link to={`/admin/batches/${batch.id}`} className="block">
+                                        <Button
+                                          className="w-full text-xs group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                                          variant="outline"
+                                          size="sm"
+                                        >
+                                          View Details
+                                        </Button>
+                                      </Link>
+                                    </CardContent>
+                                  </Card>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
