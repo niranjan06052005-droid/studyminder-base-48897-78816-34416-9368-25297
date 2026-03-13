@@ -83,18 +83,25 @@ const App = () => (
           <Route path="/get-started" element={<GetStarted />} />
           <Route path="/activities" element={<Activities />} />
           <Route path="/results" element={<Results />} />
-          <Route path="/student/dashboard" element={<StudentDashboard />} />
-          <Route path="/student/profile" element={<StudentProfile />} />
-          <Route path="/student/report" element={<StudentReport />} />
-          <Route path="/student/attendance" element={<StudentAttendance />} />
-          <Route path="/student/leaderboard" element={<StudentLeaderboard />} />
-          <Route path="/student/fees" element={<StudentFees />} />
-          <Route path="/student/notices" element={<StudentNotices />} />
-          <Route path="/student/notice/:noticeId" element={<StudentNoticeDetail />} />
-          <Route path="/student/subject-notice/:noticeId" element={<StudentSubjectNoticeDetail />} />
-          <Route path="/student/subject/:subject" element={<SubjectPage />} />
-          <Route path="/student/subject/:subject/notes/:noteId" element={<ChapterNotes />} />
-          <Route path="/student/subject/:subject/video/:videoId" element={<ChapterVideo />} />
+          {/* Student routes wrapped with StandardProvider */}
+          <Route path="/student/*" element={
+            <StudentStandardProvider>
+              <Routes>
+                <Route path="dashboard" element={<StudentDashboard />} />
+                <Route path="profile" element={<StudentProfile />} />
+                <Route path="report" element={<StudentReport />} />
+                <Route path="attendance" element={<StudentAttendance />} />
+                <Route path="leaderboard" element={<StudentLeaderboard />} />
+                <Route path="fees" element={<StudentFees />} />
+                <Route path="notices" element={<StudentNotices />} />
+                <Route path="notice/:noticeId" element={<StudentNoticeDetail />} />
+                <Route path="subject-notice/:noticeId" element={<StudentSubjectNoticeDetail />} />
+                <Route path="subject/:subject" element={<SubjectPage />} />
+                <Route path="subject/:subject/notes/:noteId" element={<ChapterNotes />} />
+                <Route path="subject/:subject/video/:videoId" element={<ChapterVideo />} />
+              </Routes>
+            </StudentStandardProvider>
+          } />
           <Route path="/teacher/profile" element={<TeacherProfile />} />
           <Route path="/teacher/classes" element={<TeacherClassList />} />
           <Route path="/teacher/class/:classId" element={<TeacherBatchView />} />
