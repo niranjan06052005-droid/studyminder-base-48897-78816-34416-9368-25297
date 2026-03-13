@@ -171,51 +171,7 @@ const StudentNotices = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Sidebar */}
-      <aside className="w-64 bg-[#0f2c4a] text-white flex flex-col fixed left-0 top-0 h-screen overflow-y-auto z-40">
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-xl font-bold">Student Portal</h1>
-        </div>
-        
-        <nav className="flex-1 p-4">
-          <div className="space-y-2">
-            <Link to="/student/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Home className="h-5 w-5" />
-              <span>Home</span>
-            </Link>
-            
-            <Link to="/student/profile" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Users className="h-5 w-5" />
-              <span>My Profile</span>
-            </Link>
-            
-            <Link to="/student/report" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <ClipboardList className="h-5 w-5" />
-              <span>My Report</span>
-            </Link>
-            
-            <Link to="/student/attendance" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <FileText className="h-5 w-5" />
-              <span>Attendance</span>
-            </Link>
-            
-            <Link to="/student/leaderboard" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <Trophy className="h-5 w-5" />
-              <span>Leaderboard</span>
-            </Link>
-            
-            <Link to="/student/fees" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors">
-              <DollarSign className="h-5 w-5" />
-              <span>Fees</span>
-            </Link>
-            
-            <Link to="/student/notices" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
-              <Bell className="h-5 w-5" />
-              <span>Notices</span>
-            </Link>
-          </div>
-        </nav>
-      </aside>
+      <StudentSidebar />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col ml-64">

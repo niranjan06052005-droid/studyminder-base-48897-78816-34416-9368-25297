@@ -40,7 +40,7 @@ const StudentDashboard = () => {
           {/* Welcome Section */}
           <div className="mb-8 animate-fade-in">
             <h2 className="text-3xl font-bold text-primary mb-2">Welcome back, Raj Kumar!</h2>
-            <p className="text-muted-foreground">Here's what's happening with your studies</p>
+            <p className="text-muted-foreground">Viewing data for <span className="font-semibold text-primary">{selectedStandard}th Standard</span></p>
           </div>
 
           {/* My Subjects Section */}
