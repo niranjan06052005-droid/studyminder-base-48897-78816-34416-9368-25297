@@ -5,7 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Banknote, CheckCircle, XCircle, Clock, AlertCircle } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Banknote, CheckCircle, XCircle, Clock, AlertCircle, MoreVertical, Mail } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface CashDepositRequest {
@@ -20,10 +21,10 @@ interface CashDepositRequest {
 
 const CashDepositTab = () => {
   const [requests, setRequests] = useState<CashDepositRequest[]>([
-    { id: "cd-1", studentName: "Raj Kumar", standard: "9th - A", installment: "September Installment", amount: 5000, requestDate: "2025-09-10", status: "pending" },
-    { id: "cd-2", studentName: "Sneha Patil", standard: "7th - B", installment: "June Installment", amount: 4500, requestDate: "2025-06-12", status: "approved" },
-    { id: "cd-3", studentName: "Amit Sharma", standard: "10th - A", installment: "September Installment", amount: 6000, requestDate: "2025-09-08", status: "pending" },
-    { id: "cd-4", studentName: "Priya Desai", standard: "8th - A", installment: "June Installment", amount: 5000, requestDate: "2025-06-14", status: "rejected" },
+    { id: "cd-1", studentName: "Raj Kumar", standard: "9th - A", installment: "September", amount: 5000, requestDate: "2025-09-10", status: "pending" },
+    { id: "cd-2", studentName: "Sneha Patil", standard: "7th - B", installment: "June", amount: 4500, requestDate: "2025-06-12", status: "approved" },
+    { id: "cd-3", studentName: "Amit Sharma", standard: "10th - A", installment: "September", amount: 6000, requestDate: "2025-09-08", status: "pending" },
+    { id: "cd-4", studentName: "Priya Desai", standard: "8th - A", installment: "June", amount: 5000, requestDate: "2025-06-14", status: "rejected" },
   ]);
 
   const [confirmDialog, setConfirmDialog] = useState<{ open: boolean; id: string; action: "approve" | "reject" }>({ open: false, id: "", action: "approve" });
@@ -39,6 +40,13 @@ const CashDepositTab = () => {
     toast({
       title: action === "approve" ? "Cash Deposit Confirmed" : "Request Rejected",
       description: action === "approve" ? "Payment has been marked as successful." : "The cash deposit request has been rejected.",
+    });
+  };
+
+  const handleEmailReminder = (req: CashDepositRequest) => {
+    toast({
+      title: "Reminder Email Sent",
+      description: `Email reminder sent to ${req.studentName} for ₹${req.amount.toLocaleString()} cash deposit.`,
     });
   };
 
@@ -126,18 +134,25 @@ const CashDepositTab = () => {
                   <TableCell>{new Date(req.requestDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</TableCell>
                   <TableCell>{getStatusBadge(req.status)}</TableCell>
                   <TableCell className="text-right">
-                    {req.status === "pending" ? (
-                      <div className="flex gap-2 justify-end">
-                        <Button size="sm" variant="default" onClick={() => setConfirmDialog({ open: true, id: req.id, action: "approve" })}>
-                          <CheckCircle className="h-3.5 w-3.5 mr-1" />Approve
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreVertical className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => setConfirmDialog({ open: true, id: req.id, action: "reject" })}>
-                          <XCircle className="h-3.5 w-3.5 mr-1" />Reject
-                        </Button>
-                      </div>
-                    ) : (
-                      <span className="text-sm text-muted-foreground">—</span>
-                    )}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {req.status === "pending" && (
+                          <DropdownMenuItem onClick={() => setConfirmDialog({ open: true, id: req.id, action: "approve" })}>
+                            <CheckCircle className="h-4 w-4 mr-2 text-emerald-600" />
+                            Approve
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem onClick={() => handleEmailReminder(req)}>
+                          <Mail className="h-4 w-4 mr-2 text-blue-600" />
+                          Email Reminder
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
@@ -150,18 +165,14 @@ const CashDepositTab = () => {
       <Dialog open={confirmDialog.open} onOpenChange={(open) => !open && setConfirmDialog({ open: false, id: "", action: "approve" })}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{confirmDialog.action === "approve" ? "Confirm Cash Deposit" : "Reject Request"}</DialogTitle>
+            <DialogTitle>Confirm Cash Deposit</DialogTitle>
             <DialogDescription>
-              {confirmDialog.action === "approve"
-                ? "Has the student deposited the cash? This will mark the installment as paid."
-                : "Are you sure you want to reject this cash deposit request?"}
+              Has the student deposited the cash? This will mark the installment as paid.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 pt-2">
             <Button variant="outline" className="flex-1" onClick={() => setConfirmDialog({ open: false, id: "", action: "approve" })}>Cancel</Button>
-            <Button className="flex-1" variant={confirmDialog.action === "approve" ? "default" : "destructive"} onClick={handleAction}>
-              {confirmDialog.action === "approve" ? "Confirm Payment" : "Reject Request"}
-            </Button>
+            <Button className="flex-1" onClick={handleAction}>Confirm Payment</Button>
           </div>
         </DialogContent>
       </Dialog>
