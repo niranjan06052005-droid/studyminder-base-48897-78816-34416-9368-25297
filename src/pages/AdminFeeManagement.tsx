@@ -12,6 +12,7 @@ import { AlertCircle, TrendingUp, Home, LogOut, Plus, Trash2, GraduationCap, Use
 import { Link } from "react-router-dom";
 import AdminSidebar from "@/components/AdminSidebar";
 import { toast } from "@/hooks/use-toast";
+import CashDepositTab from "@/components/CashDepositTab";
 
 const AdminFeeManagement = () => {
   const [timePeriod, setTimePeriod] = useState("Yearly");
@@ -251,6 +252,7 @@ const AdminFeeManagement = () => {
           <Tabs defaultValue="collection" className="w-full">
             <TabsList className="mb-6">
               <TabsTrigger value="collection">Collection</TabsTrigger>
+              <TabsTrigger value="cash-deposit">Cash Deposit</TabsTrigger>
               <TabsTrigger value="delay-fees">Delay Fees</TabsTrigger>
               <TabsTrigger value="expenditure">Expenditure</TabsTrigger>
             </TabsList>
@@ -426,6 +428,11 @@ const AdminFeeManagement = () => {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            {/* Cash Deposit Tab */}
+            <TabsContent value="cash-deposit">
+              <CashDepositTab />
             </TabsContent>
 
             {/* Delay Fees Tab */}

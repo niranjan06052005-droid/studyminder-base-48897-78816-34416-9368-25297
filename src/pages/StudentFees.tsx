@@ -2,334 +2,208 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import StudentSidebar from "@/components/StudentSidebar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   DollarSign, 
-  Bell, 
   LogOut, 
   Home, 
-  Trophy, 
-  Award, 
-  Smile, 
-  ClipboardList, 
-  FileText,
   CreditCard,
   Download,
   Calendar,
   CheckCircle,
   AlertCircle,
-  BookOpen
+  Banknote,
+  Clock,
+  Smartphone
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useStudentStandard } from "@/hooks/useStudentStandard";
+
+type PaymentMethod = "card" | "gpay" | "phonepe" | "cash";
+
+interface Installment {
+  id: string;
+  label: string;
+  amount: number;
+  dueDate: string;
+  status: "paid" | "pending" | "upcoming" | "cd_pending";
+  paidDate?: string;
+  transactionId?: string;
+  paymentMethod?: string;
+}
 
 const StudentFees = () => {
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
-  const [selectedInstallment, setSelectedInstallment] = useState("full");
+  const { selectedStandard } = useStudentStandard();
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>("card");
+  const [payingInstallmentId, setPayingInstallmentId] = useState<string | null>(null);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
-  const [customAmount, setCustomAmount] = useState("");
-  const [customAmountError, setCustomAmountError] = useState("");
 
-  // Mock data
-  const pendingFees = {
-    totalAmount: 45000,
-    paidAmount: 15000,
-    remainingAmount: 30000,
-    dueDate: "2025-11-30",
-    academicYear: "2024-25"
+  // Mock: Admin-assigned plan for the student
+  const assignedPlan = {
+    planName: "3 Months Plan",
+    totalFee: 15000,
+    academicYear: "2025-2026",
+    standard: `${selectedStandard}th Standard`,
   };
 
-  const paymentHistory = [
-    {
-      id: 1,
-      date: "2024-08-15",
-      amount: 15000,
-      method: "UPI - GPay",
-      status: "completed",
-      receiptUrl: "#receipt-1",
-      installment: "1st Installment",
-      transactionId: "TXN001234567"
-    },
-    {
-      id: 2,
-      date: "2024-05-10",
-      amount: 20000,
-      method: "Card",
-      status: "completed",
-      receiptUrl: "#receipt-2",
-      installment: "Admission Fee",
-      transactionId: "TXN001234566"
-    }
-  ];
+  const [installments, setInstallments] = useState<Installment[]>([
+    { id: "inst-1", label: "June Installment", amount: 5000, dueDate: "2025-06-15", status: "paid", paidDate: "2025-06-10", transactionId: "TXN20250610001", paymentMethod: "UPI - GPay" },
+    { id: "inst-2", label: "September Installment", amount: 5000, dueDate: "2025-09-15", status: "pending" },
+    { id: "inst-3", label: "December Installment", amount: 5000, dueDate: "2025-12-15", status: "upcoming" },
+  ]);
 
-  const installmentOptions = [
-    { id: "full", label: "One-time Payment", amount: 30000, description: "Pay full amount at once (5% discount)" },
-    { id: "3months", label: "3 Months Plan", amount: 10500, description: "₹10,500 x 3 months" },
-    { id: "6months", label: "6 Months Plan", amount: 5250, description: "₹5,250 x 6 months" },
-    { id: "9months", label: "9 Months Plan", amount: 3500, description: "₹3,500 x 9 months" },
-    { id: "custom", label: "Custom Amount", amount: 0, description: "Enter your desired amount" }
-  ];
+  const paidAmount = installments.filter(i => i.status === "paid").reduce((s, i) => s + i.amount, 0);
+  const remainingAmount = assignedPlan.totalFee - paidAmount;
 
-  const handleCustomAmountChange = (value: string) => {
-    setCustomAmount(value);
-    setCustomAmountError("");
-    
-    const amount = parseFloat(value);
-    if (isNaN(amount) || amount <= 0) {
-      setCustomAmountError("Please enter a valid amount");
-    } else if (amount > pendingFees.remainingAmount) {
-      setCustomAmountError(`Amount cannot exceed remaining balance of ₹${pendingFees.remainingAmount.toLocaleString()}`);
-    } else if (amount < 100) {
-      setCustomAmountError("Minimum amount is ₹100");
-    }
-  };
-
-  const getPaymentAmount = () => {
-    if (selectedInstallment === "custom") {
-      return parseFloat(customAmount) || 0;
-    }
-    return installmentOptions.find(opt => opt.id === selectedInstallment)?.amount || 0;
+  const openPayDialog = (installmentId: string) => {
+    setPayingInstallmentId(installmentId);
+    setSelectedPaymentMethod("card");
+    setIsPaymentDialogOpen(true);
   };
 
   const handlePayment = () => {
-    const amount = getPaymentAmount();
-    
-    if (selectedInstallment === "custom" && customAmountError) {
-      toast({
-        title: "Invalid Amount",
-        description: customAmountError,
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    toast({
-      title: "Payment Initiated",
-      description: `Processing payment of ₹${amount.toLocaleString()} via ${selectedPaymentMethod.toUpperCase()}...`,
-    });
-    
-    setTimeout(() => {
+    if (!payingInstallmentId) return;
+    const inst = installments.find(i => i.id === payingInstallmentId);
+    if (!inst) return;
+
+    if (selectedPaymentMethod === "cash") {
+      // Cash Deposit: send request to admin
+      setInstallments(prev => prev.map(i => i.id === payingInstallmentId ? { ...i, status: "cd_pending" as const } : i));
       setIsPaymentDialogOpen(false);
-      setCustomAmount("");
       toast({
-        title: "Payment Successful!",
-        description: "Your payment has been processed successfully. Receipt has been sent to your email.",
+        title: "Cash Deposit Request Sent",
+        description: `Request for ₹${inst.amount.toLocaleString()} sent to admin. Please deposit the cash and wait for confirmation.`,
       });
-    }, 2000);
+    } else {
+      // Online payment
+      toast({
+        title: "Payment Initiated",
+        description: `Processing ₹${inst.amount.toLocaleString()} via ${selectedPaymentMethod.toUpperCase()}...`,
+      });
+      setTimeout(() => {
+        setInstallments(prev => prev.map(i => i.id === payingInstallmentId ? {
+          ...i, status: "paid" as const, paidDate: new Date().toISOString().split("T")[0],
+          transactionId: `TXN${Date.now()}`, paymentMethod: selectedPaymentMethod === "gpay" ? "UPI - GPay" : selectedPaymentMethod === "phonepe" ? "UPI - PhonePe" : "Debit/Credit Card"
+        } : i));
+        setIsPaymentDialogOpen(false);
+        toast({ title: "Payment Successful!", description: "Receipt has been sent to your email." });
+      }, 2000);
+    }
   };
+
+  const getStatusBadge = (status: Installment["status"]) => {
+    switch (status) {
+      case "paid": return <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300"><CheckCircle className="h-3 w-3 mr-1" />Paid</Badge>;
+      case "pending": return <Badge className="bg-amber-100 text-amber-700 border-amber-300"><AlertCircle className="h-3 w-3 mr-1" />Due</Badge>;
+      case "upcoming": return <Badge className="bg-blue-100 text-blue-700 border-blue-300"><Clock className="h-3 w-3 mr-1" />Upcoming</Badge>;
+      case "cd_pending": return <Badge className="bg-purple-100 text-purple-700 border-purple-300"><Banknote className="h-3 w-3 mr-1" />CD Pending</Badge>;
+    }
+  };
+
+  const payableInstallment = installments.find(i => i.id === payingInstallmentId);
 
   return (
     <div className="min-h-screen bg-background">
       <StudentSidebar />
-
-      {/* Main Content */}
       <div className="flex-1 flex flex-col ml-64">
-        {/* Header */}
         <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
           <div className="px-8 py-4 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-primary">Fee Management</h1>
             <div className="flex gap-2">
-              <Link to="/">
-                <Button variant="outline" size="sm">
-                  <Home className="h-4 w-4 mr-2" />
-                  Home
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button variant="outline" size="sm">
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </Button>
-              </Link>
+              <Link to="/"><Button variant="outline" size="sm"><Home className="h-4 w-4 mr-2" />Home</Button></Link>
+              <Link to="/login"><Button variant="outline" size="sm"><LogOut className="h-4 w-4 mr-2" />Logout</Button></Link>
             </div>
           </div>
         </header>
 
         <main className="flex-1 p-8">
-          <Tabs defaultValue="pending" className="space-y-6">
+          <Tabs defaultValue="installments" className="space-y-6">
             <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="pending">Pending Fees</TabsTrigger>
+              <TabsTrigger value="installments">My Installments</TabsTrigger>
               <TabsTrigger value="history">Payment History</TabsTrigger>
             </TabsList>
 
-            {/* Pending Fees Tab */}
-            <TabsContent value="pending" className="space-y-6">
-              {/* Fee Summary Card */}
-              <Card className="border-2">
+            {/* Installments Tab */}
+            <TabsContent value="installments" className="space-y-6">
+              {/* Plan Summary */}
+              <Card className="border-2 border-primary/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <AlertCircle className="h-5 w-5 text-destructive" />
-                    Pending Fee Summary
+                    <DollarSign className="h-5 w-5 text-primary" />
+                    Your Fee Plan
                   </CardTitle>
-                  <CardDescription>Academic Year: {pendingFees.academicYear}</CardDescription>
+                  <CardDescription>{assignedPlan.standard} — Academic Year {assignedPlan.academicYear}</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="space-y-1">
+                      <p className="text-sm text-muted-foreground">Plan</p>
+                      <p className="text-lg font-bold text-primary">{assignedPlan.planName}</p>
+                    </div>
+                    <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">Total Fee</p>
-                      <p className="text-2xl font-bold">₹{pendingFees.totalAmount.toLocaleString()}</p>
+                      <p className="text-lg font-bold">₹{assignedPlan.totalFee.toLocaleString()}</p>
                     </div>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">Paid Amount</p>
-                      <p className="text-2xl font-bold text-success">₹{pendingFees.paidAmount.toLocaleString()}</p>
+                    <div className="space-y-1">
+                      <p className="text-sm text-muted-foreground">Paid</p>
+                      <p className="text-lg font-bold text-emerald-600">₹{paidAmount.toLocaleString()}</p>
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <p className="text-sm text-muted-foreground">Remaining</p>
-                      <p className="text-2xl font-bold text-destructive">₹{pendingFees.remainingAmount.toLocaleString()}</p>
+                      <p className="text-lg font-bold text-destructive">₹{remainingAmount.toLocaleString()}</p>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-                    <Calendar className="h-5 w-5 text-destructive" />
-                    <span className="text-sm">
-                      <span className="font-semibold">Due Date:</span> {new Date(pendingFees.dueDate).toLocaleDateString('en-IN', { 
-                        day: 'numeric', 
-                        month: 'long', 
-                        year: 'numeric' 
-                      })}
-                    </span>
+                  {/* Progress bar */}
+                  <div className="mt-4">
+                    <div className="flex justify-between text-xs text-muted-foreground mb-1">
+                      <span>Payment Progress</span>
+                      <span>{Math.round((paidAmount / assignedPlan.totalFee) * 100)}%</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2.5">
+                      <div className="h-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all" style={{ width: `${(paidAmount / assignedPlan.totalFee) * 100}%` }} />
+                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Payment Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Make Payment</CardTitle>
-                  <CardDescription>Choose your payment plan and method</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Installment Options */}
-                  <div className="space-y-3">
-                    <Label className="text-base font-semibold">Select Payment Plan</Label>
-                    <RadioGroup value={selectedInstallment} onValueChange={setSelectedInstallment}>
-                      {installmentOptions.map((option) => (
-                        <div key={option.id} className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
-                          <RadioGroupItem value={option.id} id={option.id} />
-                          <Label htmlFor={option.id} className="flex-1 cursor-pointer">
-                            <div className="flex justify-between items-start">
-                              <div className="flex-1">
-                                <p className="font-semibold">{option.label}</p>
-                                <p className="text-sm text-muted-foreground">{option.description}</p>
-                                {option.id === "custom" && selectedInstallment === "custom" && (
-                                  <div className="mt-3 space-y-2" onClick={(e) => e.stopPropagation()}>
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-sm font-medium">₹</span>
-                                      <input
-                                        type="number"
-                                        placeholder="Enter amount"
-                                        value={customAmount}
-                                        onChange={(e) => handleCustomAmountChange(e.target.value)}
-                                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                        min="100"
-                                        max={pendingFees.remainingAmount}
-                                      />
-                                    </div>
-                                    {customAmountError && (
-                                      <p className="text-xs text-destructive">{customAmountError}</p>
-                                    )}
-                                    <p className="text-xs text-muted-foreground">
-                                      Max: ₹{pendingFees.remainingAmount.toLocaleString()} | Min: ₹100
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
-                              {option.id !== "custom" && (
-                                <Badge variant="secondary" className="ml-2">
-                                  ₹{option.amount.toLocaleString()}
-                                </Badge>
-                              )}
-                            </div>
-                          </Label>
+              {/* Installment Cards */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Installment Schedule</h3>
+                {installments.map((inst) => (
+                  <Card key={inst.id} className={`border-2 ${inst.status === "paid" ? "border-emerald-200 bg-emerald-50/30" : inst.status === "cd_pending" ? "border-purple-200 bg-purple-50/30" : inst.status === "pending" ? "border-amber-200" : "border-border"}`}>
+                    <CardContent className="p-5">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div className="flex-1 space-y-1">
+                          <div className="flex items-center gap-3">
+                            <h4 className="font-semibold text-lg">{inst.label}</h4>
+                            {getStatusBadge(inst.status)}
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />Due: {new Date(inst.dueDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                            {inst.paidDate && <span>Paid: {new Date(inst.paidDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>}
+                          </div>
+                          {inst.transactionId && <p className="text-xs text-muted-foreground font-mono">Txn: {inst.transactionId}</p>}
+                          {inst.status === "cd_pending" && <p className="text-xs text-purple-600 font-medium">Cash deposit request sent to admin. Awaiting confirmation.</p>}
                         </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
-
-                  {/* Payment Methods */}
-                  <div className="space-y-3">
-                    <Label className="text-base font-semibold">Select Payment Method</Label>
-                    <RadioGroup value={selectedPaymentMethod} onValueChange={setSelectedPaymentMethod}>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
-                          <RadioGroupItem value="card" id="card" />
-                          <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer">
-                            <CreditCard className="h-5 w-5" />
-                            <span>Debit/Credit Card</span>
-                          </Label>
-                        </div>
-                        
-                        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
-                          <RadioGroupItem value="gpay" id="gpay" />
-                          <Label htmlFor="gpay" className="flex items-center gap-2 cursor-pointer">
-                            <DollarSign className="h-5 w-5" />
-                            <span>Google Pay</span>
-                          </Label>
-                        </div>
-                        
-                        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
-                          <RadioGroupItem value="phonepe" id="phonepe" />
-                          <Label htmlFor="phonepe" className="flex items-center gap-2 cursor-pointer">
-                            <DollarSign className="h-5 w-5" />
-                            <span>PhonePe</span>
-                          </Label>
+                        <div className="flex items-center gap-4">
+                          <p className="text-2xl font-bold">₹{inst.amount.toLocaleString()}</p>
+                          {(inst.status === "pending" || inst.status === "upcoming") && (
+                            <Button onClick={() => openPayDialog(inst.id)} className="min-w-[100px]">Pay Now</Button>
+                          )}
+                          {inst.status === "paid" && (
+                            <Button variant="outline" size="sm"><Download className="h-4 w-4 mr-1" />Receipt</Button>
+                          )}
                         </div>
                       </div>
-                    </RadioGroup>
-                  </div>
-
-                  <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button 
-                        size="lg" 
-                        className="w-full"
-                        disabled={selectedInstallment === "custom" && (!!customAmountError || !customAmount)}
-                      >
-                        Proceed to Payment
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Confirm Payment</DialogTitle>
-                        <DialogDescription>
-                          Please review your payment details before proceeding
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="space-y-4 py-4">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Payment Plan:</span>
-                          <span className="font-semibold">
-                            {installmentOptions.find(opt => opt.id === selectedInstallment)?.label}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Amount:</span>
-                          <span className="text-xl font-bold text-primary">
-                            ₹{getPaymentAmount().toLocaleString()}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Payment Method:</span>
-                          <span className="font-semibold capitalize">{selectedPaymentMethod}</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-3">
-                        <Button variant="outline" className="flex-1" onClick={() => setIsPaymentDialogOpen(false)}>
-                          Cancel
-                        </Button>
-                        <Button className="flex-1" onClick={handlePayment}>
-                          Confirm & Pay
-                        </Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
 
             {/* Payment History Tab */}
@@ -337,37 +211,27 @@ const StudentFees = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>Payment History</CardTitle>
-                  <CardDescription>View all your completed transactions</CardDescription>
+                  <CardDescription>All completed transactions</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {paymentHistory.map((payment) => (
-                      <Card key={payment.id} className="border-2">
-                        <CardContent className="p-6">
+                    {installments.filter(i => i.status === "paid").map((payment) => (
+                      <Card key={payment.id} className="border">
+                        <CardContent className="p-5">
                           <div className="flex flex-col md:flex-row justify-between gap-4">
-                            <div className="space-y-3 flex-1">
+                            <div className="space-y-2 flex-1">
                               <div className="flex items-center gap-2">
-                                <Badge variant="secondary" className="bg-success/10 text-success border-success/30">
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                  {payment.status.toUpperCase()}
-                                </Badge>
-                                <span className="text-sm text-muted-foreground">
-                                  {new Date(payment.date).toLocaleDateString('en-IN', { 
-                                    day: 'numeric', 
-                                    month: 'long', 
-                                    year: 'numeric' 
-                                  })}
-                                </span>
+                                <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300"><CheckCircle className="h-3 w-3 mr-1" />COMPLETED</Badge>
+                                <span className="text-sm text-muted-foreground">{payment.paidDate && new Date(payment.paidDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                               </div>
-                              
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <p className="text-sm text-muted-foreground">Amount Paid</p>
+                                  <p className="text-sm text-muted-foreground">Amount</p>
                                   <p className="text-xl font-bold text-primary">₹{payment.amount.toLocaleString()}</p>
                                 </div>
                                 <div>
-                                  <p className="text-sm text-muted-foreground">Payment Method</p>
-                                  <p className="font-semibold">{payment.method}</p>
+                                  <p className="text-sm text-muted-foreground">Method</p>
+                                  <p className="font-semibold">{payment.paymentMethod}</p>
                                 </div>
                                 <div>
                                   <p className="text-sm text-muted-foreground">Transaction ID</p>
@@ -375,26 +239,101 @@ const StudentFees = () => {
                                 </div>
                                 <div>
                                   <p className="text-sm text-muted-foreground">Installment</p>
-                                  <p className="font-semibold">{payment.installment}</p>
+                                  <p className="font-semibold">{payment.label}</p>
                                 </div>
                               </div>
                             </div>
-                            
                             <div className="flex items-center">
-                              <Button variant="outline" size="sm" className="gap-2">
-                                <Download className="h-4 w-4" />
-                                Download Receipt
-                              </Button>
+                              <Button variant="outline" size="sm"><Download className="h-4 w-4 mr-1" />Receipt</Button>
                             </div>
                           </div>
                         </CardContent>
                       </Card>
                     ))}
+                    {installments.filter(i => i.status === "paid").length === 0 && (
+                      <p className="text-center text-muted-foreground py-8">No payments made yet.</p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
           </Tabs>
+
+          {/* Payment Method Dialog */}
+          <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Select Payment Method</DialogTitle>
+                <DialogDescription>
+                  {payableInstallment && `Pay ₹${payableInstallment.amount.toLocaleString()} for ${payableInstallment.label}`}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-2">
+                <RadioGroup value={selectedPaymentMethod} onValueChange={(v) => setSelectedPaymentMethod(v as PaymentMethod)}>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
+                      <RadioGroupItem value="card" id="pay-card" />
+                      <Label htmlFor="pay-card" className="flex items-center gap-3 cursor-pointer flex-1">
+                        <div className="p-2 bg-blue-100 rounded-lg"><CreditCard className="h-5 w-5 text-blue-600" /></div>
+                        <div>
+                          <p className="font-semibold">Debit / Credit Card</p>
+                          <p className="text-xs text-muted-foreground">Visa, Mastercard, RuPay</p>
+                        </div>
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
+                      <RadioGroupItem value="gpay" id="pay-gpay" />
+                      <Label htmlFor="pay-gpay" className="flex items-center gap-3 cursor-pointer flex-1">
+                        <div className="p-2 bg-green-100 rounded-lg"><Smartphone className="h-5 w-5 text-green-600" /></div>
+                        <div>
+                          <p className="font-semibold">Google Pay</p>
+                          <p className="text-xs text-muted-foreground">Pay via UPI</p>
+                        </div>
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
+                      <RadioGroupItem value="phonepe" id="pay-phonepe" />
+                      <Label htmlFor="pay-phonepe" className="flex items-center gap-3 cursor-pointer flex-1">
+                        <div className="p-2 bg-purple-100 rounded-lg"><Smartphone className="h-5 w-5 text-purple-600" /></div>
+                        <div>
+                          <p className="font-semibold">PhonePe</p>
+                          <p className="text-xs text-muted-foreground">Pay via UPI</p>
+                        </div>
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-3 p-4 border rounded-lg hover:border-primary transition-colors cursor-pointer">
+                      <RadioGroupItem value="cash" id="pay-cash" />
+                      <Label htmlFor="pay-cash" className="flex items-center gap-3 cursor-pointer flex-1">
+                        <div className="p-2 bg-amber-100 rounded-lg"><Banknote className="h-5 w-5 text-amber-600" /></div>
+                        <div>
+                          <p className="font-semibold">Cash Deposit</p>
+                          <p className="text-xs text-muted-foreground">Deposit cash at office — admin will confirm</p>
+                        </div>
+                      </Label>
+                    </div>
+                  </div>
+                </RadioGroup>
+
+                {selectedPaymentMethod === "cash" && (
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                    <p className="font-medium">How Cash Deposit works:</p>
+                    <ol className="list-decimal list-inside mt-1 space-y-0.5 text-xs">
+                      <li>A request will be sent to the admin</li>
+                      <li>Deposit the cash at the office</li>
+                      <li>Admin will verify and mark it as successful</li>
+                    </ol>
+                  </div>
+                )}
+
+                <div className="flex gap-3 pt-2">
+                  <Button variant="outline" className="flex-1" onClick={() => setIsPaymentDialogOpen(false)}>Cancel</Button>
+                  <Button className="flex-1" onClick={handlePayment}>
+                    {selectedPaymentMethod === "cash" ? "Send CD Request" : "Confirm & Pay"}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </main>
       </div>
     </div>
