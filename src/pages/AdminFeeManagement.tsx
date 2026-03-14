@@ -261,15 +261,30 @@ const AdminFeeManagement = () => {
             <TabsContent value="collection" className="space-y-6">
               {/* Summary Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-blue-100 text-sm">Total Fees</p>
+                        <h3 className="text-3xl font-bold mt-1">₹{((totalCollected + totalPending) / 100000).toFixed(1)}L</h3>
+                        <p className="text-blue-100 text-xs mt-1">Academic year 2025-26</p>
+                      </div>
+                      <div className="p-3 bg-white/20 rounded-xl">
+                        <Wallet className="h-8 w-8" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <Card className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-emerald-100 text-sm">Total Collected</p>
+                        <p className="text-emerald-100 text-sm">Collected</p>
                         <h3 className="text-3xl font-bold mt-1">₹{(totalCollected / 100000).toFixed(1)}L</h3>
                         <p className="text-emerald-100 text-xs mt-1 flex items-center gap-1">
                           <TrendingUp className="h-3 w-3" />
-                          +12% from last month
+                          Till current month
                         </p>
                       </div>
                       <div className="p-3 bg-white/20 rounded-xl">
@@ -283,27 +298,12 @@ const AdminFeeManagement = () => {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-amber-100 text-sm">Pending Fees</p>
+                        <p className="text-amber-100 text-sm">Pending</p>
                         <h3 className="text-3xl font-bold mt-1">₹{(totalPending / 100000).toFixed(1)}L</h3>
                         <p className="text-amber-100 text-xs mt-1">23 students overdue</p>
                       </div>
                       <div className="p-3 bg-white/20 rounded-xl">
                         <CalendarDays className="h-8 w-8" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-blue-100 text-sm">Total Students</p>
-                        <h3 className="text-3xl font-bold mt-1">{totalStudents}</h3>
-                        <p className="text-blue-100 text-xs mt-1">Across all sections</p>
-                      </div>
-                      <div className="p-3 bg-white/20 rounded-xl">
-                        <Users className="h-8 w-8" />
                       </div>
                     </div>
                   </CardContent>

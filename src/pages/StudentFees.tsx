@@ -195,9 +195,6 @@ const StudentFees = () => {
                           {(inst.status === "pending" || inst.status === "upcoming") && (
                             <Button onClick={() => openPayDialog(inst.id)} className="min-w-[100px]">Pay Now</Button>
                           )}
-                          {inst.status === "paid" && (
-                            <Button variant="outline" size="sm"><Download className="h-4 w-4 mr-1" />Receipt</Button>
-                          )}
                         </div>
                       </div>
                     </CardContent>
