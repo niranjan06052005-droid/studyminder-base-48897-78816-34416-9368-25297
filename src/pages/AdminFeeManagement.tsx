@@ -12,6 +12,7 @@ import { AlertCircle, TrendingUp, Home, LogOut, Plus, Trash2, GraduationCap, Use
 import { Link } from "react-router-dom";
 import AdminSidebar from "@/components/AdminSidebar";
 import { toast } from "@/hooks/use-toast";
+import CashDepositTab from "@/components/CashDepositTab";
 
 const AdminFeeManagement = () => {
   const [timePeriod, setTimePeriod] = useState("Yearly");
