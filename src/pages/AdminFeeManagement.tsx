@@ -251,6 +251,7 @@ const AdminFeeManagement = () => {
           <Tabs defaultValue="collection" className="w-full">
             <TabsList className="mb-6">
               <TabsTrigger value="collection">Collection</TabsTrigger>
+              <TabsTrigger value="cash-deposit">Cash Deposit</TabsTrigger>
               <TabsTrigger value="delay-fees">Delay Fees</TabsTrigger>
               <TabsTrigger value="expenditure">Expenditure</TabsTrigger>
             </TabsList>
