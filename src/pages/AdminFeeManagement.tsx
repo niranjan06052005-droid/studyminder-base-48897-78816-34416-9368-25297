@@ -429,6 +429,11 @@ const AdminFeeManagement = () => {
               </Card>
             </TabsContent>
 
+            {/* Cash Deposit Tab */}
+            <TabsContent value="cash-deposit">
+              <CashDepositTab />
+            </TabsContent>
+
             {/* Delay Fees Tab */}
             <TabsContent value="delay-fees">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
