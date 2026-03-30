@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Users, UserCheck, DollarSign, BarChart3, Bell, BookOpen, MessageSquare } from "lucide-react";
+import { Home, Users, UserCheck, DollarSign, BarChart3, Bell, BookOpen, MessageSquare, FolderOpen } from "lucide-react";
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -11,6 +11,7 @@ const AdminSidebar = () => {
     { name: "Student", path: "/admin/students", icon: Users },
     { name: "Staff", path: "/admin/staff", icon: UserCheck },
     { name: "Batch", path: "/admin/batches", icon: BookOpen },
+    { name: "Resource", path: "/admin/resources", icon: FolderOpen },
     { name: "Fee", path: "/admin/fees", icon: DollarSign },
     { name: "Report", path: "/admin/reports", icon: BarChart3 },
     { name: "Notice", path: "/admin/notices", icon: Bell },
