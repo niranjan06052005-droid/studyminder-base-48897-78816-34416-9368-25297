@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Users, UserCheck, DollarSign, BarChart3, Bell, BookOpen, MessageSquare } from "lucide-react";
+import { Home, Users, UserCheck, DollarSign, BarChart3, Bell, BookOpen, MessageSquare, FolderOpen } from "lucide-react";
 
 const AdminSidebar = () => {
   const location = useLocation();
