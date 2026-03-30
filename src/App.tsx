@@ -130,6 +130,7 @@ const App = () => (
           <Route path="/admin/batches/:batchId/edit-timetable" element={<AdminEditTimetable />} />
           <Route path="/admin/notices" element={<AdminNoticeManagement />} />
           <Route path="/admin/notices/:noticeId" element={<AdminNoticeView />} />
+          <Route path="/admin/resources" element={<AdminResources />} />
           <Route path="/admin/fees" element={<AdminFeeManagement />} />
           <Route path="/admin/enquiries" element={<AdminEnquiries />} />
           <Route path="/admin/reports" element={<AdminReports />} />

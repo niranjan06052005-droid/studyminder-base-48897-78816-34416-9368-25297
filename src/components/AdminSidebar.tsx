@@ -11,6 +11,7 @@ const AdminSidebar = () => {
     { name: "Student", path: "/admin/students", icon: Users },
     { name: "Staff", path: "/admin/staff", icon: UserCheck },
     { name: "Batch", path: "/admin/batches", icon: BookOpen },
+    { name: "Resource", path: "/admin/resources", icon: FolderOpen },
     { name: "Fee", path: "/admin/fees", icon: DollarSign },
     { name: "Report", path: "/admin/reports", icon: BarChart3 },
     { name: "Notice", path: "/admin/notices", icon: Bell },
