@@ -37,6 +37,7 @@ import AdminNoticeView from "./pages/AdminNoticeView";
 import AdminEnquiries from "./pages/AdminEnquiries";
 import AdminEditTimetable from "./pages/AdminEditTimetable";
 import AdminReports from "./pages/AdminReports";
+import AdminResources from "./pages/AdminResources";
 import TeacherNoticeView from "./pages/TeacherNoticeView";
 import TeacherChapterNotes from "./pages/TeacherChapterNotes";
 import TeacherChapterVideo from "./pages/TeacherChapterVideo";
