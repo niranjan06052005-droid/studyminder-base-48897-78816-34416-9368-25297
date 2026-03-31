@@ -180,6 +180,16 @@ const AdminResources = () => {
     setUploadTitle("");
   };
 
+  const handleCreateChapter = () => {
+    if (!newChapterTitle.trim()) {
+      toast.error("Please enter a chapter title");
+      return;
+    }
+    toast.success(`Chapter "${newChapterTitle}" created successfully!`);
+    setIsCreateChapterOpen(false);
+    setNewChapterTitle("");
+  };
+
   const handleDelete = (type: string, title: string) => {
     toast.success(`${title} deleted successfully`);
   };
