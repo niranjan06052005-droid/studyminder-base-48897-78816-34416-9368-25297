@@ -135,6 +135,8 @@ const AdminResources = () => {
   const [activeTab, setActiveTab] = useState("notes");
   const [searchQuery, setSearchQuery] = useState("");
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isCreateChapterOpen, setIsCreateChapterOpen] = useState(false);
+  const [newChapterTitle, setNewChapterTitle] = useState("");
   const [uploadType, setUploadType] = useState("");
   const [uploadChapter, setUploadChapter] = useState("");
   const [uploadTitle, setUploadTitle] = useState("");
