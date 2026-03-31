@@ -398,6 +398,36 @@ const AdminResources = () => {
                       </div>
                     </DialogContent>
                   </Dialog>
+                  <Dialog open={isCreateChapterOpen} onOpenChange={setIsCreateChapterOpen}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="gap-2">
+                        <Plus className="h-4 w-4" />
+                        Create Chapter
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Create New Chapter</DialogTitle>
+                        <DialogDescription>
+                          Add a new chapter for {currentStd?.label} — {effectiveSubject}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                          <Label>Chapter Title</Label>
+                          <Input
+                            placeholder="e.g. Chapter 3: Arithmetic Progressions"
+                            value={newChapterTitle}
+                            onChange={(e) => setNewChapterTitle(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" onClick={() => setIsCreateChapterOpen(false)}>Cancel</Button>
+                        <Button onClick={handleCreateChapter}>Create</Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
 
